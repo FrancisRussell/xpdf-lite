@@ -558,12 +558,18 @@ void XPDFCore::doAction(LinkAction *action) {
       if (globalParams->getLaunchCommand()) {
 	fileName->insert(0, ' ');
 	fileName->insert(0, globalParams->getLaunchCommand());
-	system(fileName->getCString());
+	const int errorCode = system(fileName->getCString());
+        if (errorCode != 0) {
+          error(errInternal, -1, "non-zero error code returned by system call");
+        }
       } else {
 	msg = new GooString("About to execute the command:\n");
 	msg->append(fileName);
 	if (doQuestionDialog("Launching external application", msg)) {
-	  system(fileName->getCString());
+	  const int errorCode = system(fileName->getCString());
+          if (errorCode != 0) {
+            error(errInternal, -1, "non-zero error code returned by system call");
+          }
 	}
 	delete msg;
       }
@@ -687,7 +693,10 @@ void XPDFCore::runCommand(GooString *cmdFmt, GooString *arg) {
 #else
   cmd->append(" &");
 #endif
-  system(cmd->getCString());
+  const int errorCode = system(cmd->getCString());
+  if (errorCode != 0) {
+    error(errInternal, -1, "non-zero error code returned by system call");
+  }
   delete cmd;
 }
 
