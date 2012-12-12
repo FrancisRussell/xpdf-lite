@@ -12,14 +12,12 @@ prefix = @prefix@
 srcdir = @srcdir@
 VPATH = @srcdir@
 
-GOOSRCDIR = $(srcdir)/../goo
-GOOLIBDIR = ../goo
-FOFISRCDIR = $(srcdir)/../fofi
-FOFILIBDIR = ../fofi
-SPLASHSRCDIR = $(srcdir)/../splash
-SPLASHLIBDIR = ../splash
+POPPLERDIR = /usr/include/poppler
+GOOSRCDIR = $(POPPLERDIR)/goo
+FOFISRCDIR = $(POPPLERDIR)/fofi
+SPLASHSRCDIR = $(POPPLERDIR)/splash
 
-CXXFLAGS = @CXXFLAGS@ @DEFS@ -I.. -I$(GOOSRCDIR) -I$(FOFISRCDIR) -I$(SPLASHSRCDIR) -I$(srcdir) @freetype2_CFLAGS@ @Sgm_CFLAGS@ @Xm_CFLAGS@ @Xt_CFLAGS@ @Xp_CFLAGS@ @Xext_CFLAGS@ @Xpm_CFLAGS@ @t1_CFLAGS@ @libpaper_CFLAGS@ @X_CFLAGS@ -Wno-write-strings
+CXXFLAGS = @CXXFLAGS@ @DEFS@ -I.. -I$(POPPLERDIR) -I$(GOOSRCDIR) -I$(FOFISRCDIR) -I$(SPLASHSRCDIR) -I$(srcdir) @freetype2_CFLAGS@ @Sgm_CFLAGS@ @Xm_CFLAGS@ @Xt_CFLAGS@ @Xp_CFLAGS@ @Xext_CFLAGS@ @Xpm_CFLAGS@ @t1_CFLAGS@ @libpaper_CFLAGS@ @X_CFLAGS@ -Wno-write-strings
 
 LDFLAGS = @LDFLAGS@
 
@@ -28,11 +26,8 @@ FTLIBS = @freetype2_LIBS@
 
 XLIBS = @Sgm_LIBS@ @Xm_LIBS@ @Xt_LIBS@ @Xp_LIBS@ @Xext_LIBS@ @Xpm_LIBS@ @X_PRE_LIBS@ @X_LIBS@ -lX11 @X_EXTRA_LIBS@
 
-SPLASHLIBS = -L$(SPLASHLIBDIR) -lsplash
-
 OTHERLIBS = @LIBS@ @libpaper_LIBS@ \
-	-L$(FOFILIBDIR) -lfofi \
-	-L$(GOOLIBDIR) -lGoo
+	-l poppler
 
 CXX = @CXX@
 
@@ -115,10 +110,10 @@ XPDF_OBJS = Annot.o Array.o BuiltinFont.o BuiltinFontTables.o Catalog.o \
 	PSTokenizer.o SecurityHandler.o SplashOutputDev.o Stream.o \
 	TextOutputDev.o UnicodeMap.o UnicodeTypeTable.o XPDFApp.o \
 	XPDFCore.o XPDFTree.o XPDFViewer.o XpdfPluginAPI.o XRef.o xpdf.o
-XPDF_LIBS = -L$(GOOLIBDIR) -lGoo $(SPLASHLIBS) $(T1LIBS) $(FTLIBS) \
+XPDF_LIBS = $(T1LIBS) $(FTLIBS) \
 	$(XLIBS) $(OTHERLIBS) -lm
 
-xpdf$(EXE): $(XPDF_OBJS) $(GOOLIBDIR)/$(LIBPREFIX)Goo.a
+xpdf$(EXE): $(XPDF_OBJS)
 	$(CXX) $(CXXFLAGS) $(LDFLAGS) -o xpdf$(EXE) $(XPDF_OBJS) $(XPDF_LIBS)
 
 #------------------------------------------------------------------------
