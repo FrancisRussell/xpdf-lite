@@ -134,7 +134,7 @@
 //------------------------------------------------------------------------
 
 struct ZoomMenuInfo {
-  const char *label;
+  char *label;
   double zoom;
 };
 
