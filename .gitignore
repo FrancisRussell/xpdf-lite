@@ -1,6 +1,7 @@
 *.o
 *.a
 *.swp
+/autom4te.cache/
 /Makefile
 /aconf.h
 /config.log
@@ -9,11 +10,4 @@
 /goo/Makefile
 /splash/Makefile
 xpdf/Makefile
-/xpdf/pdfdetach
-/xpdf/pdffonts
-/xpdf/pdfimages
-/xpdf/pdfinfo
-/xpdf/pdftoppm
-/xpdf/pdftops
-/xpdf/pdftotext
 /xpdf/xpdf
