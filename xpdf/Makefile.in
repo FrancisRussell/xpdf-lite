@@ -92,6 +92,7 @@ CXX_SRC = \
 	$(srcdir)/XPDFViewer.cc \
 	$(srcdir)/XpdfPluginAPI.cc \
 	$(srcdir)/XRef.cc \
+	$(srcdir)/parseargs.cc
 	$(srcdir)/xpdf.cc
 
 #------------------------------------------------------------------------
@@ -109,7 +110,8 @@ XPDF_OBJS = Annot.o Array.o BuiltinFont.o BuiltinFontTables.o Catalog.o \
 	PDFDoc.o PDFDocEncoding.o PreScanOutputDev.o PSOutputDev.o \
 	PSTokenizer.o SecurityHandler.o SplashOutputDev.o Stream.o \
 	TextOutputDev.o UnicodeMap.o UnicodeTypeTable.o XPDFApp.o \
-	XPDFCore.o XPDFTree.o XPDFViewer.o XpdfPluginAPI.o XRef.o xpdf.o
+	XPDFCore.o XPDFTree.o XPDFViewer.o XpdfPluginAPI.o XRef.o \
+	parseargs.o xpdf.o
 XPDF_LIBS = $(T1LIBS) $(FTLIBS) \
 	$(XLIBS) $(OTHERLIBS) -lm
 
