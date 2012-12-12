@@ -16,7 +16,7 @@
 #include <string.h>
 #include "gmem.h"
 #include "gfile.h"
-#include "GString.h"
+#include "GooString.h"
 #include "Error.h"
 #include "GlobalParams.h"
 #include "PSTokenizer.h"
@@ -95,8 +95,8 @@ CharCodeToUnicode *CharCodeToUnicode::makeIdentityMapping() {
   return new CharCodeToUnicode();
 }
 
-CharCodeToUnicode *CharCodeToUnicode::parseCIDToUnicode(GString *fileName,
-							GString *collection) {
+CharCodeToUnicode *CharCodeToUnicode::parseCIDToUnicode(GooString *fileName,
+							GooString *collection) {
   FILE *f;
   Unicode *mapA;
   CharCode size, mapLenA;
@@ -138,7 +138,7 @@ CharCodeToUnicode *CharCodeToUnicode::parseCIDToUnicode(GString *fileName,
 }
 
 CharCodeToUnicode *CharCodeToUnicode::parseUnicodeToUnicode(
-						    GString *fileName) {
+						    GooString *fileName) {
   FILE *f;
   Unicode *mapA;
   CharCodeToUnicodeString *sMapA;
@@ -232,7 +232,7 @@ CharCodeToUnicode *CharCodeToUnicode::make8BitToUnicode(Unicode *toUnicode) {
   return new CharCodeToUnicode(NULL, toUnicode, 256, gTrue, NULL, 0, 0);
 }
 
-CharCodeToUnicode *CharCodeToUnicode::parseCMap(GString *buf, int nBits) {
+CharCodeToUnicode *CharCodeToUnicode::parseCMap(GooString *buf, int nBits) {
   CharCodeToUnicode *ctu;
   char *p;
 
@@ -242,7 +242,7 @@ CharCodeToUnicode *CharCodeToUnicode::parseCMap(GString *buf, int nBits) {
   return ctu;
 }
 
-void CharCodeToUnicode::mergeCMap(GString *buf, int nBits) {
+void CharCodeToUnicode::mergeCMap(GooString *buf, int nBits) {
   char *p;
 
   p = buf->getCString();
@@ -256,7 +256,7 @@ void CharCodeToUnicode::parseCMap1(int (*getCharFunc)(void *), void *data,
   int n1, n2, n3;
   CharCode i;
   CharCode maxCode, code1, code2;
-  GString *name;
+  GooString *name;
   FILE *f;
 
   maxCode = (nBits == 8) ? 0xff : (nBits == 16) ? 0xffff : 0xffffffff;
@@ -265,7 +265,7 @@ void CharCodeToUnicode::parseCMap1(int (*getCharFunc)(void *), void *data,
   while (pst->getToken(tok2, sizeof(tok2), &n2)) {
     if (!strcmp(tok2, "usecmap")) {
       if (tok1[0] == '/') {
-	name = new GString(tok1 + 1);
+	name = new GooString(tok1 + 1);
 	if ((f = globalParams->findToUnicodeFile(name))) {
 	  parseCMap1(&getCharFromFile, f, nBits);
 	  fclose(f);
@@ -440,7 +440,7 @@ CharCodeToUnicode::CharCodeToUnicode() {
 #endif
 }
 
-CharCodeToUnicode::CharCodeToUnicode(GString *tagA) {
+CharCodeToUnicode::CharCodeToUnicode(GooString *tagA) {
   CharCode i;
 
   tag = tagA;
@@ -457,7 +457,7 @@ CharCodeToUnicode::CharCodeToUnicode(GString *tagA) {
 #endif
 }
 
-CharCodeToUnicode::CharCodeToUnicode(GString *tagA, Unicode *mapA,
+CharCodeToUnicode::CharCodeToUnicode(GooString *tagA, Unicode *mapA,
 				     CharCode mapLenA, GBool copyMap,
 				     CharCodeToUnicodeString *sMapA,
 				     int sMapLenA, int sMapSizeA) {
@@ -514,7 +514,7 @@ void CharCodeToUnicode::decRefCnt() {
   }
 }
 
-GBool CharCodeToUnicode::match(GString *tagA) {
+GBool CharCodeToUnicode::match(GooString *tagA) {
   return tag && !tag->cmp(tagA);
 }
 
@@ -597,7 +597,7 @@ CharCodeToUnicodeCache::~CharCodeToUnicodeCache() {
   gfree(cache);
 }
 
-CharCodeToUnicode *CharCodeToUnicodeCache::getCharCodeToUnicode(GString *tag) {
+CharCodeToUnicode *CharCodeToUnicodeCache::getCharCodeToUnicode(GooString *tag) {
   CharCodeToUnicode *ctu;
   int i, j;
 

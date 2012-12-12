@@ -70,7 +70,7 @@ public:
 
   void draw(Gfx *gfx, GBool printing);
 
-  GString *getType() { return type; }
+  GooString *getType() { return type; }
   double getXMin() { return xMin; }
   double getYMin() { return yMin; }
   double getXMax() { return xMax; }
@@ -90,13 +90,13 @@ public:
 private:
  
   void setColor(Array *a, GBool fill, int adjust);
-  void drawText(GString *text, GString *da, GfxFontDict *fontDict,
+  void drawText(GooString *text, GooString *da, GfxFontDict *fontDict,
 		GBool multiline, int comb, int quadding,
 		GBool txField, GBool forceZapfDingbats, int rot);
-  void drawListBox(GString **text, GBool *selection,
+  void drawListBox(GooString **text, GBool *selection,
 		   int nOptions, int topIdx,
-		   GString *da, GfxFontDict *fontDict, GBool quadding);
-  void getNextLine(GString *text, int start,
+		   GooString *da, GfxFontDict *fontDict, GBool quadding);
+  void getNextLine(GooString *text, int start,
 		   GfxFont *font, double fontSize, double wMax,
 		   int *end, double *width, int *next);
   void drawCircle(double cx, double cy, double r, GBool fill);
@@ -108,11 +108,11 @@ private:
   PDFDoc *doc;
   XRef *xref;			// the xref table for this PDF file
   Ref ref;			// object ref identifying this annotation
-  GString *type;		// annotation type
-  GString *appearanceState;	// appearance state name
+  GooString *type;		// annotation type
+  GooString *appearanceState;	// appearance state name
   Object appearance;		// a reference to the Form XObject stream
 				//   for the normal appearance
-  GString *appearBuf;
+  GooString *appearBuf;
   double xMin, yMin,		// annotation rectangle
          xMax, yMax;
   Guint flags;

@@ -36,15 +36,15 @@ static Guchar passwordPad[32] = {
 //------------------------------------------------------------------------
 
 GBool Decrypt::makeFileKey(int encVersion, int encRevision, int keyLength,
-			   GString *ownerKey, GString *userKey,
-			   GString *ownerEnc, GString *userEnc,
-			   int permissions, GString *fileID,
-			   GString *ownerPassword, GString *userPassword,
+			   GooString *ownerKey, GooString *userKey,
+			   GooString *ownerEnc, GooString *userEnc,
+			   int permissions, GooString *fileID,
+			   GooString *ownerPassword, GooString *userPassword,
 			   Guchar *fileKey, GBool encryptMetadata,
 			   GBool *ownerPasswordOk) {
   DecryptAES256State state;
   Guchar test[127 + 56], test2[32];
-  GString *userPassword2;
+  GooString *userPassword2;
   Guchar fState[256];
   Guchar tmpKey[16];
   Guchar fx, fy;
@@ -154,7 +154,7 @@ GBool Decrypt::makeFileKey(int encVersion, int encRevision, int keyLength,
 	  }
 	}
       }
-      userPassword2 = new GString((char *)test2, 32);
+      userPassword2 = new GooString((char *)test2, 32);
       if (makeFileKey2(encVersion, encRevision, keyLength, ownerKey, userKey,
 		       permissions, fileID, userPassword2, fileKey,
 		       encryptMetadata)) {
@@ -173,9 +173,9 @@ GBool Decrypt::makeFileKey(int encVersion, int encRevision, int keyLength,
 }
 
 GBool Decrypt::makeFileKey2(int encVersion, int encRevision, int keyLength,
-			    GString *ownerKey, GString *userKey,
-			    int permissions, GString *fileID,
-			    GString *userPassword, Guchar *fileKey,
+			    GooString *ownerKey, GooString *userKey,
+			    int permissions, GooString *fileID,
+			    GooString *userPassword, Guchar *fileKey,
 			    GBool encryptMetadata) {
   Guchar *buf;
   Guchar test[32];

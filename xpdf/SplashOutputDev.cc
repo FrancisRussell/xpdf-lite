@@ -1072,7 +1072,7 @@ void SplashOutputDev::doUpdateFont(GfxState *state) {
   FoFiTrueType *ff;
   Ref embRef;
   Object refObj, strObj;
-  GString *tmpFileName, *fileName;
+  GooString *tmpFileName, *fileName;
   FILE *tmpFile;
   int *codeToGID;
   CharCodeToUnicode *ctu;
@@ -3194,7 +3194,7 @@ void SplashOutputDev::setFillColor(int r, int g, int b) {
   }
 }
 
-SplashFont *SplashOutputDev::getFont(GString *name, SplashCoord *textMatA) {
+SplashFont *SplashOutputDev::getFont(GooString *name, SplashCoord *textMatA) {
   Ref ref;
   SplashOutFontFileID *id;
   GfxFontLoc *fontLoc;

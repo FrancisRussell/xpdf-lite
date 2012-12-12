@@ -16,8 +16,8 @@
 #include <string.h>
 #include "gmem.h"
 #include "gfile.h"
-#include "GString.h"
-#include "GList.h"
+#include "GooString.h"
+#include "GooList.h"
 #include "Error.h"
 #include "GlobalParams.h"
 #include "UnicodeMap.h"
@@ -34,7 +34,7 @@ struct UnicodeMapExt {
 
 //------------------------------------------------------------------------
 
-UnicodeMap *UnicodeMap::parse(GString *encodingNameA) {
+UnicodeMap *UnicodeMap::parse(GooString *encodingNameA) {
   FILE *f;
   UnicodeMap *map;
   UnicodeMapRange *range;
@@ -110,7 +110,7 @@ UnicodeMap *UnicodeMap::parse(GString *encodingNameA) {
   return map;
 }
 
-UnicodeMap::UnicodeMap(GString *encodingNameA) {
+UnicodeMap::UnicodeMap(GooString *encodingNameA) {
   encodingName = encodingNameA;
   unicodeOut = gFalse;
   kind = unicodeMapUser;
@@ -126,7 +126,7 @@ UnicodeMap::UnicodeMap(GString *encodingNameA) {
 
 UnicodeMap::UnicodeMap(const char *encodingNameA, GBool unicodeOutA,
 		       UnicodeMapRange *rangesA, int lenA) {
-  encodingName = new GString(encodingNameA);
+  encodingName = new GooString(encodingNameA);
   unicodeOut = unicodeOutA;
   kind = unicodeMapResident;
   ranges = rangesA;
@@ -141,7 +141,7 @@ UnicodeMap::UnicodeMap(const char *encodingNameA, GBool unicodeOutA,
 
 UnicodeMap::UnicodeMap(const char *encodingNameA, GBool unicodeOutA,
 		       UnicodeMapFunc funcA) {
-  encodingName = new GString(encodingNameA);
+  encodingName = new GooString(encodingNameA);
   unicodeOut = unicodeOutA;
   kind = unicodeMapFunc;
   func = funcA;
@@ -191,7 +191,7 @@ void UnicodeMap::decRefCnt() {
   }
 }
 
-GBool UnicodeMap::match(GString *encodingNameA) {
+GBool UnicodeMap::match(GooString *encodingNameA) {
   return !encodingName->cmp(encodingNameA);
 }
 
@@ -262,7 +262,7 @@ UnicodeMapCache::~UnicodeMapCache() {
   }
 }
 
-UnicodeMap *UnicodeMapCache::getUnicodeMap(GString *encodingName) {
+UnicodeMap *UnicodeMapCache::getUnicodeMap(GooString *encodingName) {
   UnicodeMap *map;
   int i, j;
 

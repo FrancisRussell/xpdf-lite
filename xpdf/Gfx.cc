@@ -18,8 +18,8 @@
 #include <string.h>
 #include <math.h>
 #include "gmem.h"
-#include "GString.h"
-#include "GList.h"
+#include "GooString.h"
+#include "GooList.h"
 #include "GlobalParams.h"
 #include "CharTypes.h"
 #include "Object.h"
@@ -488,7 +488,7 @@ Gfx::Gfx(PDFDoc *docA, OutputDev *outA, int pageNum, Dict *resDict,
   }
   formDepth = 0;
   textClipBBoxEmpty = gTrue;
-  markedContentStack = new GList();
+  markedContentStack = new GooList();
   ocState = gTrue;
   parser = NULL;
   abortCheckCbk = abortCheckCbkA;
@@ -532,7 +532,7 @@ Gfx::Gfx(PDFDoc *docA, OutputDev *outA, Dict *resDict,
   }
   formDepth = 0;
   textClipBBoxEmpty = gTrue;
-  markedContentStack = new GList();
+  markedContentStack = new GooList();
   ocState = gTrue;
   parser = NULL;
   abortCheckCbk = abortCheckCbkA;
@@ -562,7 +562,7 @@ Gfx::~Gfx() {
   while (res) {
     popResources();
   }
-  deleteGList(markedContentStack, GfxMarkedContent);
+  deleteGooList(markedContentStack, GfxMarkedContent);
 }
 
 void Gfx::display(Object *obj, GBool topLevel) {
@@ -3332,7 +3332,7 @@ void Gfx::opShowSpaceText(Object args[], int numArgs) {
   }
 }
 
-void Gfx::doShowText(GString *s) {
+void Gfx::doShowText(GooString *s) {
   GfxFont *font;
   int wMode;
   double riseX, riseY;
@@ -3563,7 +3563,7 @@ void Gfx::doShowText(GString *s) {
 }
 
 // NB: this is only called when ocState is false.
-void Gfx::doIncCharCount(GString *s) {
+void Gfx::doIncCharCount(GooString *s) {
   if (out->needCharCount()) {
     out->incCharCount(s->getLength());
   }
@@ -4328,7 +4328,7 @@ void Gfx::opBeginMarkedContent(Object args[], int numArgs) {
   GfxMarkedContent *mc;
   Object obj;
   GBool ocStateNew;
-  GString *s;
+  GooString *s;
   Unicode *u;
   int uLen, i;
   GfxMarkedContentKind mcKind;

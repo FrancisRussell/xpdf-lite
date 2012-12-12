@@ -13,8 +13,8 @@
 #endif
 
 #include "gmem.h"
-#include "GString.h"
-#include "GList.h"
+#include "GooString.h"
+#include "GooList.h"
 #include "Error.h"
 #include "Link.h"
 #include "PDFDocEncoding.h"
@@ -40,7 +40,7 @@ Outline::Outline(Object *outlineObj, XRef *xref) {
 
 Outline::~Outline() {
   if (items) {
-    deleteGList(items, OutlineItem);
+    deleteGooList(items, OutlineItem);
   }
 }
 
@@ -48,7 +48,7 @@ Outline::~Outline() {
 
 OutlineItem::OutlineItem(Dict *dict, XRef *xrefA) {
   Object obj1;
-  GString *s;
+  GooString *s;
   int i;
 
   xref = xrefA;
@@ -114,15 +114,15 @@ OutlineItem::~OutlineItem() {
   nextRef.free();
 }
 
-GList *OutlineItem::readItemList(Object *firstItemRef, Object *lastItemRef,
+GooList *OutlineItem::readItemList(Object *firstItemRef, Object *lastItemRef,
 				 XRef *xrefA) {
-  GList *items;
+  GooList *items;
   OutlineItem *item;
   Object obj;
   Object *p, *refObj;
   int i;
 
-  items = new GList();
+  items = new GooList();
   if (!firstItemRef->isRef() || !lastItemRef->isRef()) {
     return items;
   }
@@ -165,7 +165,7 @@ void OutlineItem::open() {
 
 void OutlineItem::close() {
   if (kids) {
-    deleteGList(kids, OutlineItem);
+    deleteGooList(kids, OutlineItem);
     kids = NULL;
   }
 }

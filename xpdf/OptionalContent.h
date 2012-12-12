@@ -19,8 +19,8 @@
 #include "Object.h"
 #include "CharTypes.h"
 
-class GString;
-class GList;
+class GooString;
+class GooList;
 class PDFDoc;
 class XRef;
 class OptionalContentGroup;
@@ -55,7 +55,7 @@ private:
   GBool evalOCVisibilityExpr(Object *expr, int recursion);
 
   XRef *xref;
-  GList *ocgs;			// all OCGs [OptionalContentGroup]
+  GooList *ocgs;			// all OCGs [OptionalContentGroup]
   OCDisplayNode *display;	// root node of display tree 
 };
 
@@ -116,16 +116,16 @@ public:
 
 private:
 
-  OCDisplayNode(GString *nameA);
+  OCDisplayNode(GooString *nameA);
   OCDisplayNode(OptionalContentGroup *ocgA);
   void addChild(OCDisplayNode *child);
-  void addChildren(GList *childrenA);
-  GList *takeChildren();
+  void addChildren(GooList *childrenA);
+  GooList *takeChildren();
 
   Unicode *name;		// display name (may be NULL)
   int nameLen;
   OptionalContentGroup *ocg;	// NULL for display labels
-  GList *children;		// NULL if there are no children
+  GooList *children;		// NULL if there are no children
 				//   [OCDisplayNode]
 };
 

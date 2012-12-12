@@ -19,7 +19,7 @@
 #include "Object.h"
 #include "Stream.h"
 
-class GList;
+class GooList;
 class JBIG2Segment;
 class JBIG2Bitmap;
 class JArithmeticDecoder;
@@ -41,7 +41,7 @@ public:
   virtual int getChar();
   virtual int lookChar();
   virtual int getBlock(char *blk, int size);
-  virtual GString *getPSFilter(int psLevel, const char *indent);
+  virtual GooString *getPSFilter(int psLevel, const char *indent);
   virtual GBool isBinary(GBool last = gTrue);
 
 private:
@@ -120,8 +120,8 @@ private:
   Guint pageDefPixel;
   JBIG2Bitmap *pageBitmap;
   Guint defCombOp;
-  GList *segments;		// [JBIG2Segment]
-  GList *globalSegments;	// [JBIG2Segment]
+  GooList *segments;		// [JBIG2Segment]
+  GooList *globalSegments;	// [JBIG2Segment]
   Stream *curStr;
   Guchar *dataPtr;
   Guchar *dataEnd;

@@ -19,10 +19,10 @@
 #include "CharTypes.h"
 
 #if MULTITHREADED
-#include "GMutex.h"
+#include "GooMutex.h"
 #endif
 
-class GString;
+class GooString;
 class Object;
 class Stream;
 struct CMapVectorEntry;
@@ -35,16 +35,16 @@ public:
 
   // Parse a CMap from <obj>, which can be a name or a stream.  Sets
   // the initial reference count to 1.  Returns NULL on failure.
-  static CMap *parse(CMapCache *cache, GString *collectionA, Object *obj);
+  static CMap *parse(CMapCache *cache, GooString *collectionA, Object *obj);
 
   // Create the CMap specified by <collection> and <cMapName>.  Sets
   // the initial reference count to 1.  Returns NULL on failure.
-  static CMap *parse(CMapCache *cache, GString *collectionA,
-		     GString *cMapNameA);
+  static CMap *parse(CMapCache *cache, GooString *collectionA,
+		     GooString *cMapNameA);
 
   // Parse a CMap from <str>.  Sets the initial reference count to 1.
   // Returns NULL on failure.
-  static CMap *parse(CMapCache *cache, GString *collectionA, Stream *str);
+  static CMap *parse(CMapCache *cache, GooString *collectionA, Stream *str);
 
   ~CMap();
 
@@ -52,11 +52,11 @@ public:
   void decRefCnt();
 
   // Return collection name (<registry>-<ordering>).
-  GString *getCollection() { return collection; }
+  GooString *getCollection() { return collection; }
 
   // Return true if this CMap matches the specified <collectionA>, and
   // <cMapNameA>.
-  GBool match(GString *collectionA, GString *cMapNameA);
+  GBool match(GooString *collectionA, GooString *cMapNameA);
 
   // Return the CID corresponding to the character code starting at
   // <s>, which contains <len> bytes.  Sets *<c> to the char code, and
@@ -69,16 +69,16 @@ public:
 private:
 
   void parse2(CMapCache *cache, int (*getCharFunc)(void *), void *data);
-  CMap(GString *collectionA, GString *cMapNameA);
-  CMap(GString *collectionA, GString *cMapNameA, int wModeA);
+  CMap(GooString *collectionA, GooString *cMapNameA);
+  CMap(GooString *collectionA, GooString *cMapNameA, int wModeA);
   void useCMap(CMapCache *cache, char *useName);
   void useCMap(CMapCache *cache, Object *obj);
   void copyVector(CMapVectorEntry *dest, CMapVectorEntry *src);
   void addCIDs(Guint start, Guint end, Guint nBytes, CID firstCID);
   void freeCMapVector(CMapVectorEntry *vec);
 
-  GString *collection;
-  GString *cMapName;
+  GooString *collection;
+  GooString *cMapName;
   GBool isIdent;		// true if this CMap is an identity mapping,
 				//   or is based on one (via usecmap)
   int wMode;			// writing mode (0=horizontal, 1=vertical)
@@ -86,7 +86,7 @@ private:
 				//   identity CMap)
   int refCnt;
 #if MULTITHREADED
-  GMutex mutex;
+  GooMutex mutex;
 #endif
 };
 
@@ -104,7 +104,7 @@ public:
   // Increments its reference count; there will be one reference for
   // the cache plus one for the caller of this function.  Returns NULL
   // on failure.
-  CMap *getCMap(GString *collection, GString *cMapName);
+  CMap *getCMap(GooString *collection, GooString *cMapName);
 
 private:
 

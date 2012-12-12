@@ -17,9 +17,9 @@
 #include <stdarg.h>
 #include <signal.h>
 #include <math.h>
-#include "GString.h"
-#include "GList.h"
-#include "GHash.h"
+#include "GooString.h"
+#include "GooList.h"
+#include "GooHash.h"
 #include "config.h"
 #include "GlobalParams.h"
 #include "Object.h"
@@ -812,7 +812,7 @@ static PSSubstFont psBase14SubstFonts[14] = {
 // Mapping from Type 1/1C font file to PS font name.
 struct PST1FontName {
   Ref fontFileID;
-  GString *psName;		// PostScript font name used for this
+  GooString *psName;		// PostScript font name used for this
 				//   embedded font file
 };
 
@@ -825,7 +825,7 @@ struct PSFont8Info {
 // Encoding info for substitute 16-bit font
 struct PSFont16Enc {
   Ref fontID;
-  GString *enc;			// NULL means font wasn't correctly substituted
+  GooString *enc;			// NULL means font wasn't correctly substituted
 };
 
 //------------------------------------------------------------------------
@@ -846,16 +846,16 @@ class PSOutCustomColor {
 public:
 
   PSOutCustomColor(double cA, double mA,
-		   double yA, double kA, GString *nameA);
+		   double yA, double kA, GooString *nameA);
   ~PSOutCustomColor();
 
   double c, m, y, k;
-  GString *name;
+  GooString *name;
   PSOutCustomColor *next;
 };
 
 PSOutCustomColor::PSOutCustomColor(double cA, double mA,
-				   double yA, double kA, GString *nameA) {
+				   double yA, double kA, GooString *nameA) {
   c = cA;
   m = mA;
   y = yA;
@@ -897,7 +897,7 @@ public:
     { return (bufIdx >= bufSize && !fillBuf()) ? EOF : buf[bufIdx++]; }
   virtual int lookChar()
     { return (bufIdx >= bufSize && !fillBuf()) ? EOF : buf[bufIdx]; }
-  virtual GString *getPSFilter(int psLevel, char *indent) { return NULL; }
+  virtual GooString *getPSFilter(int psLevel, char *indent) { return NULL; }
   virtual GBool isBinary(GBool last = gTrue) { return gTrue; }
   virtual GBool isEncoder() { return gTrue; }
 
@@ -999,7 +999,7 @@ PSOutputDev::PSOutputDev(char *fileName, PDFDoc *docA,
   customCodeCbkData = customCodeCbkDataA;
 
   fontIDs = NULL;
-  fontNames = new GHash(gTrue);
+  fontNames = new GooHash(gTrue);
   t1FontNames = NULL;
   font8Info = NULL;
   font16Enc = NULL;
@@ -1061,7 +1061,7 @@ PSOutputDev::PSOutputDev(PSOutputFunc outputFuncA, void *outputStreamA,
   customCodeCbkData = customCodeCbkDataA;
 
   fontIDs = NULL;
-  fontNames = new GHash(gTrue);
+  fontNames = new GooHash(gTrue);
   t1FontNames = NULL;
   font8Info = NULL;
   font16Enc = NULL;
@@ -1088,7 +1088,7 @@ void PSOutputDev::init(PSOutputFunc outputFuncA, void *outputStreamA,
   Page *page;
   PDFRectangle *box;
   PSOutPaperSize *size;
-  GList *names;
+  GooList *names;
   int pg, w, h, i;
 
   // initialize
@@ -1112,7 +1112,7 @@ void PSOutputDev::init(PSOutputFunc outputFuncA, void *outputStreamA,
   }
   if (paperWidth < 0 || paperHeight < 0) {
     paperMatch = gTrue;
-    paperSizes = new GList();
+    paperSizes = new GooList();
     paperWidth = paperHeight = 1; // in case the document has zero pages
     for (pg = (firstPage >= 1) ? firstPage : 1;
 	 pg <= lastPage && pg <= catalog->getNumPages();
@@ -1165,11 +1165,11 @@ void PSOutputDev::init(PSOutputFunc outputFuncA, void *outputStreamA,
   fontIDLen = 0;
   fontIDs = (Ref *)gmallocn(fontIDSize, sizeof(Ref));
   for (i = 0; i < 14; ++i) {
-    fontNames->add(new GString(psBase14SubstFonts[i].psName), 1);
+    fontNames->add(new GooString(psBase14SubstFonts[i].psName), 1);
   }
   names = globalParams->getPSResidentFonts();
   for (i = 0; i < names->getLength(); ++i) {
-    fontNames->add((GString *)names->get(i), 1);
+    fontNames->add((GooString *)names->get(i), 1);
   }
   delete names;
   t1FontNameSize = 64;
@@ -1184,13 +1184,13 @@ void PSOutputDev::init(PSOutputFunc outputFuncA, void *outputStreamA,
   formIDLen = 0;
   formIDSize = 0;
 
-  xobjStack = new GList();
+  xobjStack = new GooList();
   numSaves = 0;
   numTilingPatterns = 0;
   nextFunc = 0;
 
   // initialize embedded font resource comment list
-  embFontList = new GString();
+  embFontList = new GooString();
 
   if (!manualCtrl) {
     // this check is needed in case the document has zero pages
@@ -1250,7 +1250,7 @@ PSOutputDev::~PSOutputDev() {
 #endif
   }
   if (paperSizes) {
-    deleteGList(paperSizes, PSOutPaperSize);
+    deleteGooList(paperSizes, PSOutPaperSize);
   }
   if (embFontList) {
     delete embFontList;
@@ -1436,7 +1436,7 @@ void PSOutputDev::writeDocSetup(Catalog *catalog,
   Annots *annots;
   Object *acroForm;
   Object obj1, obj2, obj3;
-  GString *s;
+  GooString *s;
   int pg, i;
 
   if (mode == psModeForm) {
@@ -1682,7 +1682,7 @@ void PSOutputDev::setupFonts(Dict *resDict) {
 
 void PSOutputDev::setupFont(GfxFont *font, Dict *parentResDict) {
   GfxFontLoc *fontLoc;
-  GString *psName;
+  GooString *psName;
   GBool subst;
   char buf[16];
   UnicodeMap *uMap;
@@ -1712,7 +1712,7 @@ void PSOutputDev::setupFont(GfxFont *font, Dict *parentResDict) {
   subst = gFalse;
 
   if (font->getType() == fontType3) {
-    psName = GString::format("T3_{0:d}_{1:d}",
+    psName = GooString::format("T3_{0:d}_{1:d}",
 			     font->getID()->num, font->getID()->gen);
     setupType3Font(font, psName, parentResDict);
   } else {
@@ -1907,7 +1907,7 @@ void PSOutputDev::setupFont(GfxFont *font, Dict *parentResDict) {
   delete psName;
 }
 
-void PSOutputDev::setupEmbeddedType1Font(Ref *id, GString *psName) {
+void PSOutputDev::setupEmbeddedType1Font(Ref *id, GooString *psName) {
   static char hexChar[17] = "0123456789abcdef";
   Object refObj, strObj, obj1, obj2, obj3;
   Dict *dict;
@@ -2036,7 +2036,7 @@ void PSOutputDev::setupEmbeddedType1Font(Ref *id, GString *psName) {
 
 //~ This doesn't handle .pfb files or binary eexec data (which only
 //~ happens in pfb files?).
-void PSOutputDev::setupExternalType1Font(GString *fileName, GString *psName) {
+void PSOutputDev::setupExternalType1Font(GooString *fileName, GooString *psName) {
   FILE *fontFile;
   int c;
 
@@ -2067,7 +2067,7 @@ void PSOutputDev::setupExternalType1Font(GString *fileName, GString *psName) {
 }
 
 void PSOutputDev::setupEmbeddedType1CFont(GfxFont *font, Ref *id,
-					  GString *psName) {
+					  GooString *psName) {
   char *fontBuf;
   int fontLen;
   FoFiType1C *ffT1C;
@@ -2112,7 +2112,7 @@ void PSOutputDev::setupEmbeddedType1CFont(GfxFont *font, Ref *id,
 }
 
 void PSOutputDev::setupEmbeddedOpenTypeT1CFont(GfxFont *font, Ref *id,
-					       GString *psName) {
+					       GooString *psName) {
   char *fontBuf;
   int fontLen;
   FoFiTrueType *ffTT;
@@ -2159,7 +2159,7 @@ void PSOutputDev::setupEmbeddedOpenTypeT1CFont(GfxFont *font, Ref *id,
 }
 
 void PSOutputDev::setupEmbeddedTrueTypeFont(GfxFont *font, Ref *id,
-					    GString *psName) {
+					    GooString *psName) {
   char *fontBuf;
   int fontLen;
   FoFiTrueType *ffTT;
@@ -2200,8 +2200,8 @@ void PSOutputDev::setupEmbeddedTrueTypeFont(GfxFont *font, Ref *id,
   writePS("%%EndResource\n");
 }
 
-void PSOutputDev::setupExternalTrueTypeFont(GfxFont *font, GString *fileName,
-					    GString *psName) {
+void PSOutputDev::setupExternalTrueTypeFont(GfxFont *font, GooString *fileName,
+					    GooString *psName) {
   FoFiTrueType *ffTT;
   int *codeToGID;
 
@@ -2238,7 +2238,7 @@ void PSOutputDev::setupExternalTrueTypeFont(GfxFont *font, GString *fileName,
 }
 
 void PSOutputDev::setupEmbeddedCIDType0Font(GfxFont *font, Ref *id,
-					    GString *psName) {
+					    GooString *psName) {
   char *fontBuf;
   int fontLen;
   FoFiType1C *ffT1C;
@@ -2290,7 +2290,7 @@ void PSOutputDev::setupEmbeddedCIDType0Font(GfxFont *font, Ref *id,
 }
 
 void PSOutputDev::setupEmbeddedCIDTrueTypeFont(GfxFont *font, Ref *id,
-					       GString *psName,
+					       GooString *psName,
 					       GBool needVerticalMetrics) {
   char *fontBuf;
   int fontLen;
@@ -2330,8 +2330,8 @@ void PSOutputDev::setupEmbeddedCIDTrueTypeFont(GfxFont *font, Ref *id,
 }
 
 void PSOutputDev::setupExternalCIDTrueTypeFont(GfxFont *font,
-					       GString *fileName,
-					       GString *psName,
+					       GooString *fileName,
+					       GooString *psName,
 					       GBool needVerticalMetrics) {
   FoFiTrueType *ffTT;
   int *codeToGID;
@@ -2409,7 +2409,7 @@ void PSOutputDev::setupExternalCIDTrueTypeFont(GfxFont *font,
 }
 
 void PSOutputDev::setupEmbeddedOpenTypeCFFFont(GfxFont *font, Ref *id,
-					       GString *psName) {
+					       GooString *psName) {
   char *fontBuf;
   int fontLen;
   FoFiTrueType *ffTT;
@@ -2466,7 +2466,7 @@ void PSOutputDev::setupEmbeddedOpenTypeCFFFont(GfxFont *font, Ref *id,
   writePS("%%EndResource\n");
 }
 
-void PSOutputDev::setupType3Font(GfxFont *font, GString *psName,
+void PSOutputDev::setupType3Font(GfxFont *font, GooString *psName,
 				 Dict *parentResDict) {
   Dict *resDict;
   Dict *charProcs;
@@ -2474,7 +2474,7 @@ void PSOutputDev::setupType3Font(GfxFont *font, GString *psName,
   Gfx *gfx;
   PDFRectangle box;
   double *m;
-  GString *buf;
+  GooString *buf;
   int i;
 
   // set up resources used by font
@@ -2532,10 +2532,10 @@ void PSOutputDev::setupType3Font(GfxFont *font, GString *psName,
       charProc.free();
       if (t3String) {
 	if (t3Cacheable) {
-	  buf = GString::format("{0:.6g} {1:.6g} {2:.6g} {3:.6g} {4:.6g} {5:.6g} setcachedevice\n",
+	  buf = GooString::format("{0:.6g} {1:.6g} {2:.6g} {3:.6g} {4:.6g} {5:.6g} setcachedevice\n",
 				t3WX, t3WY, t3LLX, t3LLY, t3URX, t3URY);
 	} else {
-	  buf = GString::format("{0:.6g} {1:.6g} setcharwidth\n", t3WX, t3WY);
+	  buf = GooString::format("{0:.6g} {1:.6g} setcharwidth\n", t3WX, t3WY);
 	}
 	(*outputFunc)(outputStream, buf->getCString(), buf->getLength());
 	delete buf;
@@ -2562,8 +2562,8 @@ void PSOutputDev::setupType3Font(GfxFont *font, GString *psName,
 
 // Make a unique PS font name, based on the names given in the PDF
 // font object, and an object ID (font file object for 
-GString *PSOutputDev::makePSFontName(GfxFont *font, Ref *id) {
-  GString *psName, *s;
+GooString *PSOutputDev::makePSFontName(GfxFont *font, Ref *id) {
+  GooString *psName, *s;
 
   if ((s = font->getEmbeddedFontName())) {
     psName = filterPSName(s);
@@ -2581,7 +2581,7 @@ GString *PSOutputDev::makePSFontName(GfxFont *font, Ref *id) {
     }
     delete psName;
   }
-  psName = GString::format("FF{0:d}_{1:d}", id->num, id->gen);
+  psName = GooString::format("FF{0:d}_{1:d}", id->num, id->gen);
   if ((s = font->getEmbeddedFontName())) {
     s = filterPSName(s);
     psName->append('_')->append(s);
@@ -2652,7 +2652,7 @@ void PSOutputDev::setupImages(Dict *resDict) {
 
 void PSOutputDev::setupImage(Ref id, Stream *str, GBool mask) {
   GBool useRLE, useCompressed, useASCIIHex;
-  GString *s;
+  GooString *s;
   int c;
   int size, line, col, i;
 
@@ -3141,7 +3141,7 @@ void PSOutputDev::startPage(int pageNum, GfxState *state) {
   int x1, y1, x2, y2, width, height, t;
   int imgWidth, imgHeight, imgWidth2, imgHeight2;
   GBool landscape;
-  GString *s;
+  GooString *s;
 
   if (mode == psModePS) {
     writePSFmt("%%Page: {0:d} {1:d}\n", pageNum, seqPage);
@@ -4262,11 +4262,11 @@ void PSOutputDev::doPath(GfxPath *path) {
   }
 }
 
-void PSOutputDev::drawString(GfxState *state, GString *s) {
+void PSOutputDev::drawString(GfxState *state, GooString *s) {
   GfxFont *font;
   int wMode;
   int *codeToGID;
-  GString *s2;
+  GooString *s2;
   double dx, dy, originX, originY;
   char *p;
   UnicodeMap *uMap;
@@ -4323,7 +4323,7 @@ void PSOutputDev::drawString(GfxState *state, GString *s) {
   nChars = 0;
   p = s->getCString();
   len = s->getLength();
-  s2 = new GString();
+  s2 = new GooString();
   dxdySize = font->isCIDFont() ? 8 : s->getLength();
   dxdy = (double *)gmallocn(2 * dxdySize, sizeof(double));
   while (len > 0) {
@@ -4682,7 +4682,7 @@ void PSOutputDev::doImageL2(Object *ref, GfxImageColorMap *colorMap,
   PSOutImgClipRect *rects0, *rects1, *rectsTmp, *rectsOut;
   int rects0Len, rects1Len, rectsSize, rectsOutLen, rectsOutSize;
   GBool emitRect, addRect, extendRect;
-  GString *s;
+  GooString *s;
   int n, numComps;
   GBool useRLE, useASCII, useASCIIHex, useCompressed;
   GfxSeparationColorSpace *sepCS;
@@ -5202,11 +5202,11 @@ void PSOutputDev::doImageL3(Object *ref, GfxImageColorMap *colorMap,
 			    int *maskColors, Stream *maskStr,
 			    int maskWidth, int maskHeight, GBool maskInvert) {
   Stream *str2;
-  GString *s;
+  GooString *s;
   int n, numComps;
   GBool useRLE, useASCII, useASCIIHex, useCompressed;
   GBool maskUseRLE, maskUseASCII, maskUseCompressed;
-  GString *maskFilters;
+  GooString *maskFilters;
   GfxSeparationColorSpace *sepCS;
   GfxColor color;
   GfxCMYK cmyk;
@@ -5241,7 +5241,7 @@ void PSOutputDev::doImageL3(Object *ref, GfxImageColorMap *colorMap,
 	maskUseCompressed = gTrue;
       }
     }
-    maskFilters = new GString();
+    maskFilters = new GooString();
     if (maskUseASCII) {
       maskFilters->appendf("  /ASCII{0:s}Decode filter\n",
 			   useASCIIHex ? "Hex" : "85");
@@ -6273,7 +6273,7 @@ void PSOutputDev::type3D1(GfxState *state, double wx, double wy,
   t3LLY = lly;
   t3URX = urx;
   t3URY = ury;
-  t3String = new GString();
+  t3String = new GooString();
   writePS("q\n");
   t3FillColorOnly = gTrue;
   t3Cacheable = gTrue;
@@ -6472,20 +6472,20 @@ void PSOutputDev::writePS(const char *s) {
 
 void PSOutputDev::writePSFmt(const char *fmt, ...) {
   va_list args;
-  GString *buf;
+  GooString *buf;
 
   va_start(args, fmt);
   if (t3String) {
     t3String->appendfv((char *)fmt, args);
   } else {
-    buf = GString::formatv((char *)fmt, args);
+    buf = GooString::formatv((char *)fmt, args);
     (*outputFunc)(outputStream, buf->getCString(), buf->getLength());
     delete buf;
   }
   va_end(args);
 }
 
-void PSOutputDev::writePSString(GString *s) {
+void PSOutputDev::writePSString(GooString *s) {
   Guchar *p;
   int n, line;
   char buf[8];
@@ -6531,13 +6531,13 @@ void PSOutputDev::writePSName(const char *s) {
   }
 }
 
-GString *PSOutputDev::filterPSName(GString *name) {
-  GString *name2;
+GooString *PSOutputDev::filterPSName(GooString *name) {
+  GooString *name2;
   char buf[8];
   int i;
   char c;
 
-  name2 = new GString();
+  name2 = new GooString();
 
   // ghostscript chokes on names that begin with out-of-limits
   // numbers, e.g., 1e4foo is handled correctly (as a name), but
@@ -6563,7 +6563,7 @@ GString *PSOutputDev::filterPSName(GString *name) {
 }
 
 // Write a DSC-compliant <textline>.
-void PSOutputDev::writePSTextLine(GString *s) {
+void PSOutputDev::writePSTextLine(GooString *s) {
   int i, j, step;
   int c;
 

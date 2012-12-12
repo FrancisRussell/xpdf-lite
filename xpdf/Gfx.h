@@ -17,8 +17,8 @@
 
 #include "gtypes.h"
 
-class GString;
-class GList;
+class GooString;
+class GooList;
 class PDFDoc;
 class XRef;
 class Array;
@@ -198,7 +198,7 @@ private:
 				//   initialized yet
   GBool ocState;		// true if drawing is enabled, false if
 				//   disabled
-  GList *markedContentStack;	// BMC/BDC/EMC stack [GfxMarkedContent]
+  GooList *markedContentStack;	// BMC/BDC/EMC stack [GfxMarkedContent]
 
   Parser *parser;		// parser for page content stream(s)
 
@@ -318,8 +318,8 @@ private:
   void opMoveShowText(Object args[], int numArgs);
   void opMoveSetShowText(Object args[], int numArgs);
   void opShowSpaceText(Object args[], int numArgs);
-  void doShowText(GString *s);
-  void doIncCharCount(GString *s);
+  void doShowText(GooString *s);
+  void doIncCharCount(GooString *s);
 
   // XObject operators
   void opXObject(Object args[], int numArgs);

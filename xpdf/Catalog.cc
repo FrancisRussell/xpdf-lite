@@ -17,7 +17,7 @@
 #include <limits.h>
 #include "gmem.h"
 #include "gfile.h"
-#include "GList.h"
+#include "GooList.h"
 #include "Object.h"
 #include "CharTypes.h"
 #include "PDFDoc.h"
@@ -43,7 +43,7 @@ public:
   Ref ref;
   int count;
   PageTreeNode *parent;
-  GList *kids;			// [PageTreeNode]
+  GooList *kids;			// [PageTreeNode]
   PageAttrs *attrs;
 };
 
@@ -58,7 +58,7 @@ PageTreeNode::PageTreeNode(Ref refA, int countA, PageTreeNode *parentA) {
 PageTreeNode::~PageTreeNode() {
   delete attrs;
   if (kids) {
-    deleteGList(kids, PageTreeNode);
+    deleteGooList(kids, PageTreeNode);
   }
 }
 
@@ -149,7 +149,7 @@ Catalog::Catalog(PDFDoc *docA) {
 	baseURI->insert(0, "file://localhost/");
       }
     } else {
-      baseURI = new GString("file://localhost/");
+      baseURI = new GooString("file://localhost/");
     }
   }
 
@@ -207,7 +207,7 @@ Catalog::~Catalog() {
   acroForm.free();
   ocProperties.free();
   if (embeddedFiles) {
-    deleteGList(embeddedFiles, EmbeddedFile);
+    deleteGooList(embeddedFiles, EmbeddedFile);
   }
 }
 
@@ -232,8 +232,8 @@ void Catalog::doneWithPage(int i) {
   }
 }
 
-GString *Catalog::readMetadata() {
-  GString *s;
+GooString *Catalog::readMetadata() {
+  GooString *s;
   Dict *dict;
   Object obj;
   int c;
@@ -247,7 +247,7 @@ GString *Catalog::readMetadata() {
 	  obj.isName() ? obj.getName() : "???");
   }
   obj.free();
-  s = new GString();
+  s = new GooString();
   metadata.streamReset();
   while ((c = metadata.streamGetChar()) != EOF) {
     s->append(c);
@@ -269,7 +269,7 @@ int Catalog::findPage(int num, int gen) {
   return 0;
 }
 
-LinkDest *Catalog::findDest(GString *name) {
+LinkDest *Catalog::findDest(GooString *name) {
   LinkDest *dest;
   Object obj1, obj2;
   GBool found;
@@ -313,7 +313,7 @@ LinkDest *Catalog::findDest(GString *name) {
   return dest;
 }
 
-Object *Catalog::findDestInTree(Object *tree, GString *name, Object *obj) {
+Object *Catalog::findDestInTree(Object *tree, GooString *name, Object *obj) {
   Object names, name1;
   Object kids, kid, limits, low, high;
   GBool done, found;
@@ -500,7 +500,7 @@ void Catalog::loadPage2(int pg, int relPg, PageTreeNode *node) {
       node->attrs = attrs;
 
       // read the kids
-      node->kids = new GList();
+      node->kids = new GooList();
       for (i = 0; i < kidsObj.arrayGetLength(); ++i) {
 	if (kidsObj.arrayGetNF(i, &kidRefObj)->isRef()) {
 	  if (kidRefObj.fetch(xref, &kidObj)->isDict()) {
@@ -660,7 +660,7 @@ void Catalog::readFileAttachmentAnnots(Object *pageNodeRef,
 
 void Catalog::readEmbeddedFile(Object *fileSpec, Object *name1) {
   Object name2, efObj, streamObj;
-  GString *s;
+  GooString *s;
   Unicode *name;
   int nameLen, i;
 
@@ -702,7 +702,7 @@ void Catalog::readEmbeddedFile(Object *fileSpec, Object *name1) {
     if (fileSpec->dictLookup("EF", &efObj)->isDict()) {
       if (efObj.dictLookupNF("F", &streamObj)->isRef()) {
 	if (!embeddedFiles) {
-	  embeddedFiles = new GList();
+	  embeddedFiles = new GooList();
 	}
 	embeddedFiles->append(new EmbeddedFile(name, nameLen, &streamObj));
       } else {

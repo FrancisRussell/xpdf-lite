@@ -22,8 +22,8 @@
 #include <io.h>    // for setmode
 #endif
 #include "gmem.h"
-#include "GString.h"
-#include "GList.h"
+#include "GooString.h"
+#include "GooList.h"
 #include "config.h"
 #include "Error.h"
 #include "GlobalParams.h"
@@ -173,7 +173,7 @@ TextFontInfo::TextFontInfo(GfxState *state) {
   gfxFont = state->getFont();
 #if TEXTOUT_WORD_LIST
   fontName = (gfxFont && gfxFont->getName()) ? gfxFont->getName()->copy()
-                                             : (GString *)NULL;
+                                             : (GooString *)NULL;
   flags = gfxFont ? gfxFont->getFlags() : 0;
 #endif
 }
@@ -488,13 +488,13 @@ int TextWord::cmpYX(const void *p1, const void *p2) {
 
 #if TEXTOUT_WORD_LIST
 
-GString *TextWord::getText() {
-  GString *s;
+GooString *TextWord::getText() {
+  GooString *s;
   UnicodeMap *uMap;
   char buf[8];
   int n, i;
 
-  s = new GString();
+  s = new GooString();
   if (!(uMap = globalParams->getTextEncoding())) {
     return s;
   }
@@ -1766,7 +1766,7 @@ TextWordList::TextWordList(TextPage *text, GBool physLayout) {
   TextWord **wordArray;
   int nWords, i;
 
-  words = new GList();
+  words = new GooList();
 
   if (text->rawOrder) {
     for (word = text->rawWords; word; word = word->next) {
@@ -1860,11 +1860,11 @@ TextPage::TextPage(GBool rawOrderA) {
   blocks = NULL;
   rawWords = NULL;
   rawLastWord = NULL;
-  fonts = new GList();
+  fonts = new GooList();
   lastFindXMin = lastFindYMin = 0;
   haveLastFind = gFalse;
-  underlines = new GList();
-  links = new GList();
+  underlines = new GooList();
+  links = new GooList();
 }
 
 TextPage::~TextPage() {
@@ -1877,8 +1877,8 @@ TextPage::~TextPage() {
     }
   }
   delete fonts;
-  deleteGList(underlines, TextUnderline);
-  deleteGList(links, TextLink);
+  deleteGooList(underlines, TextUnderline);
+  deleteGooList(links, TextLink);
 }
 
 void TextPage::startPage(GfxState *state) {
@@ -1924,9 +1924,9 @@ void TextPage::clear() {
     }
     gfree(blocks);
   }
-  deleteGList(fonts, TextFontInfo);
-  deleteGList(underlines, TextUnderline);
-  deleteGList(links, TextLink);
+  deleteGooList(fonts, TextFontInfo);
+  deleteGooList(underlines, TextUnderline);
+  deleteGooList(links, TextLink);
 
   curWord = NULL;
   charPos = 0;
@@ -1946,9 +1946,9 @@ void TextPage::clear() {
   blocks = NULL;
   rawWords = NULL;
   rawLastWord = NULL;
-  fonts = new GList();
-  underlines = new GList();
-  links = new GList();
+  fonts = new GooList();
+  underlines = new GooList();
+  links = new GooList();
 }
 
 void TextPage::updateFont(GfxState *state) {
@@ -3337,9 +3337,9 @@ GBool TextPage::findText(Unicode *s, int len,
   return gFalse;
 }
 
-GString *TextPage::getText(double xMin, double yMin,
+GooString *TextPage::getText(double xMin, double yMin,
 			   double xMax, double yMax) {
-  GString *s;
+  GooString *s;
   UnicodeMap *uMap;
   GBool isUnicode;
   TextBlock *blk;
@@ -3354,7 +3354,7 @@ GString *TextPage::getText(double xMin, double yMin,
   int col, idx0, idx1, i, j;
   GBool multiLine, oneRot;
 
-  s = new GString();
+  s = new GooString();
 
   if (rawOrder) {
     return s;
@@ -3662,7 +3662,7 @@ void TextPage::dump(void *outputStream, TextOutputFunc outputFunc,
   char space[8], eol[16], eop[8];
   int spaceLen, eolLen, eopLen;
   GBool pageBreaks;
-  GString *s;
+  GooString *s;
   double delta;
   int col, i, j, d, n;
 
@@ -3693,7 +3693,7 @@ void TextPage::dump(void *outputStream, TextOutputFunc outputFunc,
   if (rawOrder) {
 
     for (word = rawWords; word; word = word->next) {
-      s = new GString();
+      s = new GooString();
       dumpFragment(word->text, word->len, uMap, s);
       (*outputFunc)(outputStream, s->getCString(), s->getLength());
       delete s;
@@ -3767,7 +3767,7 @@ void TextPage::dump(void *outputStream, TextOutputFunc outputFunc,
       }
 
       // print the line
-      s = new GString();
+      s = new GooString();
       col += dumpFragment(frag->line->text + frag->start, frag->len, uMap, s);
       (*outputFunc)(outputStream, s->getCString(), s->getLength());
       delete s;
@@ -3806,7 +3806,7 @@ void TextPage::dump(void *outputStream, TextOutputFunc outputFunc,
 	  if (line->hyphenated && (line->next || blk->next)) {
 	    --n;
 	  }
-	  s = new GString();
+	  s = new GooString();
 	  dumpFragment(line->text, n, uMap, s);
 	  (*outputFunc)(outputStream, s->getCString(), s->getLength());
 	  delete s;
@@ -3936,7 +3936,7 @@ void TextPage::assignColumns(TextLineFrag *frags, int nFrags, GBool oneRot) {
 }
 
 int TextPage::dumpFragment(Unicode *text, int len, UnicodeMap *uMap,
-			   GString *s) {
+			   GooString *s) {
   char lre[8], rle[8], popdf[8], buf[8];
   int lreLen, rleLen, popdfLen, n;
   int nCols, i, j, k;
@@ -4119,7 +4119,7 @@ void TextOutputDev::updateFont(GfxState *state) {
   text->updateFont(state);
 }
 
-void TextOutputDev::beginString(GfxState *state, GString *s) {
+void TextOutputDev::beginString(GfxState *state, GooString *s) {
 }
 
 void TextOutputDev::endString(GfxState *state) {
@@ -4304,7 +4304,7 @@ GBool TextOutputDev::findText(Unicode *s, int len,
 			xMin, yMin, xMax, yMax);
 }
 
-GString *TextOutputDev::getText(double xMin, double yMin,
+GooString *TextOutputDev::getText(double xMin, double yMin,
 				double xMax, double yMax) {
   return text->getText(xMin, yMin, xMax, yMax);
 }

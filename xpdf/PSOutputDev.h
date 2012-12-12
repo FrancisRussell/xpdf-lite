@@ -21,7 +21,7 @@
 #include "GlobalParams.h"
 #include "OutputDev.h"
 
-class GHash;
+class GooHash;
 class PDFDoc;
 class XRef;
 class Function;
@@ -60,7 +60,7 @@ enum PSOutCustomCodeLocation {
 
 typedef void (*PSOutputFunc)(void *stream, const char *data, int len);
 
-typedef GString *(*PSOutCustomCodeCbk)(PSOutputDev *psOut,
+typedef GooString *(*PSOutCustomCodeCbk)(PSOutputDev *psOut,
 				       PSOutCustomCodeLocation loc, int n, 
 				       void *data);
 
@@ -212,7 +212,7 @@ public:
   virtual void clipToStrokePath(GfxState *state);
 
   //----- text drawing
-  virtual void drawString(GfxState *state, GString *s);
+  virtual void drawString(GfxState *state, GooString *s);
   virtual void endTextObject(GfxState *state);
 
   //----- image drawing
@@ -264,7 +264,7 @@ public:
   void writePSChar(char c);
   void writePS(const char *s);
   void writePSFmt(const char *fmt, ...);
-  void writePSString(GString *s);
+  void writePSString(GooString *s);
   void writePSName(const char *s);
 
 private:
@@ -277,23 +277,23 @@ private:
   void setupResources(Dict *resDict);
   void setupFonts(Dict *resDict);
   void setupFont(GfxFont *font, Dict *parentResDict);
-  void setupEmbeddedType1Font(Ref *id, GString *psName);
-  void setupExternalType1Font(GString *fileName, GString *psName);
-  void setupEmbeddedType1CFont(GfxFont *font, Ref *id, GString *psName);
-  void setupEmbeddedOpenTypeT1CFont(GfxFont *font, Ref *id, GString *psName);
-  void setupEmbeddedTrueTypeFont(GfxFont *font, Ref *id, GString *psName);
-  void setupExternalTrueTypeFont(GfxFont *font, GString *fileName,
-				 GString *psName);
-  void setupEmbeddedCIDType0Font(GfxFont *font, Ref *id, GString *psName);
-  void setupEmbeddedCIDTrueTypeFont(GfxFont *font, Ref *id, GString *psName,
+  void setupEmbeddedType1Font(Ref *id, GooString *psName);
+  void setupExternalType1Font(GooString *fileName, GooString *psName);
+  void setupEmbeddedType1CFont(GfxFont *font, Ref *id, GooString *psName);
+  void setupEmbeddedOpenTypeT1CFont(GfxFont *font, Ref *id, GooString *psName);
+  void setupEmbeddedTrueTypeFont(GfxFont *font, Ref *id, GooString *psName);
+  void setupExternalTrueTypeFont(GfxFont *font, GooString *fileName,
+				 GooString *psName);
+  void setupEmbeddedCIDType0Font(GfxFont *font, Ref *id, GooString *psName);
+  void setupEmbeddedCIDTrueTypeFont(GfxFont *font, Ref *id, GooString *psName,
 				    GBool needVerticalMetrics);
   void setupExternalCIDTrueTypeFont(GfxFont *font,
-				    GString *fileName,
-				    GString *psName,
+				    GooString *fileName,
+				    GooString *psName,
 				    GBool needVerticalMetrics);
-  void setupEmbeddedOpenTypeCFFFont(GfxFont *font, Ref *id, GString *psName);
-  void setupType3Font(GfxFont *font, GString *psName, Dict *parentResDict);
-  GString *makePSFontName(GfxFont *font, Ref *id);
+  void setupEmbeddedOpenTypeCFFFont(GfxFont *font, Ref *id, GooString *psName);
+  void setupType3Font(GfxFont *font, GooString *psName, Dict *parentResDict);
+  GooString *makePSFontName(GfxFont *font, Ref *id);
   void setupImages(Dict *resDict);
   void setupImage(Ref id, Stream *str, GBool mask);
   void setupForms(Dict *resDict);
@@ -328,8 +328,8 @@ private:
   GBool getFileSpec(Object *fileSpec, Object *fileName);
 #endif
   void cvtFunction(Function *func);
-  GString *filterPSName(GString *name);
-  void writePSTextLine(GString *s);
+  GooString *filterPSName(GooString *name);
+  void writePSTextLine(GooString *s);
 
   PSLevel level;		// PostScript level (1, 2, separation)
   PSOutMode mode;		// PostScript mode (PS, EPS, form)
@@ -350,7 +350,7 @@ private:
   void *underlayCbkData;
   void (*overlayCbk)(PSOutputDev *psOut, void *data);
   void *overlayCbkData;
-  GString *(*customCodeCbk)(PSOutputDev *psOut,
+  GooString *(*customCodeCbk)(PSOutputDev *psOut,
 			    PSOutCustomCodeLocation loc, int n, 
 			    void *data);
   void *customCodeCbkData;
@@ -361,7 +361,7 @@ private:
   Ref *fontIDs;			// list of object IDs of all used fonts
   int fontIDLen;		// number of entries in fontIDs array
   int fontIDSize;		// size of fontIDs array
-  GHash *fontNames;		// all used font names
+  GooHash *fontNames;		// all used font names
   PST1FontName *t1FontNames;	// font names for Type 1/1C fonts
   int t1FontNameLen;		// number of entries in t1FontNames array
   int t1FontNameSize;		// size of t1FontNames array
@@ -377,13 +377,13 @@ private:
   Ref *formIDs;			// list of IDs for predefined forms
   int formIDLen;		// number of entries in formIDs array
   int formIDSize;		// size of formIDs array
-  GList *xobjStack;		// stack of XObject dicts currently being
+  GooList *xobjStack;		// stack of XObject dicts currently being
 				//   processed
   int numSaves;			// current number of gsaves
   int numTilingPatterns;	// current number of nested tiling patterns
   int nextFunc;			// next unique number to use for a function
 
-  GList *paperSizes;		// list of used paper sizes, if paperMatch
+  GooList *paperSizes;		// list of used paper sizes, if paperMatch
 				//   is true [PSOutPaperSize]
   double tx0, ty0;		// global translation
   double xScale0, yScale0;	// global scaling
@@ -396,7 +396,7 @@ private:
   double epsX1, epsY1,		// EPS bounding box (unrotated)
          epsX2, epsY2;
 
-  GString *embFontList;		// resource comments for embedded fonts
+  GooString *embFontList;		// resource comments for embedded fonts
 
   int processColors;		// used process colors
   PSOutCustomColor		// used custom colors
@@ -406,7 +406,7 @@ private:
 				//   clipping render mode
 
   GBool inType3Char;		// inside a Type 3 CharProc
-  GString *t3String;		// Type 3 content string
+  GooString *t3String;		// Type 3 content string
   double t3WX, t3WY,		// Type 3 character parameters
          t3LLX, t3LLY, t3URX, t3URY;
   GBool t3FillColorOnly;	// operators should only use the fill color

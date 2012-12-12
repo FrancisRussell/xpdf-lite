@@ -115,7 +115,7 @@ Object *Lexer::getObj(Object *obj) {
   int numParen;
   int xi;
   double xf, scale;
-  GString *s;
+  GooString *s;
   int n, m;
 
   // skip whitespace and comments
@@ -288,7 +288,7 @@ Object *Lexer::getObj(Object *obj) {
       if (c2 != EOF) {
 	if (n == tokBufSize) {
 	  if (!s)
-	    s = new GString(tokBuf, tokBufSize);
+	    s = new GooString(tokBuf, tokBufSize);
 	  else
 	    s->append(tokBuf, tokBufSize);
 	  p = tokBuf;
@@ -299,7 +299,7 @@ Object *Lexer::getObj(Object *obj) {
       }
     } while (!done);
     if (!s)
-      s = new GString(tokBuf, n);
+      s = new GooString(tokBuf, n);
     else
       s->append(tokBuf, n);
     obj->initString(s);
@@ -345,7 +345,7 @@ Object *Lexer::getObj(Object *obj) {
 	*p++ = c;
       } else if (n == tokBufSize) {
 	*p = c;
-	s = new GString(tokBuf, n);
+	s = new GooString(tokBuf, n);
       } else {
 	s->append((char)c);
       }
@@ -405,7 +405,7 @@ Object *Lexer::getObj(Object *obj) {
 	  if (++m == 2) {
 	    if (n == tokBufSize) {
 	      if (!s)
-		s = new GString(tokBuf, tokBufSize);
+		s = new GooString(tokBuf, tokBufSize);
 	      else
 		s->append(tokBuf, tokBufSize);
 	      p = tokBuf;
@@ -419,7 +419,7 @@ Object *Lexer::getObj(Object *obj) {
 	}
       }
       if (!s)
-	s = new GString(tokBuf, n);
+	s = new GooString(tokBuf, n);
       else
 	s->append(tokBuf, n);
       if (m == 1)

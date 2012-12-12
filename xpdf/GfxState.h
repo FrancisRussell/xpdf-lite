@@ -450,7 +450,7 @@ private:
 class GfxSeparationColorSpace: public GfxColorSpace {
 public:
 
-  GfxSeparationColorSpace(GString *nameA, GfxColorSpace *altA,
+  GfxSeparationColorSpace(GooString *nameA, GfxColorSpace *altA,
 			  Function *funcA);
   virtual ~GfxSeparationColorSpace();
   virtual GfxColorSpace *copy();
@@ -469,17 +469,17 @@ public:
   virtual GBool isNonMarking() { return nonMarking; }
 
   // Separation-specific access.
-  GString *getName() { return name; }
+  GooString *getName() { return name; }
   GfxColorSpace *getAlt() { return alt; }
   Function *getFunc() { return func; }
 
 private:
 
-  GfxSeparationColorSpace(GString *nameA, GfxColorSpace *altA,
+  GfxSeparationColorSpace(GooString *nameA, GfxColorSpace *altA,
 			  Function *funcA, GBool nonMarkingA,
 			  Guint overprintMaskA);
 
-  GString *name;		// colorant name
+  GooString *name;		// colorant name
   GfxColorSpace *alt;		// alternate color space
   Function *func;		// tint transform (into alternate color space)
   GBool nonMarking;
@@ -492,7 +492,7 @@ private:
 class GfxDeviceNColorSpace: public GfxColorSpace {
 public:
 
-  GfxDeviceNColorSpace(int nCompsA, GString **namesA,
+  GfxDeviceNColorSpace(int nCompsA, GooString **namesA,
 		       GfxColorSpace *alt, Function *func);
   virtual ~GfxDeviceNColorSpace();
   virtual GfxColorSpace *copy();
@@ -511,18 +511,18 @@ public:
   virtual GBool isNonMarking() { return nonMarking; }
 
   // DeviceN-specific access.
-  GString *getColorantName(int i) { return names[i]; }
+  GooString *getColorantName(int i) { return names[i]; }
   GfxColorSpace *getAlt() { return alt; }
   Function *getTintTransformFunc() { return func; }
 
 private:
 
-  GfxDeviceNColorSpace(int nCompsA, GString **namesA,
+  GfxDeviceNColorSpace(int nCompsA, GooString **namesA,
 		       GfxColorSpace *alt, Function *func,
 		       GBool nonMarkingA, Guint overprintMaskA);
 
   int nComps;			// number of components
-  GString			// colorant names
+  GooString			// colorant names
     *names[gfxColorMaxComps];
   GfxColorSpace *alt;		// alternate color space
   Function *func;		// tint transform (into alternate color space)

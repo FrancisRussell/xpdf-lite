@@ -18,7 +18,7 @@
 #include "gtypes.h"
 #include "Object.h"
 
-class GString;
+class GooString;
 class PDFDoc;
 struct XpdfSecurityHandler;
 
@@ -46,14 +46,14 @@ public:
   // document can be opened (if it's unencrypted, or if a correct
   // password is obtained); false otherwise (encrypted and no correct
   // password).
-  GBool checkEncryption(GString *ownerPassword,
-			GString *userPassword);
+  GBool checkEncryption(GooString *ownerPassword,
+			GooString *userPassword);
 
   // Create authorization data for the specified owner and user
   // passwords.  If the security handler doesn't support "batch" mode,
   // this function should return NULL.
-  virtual void *makeAuthData(GString *ownerPassword,
-			     GString *userPassword) = 0;
+  virtual void *makeAuthData(GooString *ownerPassword,
+			     GooString *userPassword) = 0;
 
   // Construct authorization data, typically by prompting the user for
   // a password.  Returns an authorization data object, or NULL to
@@ -95,8 +95,8 @@ public:
   virtual ~StandardSecurityHandler();
 
   virtual GBool isUnencrypted();
-  virtual void *makeAuthData(GString *ownerPassword,
-			     GString *userPassword);
+  virtual void *makeAuthData(GooString *ownerPassword,
+			     GooString *userPassword);
   virtual void *getAuthData();
   virtual void freeAuthData(void *authData);
   virtual GBool authorize(void *authData);
@@ -118,9 +118,9 @@ private:
   CryptAlgorithm encAlgorithm;
   GBool encryptMetadata;
 
-  GString *ownerKey, *userKey;
-  GString *ownerEnc, *userEnc;
-  GString *fileID;
+  GooString *ownerKey, *userKey;
+  GooString *ownerEnc, *userEnc;
+  GooString *fileID;
   GBool ok;
 };
 
@@ -136,8 +136,8 @@ public:
 			  XpdfSecurityHandler *xshA);
   virtual ~ExternalSecurityHandler();
 
-  virtual void *makeAuthData(GString *ownerPassword,
-			     GString *userPassword);
+  virtual void *makeAuthData(GooString *ownerPassword,
+			     GooString *userPassword);
   virtual void *getAuthData();
   virtual void freeAuthData(void *authData);
   virtual GBool authorize(void *authData);

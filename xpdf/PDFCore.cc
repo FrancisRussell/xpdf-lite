@@ -13,8 +13,8 @@
 #endif
 
 #include <math.h>
-#include "GString.h"
-#include "GList.h"
+#include "GooString.h"
+#include "GooList.h"
 #include "GlobalParams.h"
 #include "Splash.h"
 #include "SplashBitmap.h"
@@ -34,7 +34,7 @@
 
 PDFCorePage::PDFCorePage(int pageA, int wA, int hA, int tileWA, int tileHA) {
   page = pageA;
-  tiles = new GList();
+  tiles = new GooList();
   w = wA;
   h = hA;
   tileW = tileWA;
@@ -44,7 +44,7 @@ PDFCorePage::PDFCorePage(int pageA, int wA, int hA, int tileWA, int tileHA) {
 }
 
 PDFCorePage::~PDFCorePage() {
-  deleteGList(tiles, PDFCoreTile);
+  deleteGooList(tiles, PDFCoreTile);
   if (links) {
     delete links;
   }
@@ -110,7 +110,7 @@ PDFCore::PDFCore(SplashColorMode colorModeA, int bitmapRowPadA,
   }
 
 
-  pages = new GList();
+  pages = new GooList();
   curTile = NULL;
 
   splashColorCopy(paperColor, paperColorA);
@@ -132,12 +132,12 @@ PDFCore::~PDFCore() {
     }
   }
   gfree(pageY);
-  deleteGList(pages, PDFCorePage);
+  deleteGooList(pages, PDFCorePage);
   delete out;
 }
 
-int PDFCore::loadFile(GString *fileName, GString *ownerPassword,
-		      GString *userPassword) {
+int PDFCore::loadFile(GooString *fileName, GooString *ownerPassword,
+		      GooString *userPassword) {
   int err;
 
   setBusyCursor(gTrue);
@@ -149,7 +149,7 @@ int PDFCore::loadFile(GString *fileName, GString *ownerPassword,
 
 #ifdef WIN32
 int PDFCore::loadFile(wchar_t *fileName, int fileNameLen,
-		      GString *ownerPassword, GString *userPassword) {
+		      GooString *ownerPassword, GooString *userPassword) {
   int err;
 
   setBusyCursor(gTrue);
@@ -160,8 +160,8 @@ int PDFCore::loadFile(wchar_t *fileName, int fileNameLen,
 }
 #endif
 
-int PDFCore::loadFile(BaseStream *stream, GString *ownerPassword,
-		      GString *userPassword) {
+int PDFCore::loadFile(BaseStream *stream, GooString *ownerPassword,
+		      GooString *userPassword) {
   int err;
 
   setBusyCursor(gTrue);
@@ -952,7 +952,7 @@ GBool PDFCore::gotoPrevPage(int dec, GBool top, GBool bottom) {
   return gTrue;
 }
 
-GBool PDFCore::gotoNamedDestination(GString *dest) {
+GBool PDFCore::gotoNamedDestination(GooString *dest) {
   LinkDest *d;
 
   if (!doc) {
@@ -1612,12 +1612,12 @@ GBool PDFCore::getSelection(int *pg, double *ulx, double *uly,
   return gTrue;
 }
 
-GString *PDFCore::extractText(int pg, double xMin, double yMin,
+GooString *PDFCore::extractText(int pg, double xMin, double yMin,
 			      double xMax, double yMax) {
   PDFCorePage *page;
   TextOutputDev *textOut;
   int x0, y0, x1, y1, t;
-  GString *s;
+  GooString *s;
 
   if (!doc->okToCopy()) {
     return NULL;
@@ -1646,7 +1646,7 @@ GString *PDFCore::extractText(int pg, double xMin, double yMin,
       }
       s = textOut->getText(x0, y0, x1, y1);
     } else {
-      s = new GString();
+      s = new GooString();
     }
     delete textOut;
   }

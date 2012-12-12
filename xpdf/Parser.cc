@@ -49,7 +49,7 @@ Object *Parser::getObj(Object *obj, GBool simpleOnly,
   Object obj2;
   int num;
   DecryptStream *decrypt;
-  GString *s, *s2;
+  GooString *s, *s2;
   int c;
 
   // refill buffer after inline image data
@@ -124,7 +124,7 @@ Object *Parser::getObj(Object *obj, GBool simpleOnly,
   // string
   } else if (buf1.isString() && fileKey) {
     s = buf1.getString();
-    s2 = new GString();
+    s2 = new GooString();
     obj2.initNull();
     decrypt = new DecryptStream(new MemStream(s->getCString(), 0,
 					      s->getLength(), &obj2),

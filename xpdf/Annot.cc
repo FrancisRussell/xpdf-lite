@@ -15,7 +15,7 @@
 #include <stdlib.h>
 #include <math.h>
 #include "gmem.h"
-#include "GList.h"
+#include "GooList.h"
 #include "Error.h"
 #include "Object.h"
 #include "Catalog.h"
@@ -108,7 +108,7 @@ Annot::Annot(PDFDoc *docA, Dict *dict, Ref *refA) {
   //----- parse the type
 
   if (dict->lookup("Subtype", &obj1)->isName()) {
-    type = new GString(obj1.getName());
+    type = new GooString(obj1.getName());
   }
   obj1.free();
 
@@ -251,16 +251,16 @@ Annot::Annot(PDFDoc *docA, Dict *dict, Ref *refA) {
   dict->lookup("AP", &apObj);
   dict->lookup("AS", &asObj);
   if (asObj.isName()) {
-    appearanceState = new GString(asObj.getName());
+    appearanceState = new GooString(asObj.getName());
   } else if (apObj.isDict()) {
     apObj.dictLookup("N", &obj1);
     if (obj1.isDict() && obj1.dictGetLength() == 1) {
-      appearanceState = new GString(obj1.dictGetKey(0));
+      appearanceState = new GooString(obj1.dictGetKey(0));
     }
     obj1.free();
   }
   if (!appearanceState) {
-    appearanceState = new GString("Off");
+    appearanceState = new GooString("Off");
   }
   asObj.free();
 
@@ -312,8 +312,8 @@ void Annot::generateFieldAppearance(Dict *field, Dict *annot, Dict *acroForm) {
   GBool hasCaption;
   double w, dx, dy, r;
   double *dash;
-  GString *caption, *da;
-  GString **text;
+  GooString *caption, *da;
+  GooString **text;
   GBool *selection;
   int rot, dashLength, ff, quadding, comb, nOptions, topIdx, i, j;
 
@@ -322,7 +322,7 @@ void Annot::generateFieldAppearance(Dict *field, Dict *annot, Dict *acroForm) {
     return;
   }
 
-  appearBuf = new GString();
+  appearBuf = new GooString();
 
   // get the appearance characteristics (MK) dictionary
   if (annot->lookup("MK", &mkObj)->isDict()) {
@@ -527,7 +527,7 @@ void Annot::generateFieldAppearance(Dict *field, Dict *annot, Dict *acroForm) {
       fieldLookup(field, acroForm, "V", &obj1);
       if (obj1.isName() && !obj1.isName("Off")) {
 	if (!caption) {
-	  caption = new GString("3"); // ZapfDingbats checkmark
+	  caption = new GooString("3"); // ZapfDingbats checkmark
 	}
 	drawText(caption, da, fontDict, gFalse, 0, fieldQuadCenter,
 		 gFalse, gTrue, rot);
@@ -582,7 +582,7 @@ void Annot::generateFieldAppearance(Dict *field, Dict *annot, Dict *acroForm) {
       if (field->lookup("Opt", &obj1)->isArray()) {
 	nOptions = obj1.arrayGetLength();
 	// get the option text
-	text = (GString **)gmallocn(nOptions, sizeof(GString *));
+	text = (GooString **)gmallocn(nOptions, sizeof(GooString *));
 	for (i = 0; i < nOptions; ++i) {
 	  text[i] = NULL;
 	  obj1.arrayGet(i, &obj2);
@@ -596,7 +596,7 @@ void Annot::generateFieldAppearance(Dict *field, Dict *annot, Dict *acroForm) {
 	  }
 	  obj2.free();
 	  if (!text[i]) {
-	    text[i] = new GString();
+	    text[i] = new GooString();
 	  }
 	}
 	// get the selected option(s)
@@ -727,12 +727,12 @@ void Annot::setColor(Array *a, GBool fill, int adjust) {
 }
 
 // Draw the variable text or caption for a field.
-void Annot::drawText(GString *text, GString *da, GfxFontDict *fontDict,
+void Annot::drawText(GooString *text, GooString *da, GfxFontDict *fontDict,
 		     GBool multiline, int comb, int quadding,
 		     GBool txField, GBool forceZapfDingbats, int rot) {
-  GString *text2;
-  GList *daToks;
-  GString *tok;
+  GooString *text2;
+  GooList *daToks;
+  GooString *tok;
   GfxFont *font;
   double dx, dy;
   double fontSize, fontSize2, border, x, xPrev, y, w, w2, wMax;
@@ -746,7 +746,7 @@ void Annot::drawText(GString *text, GString *da, GfxFontDict *fontDict,
   //~ this currently drops all non-Latin1 characters
   if (text->getLength() >= 2 &&
       text->getChar(0) == '\xfe' && text->getChar(1) == '\xff') {
-    text2 = new GString();
+    text2 = new GooString();
     for (i = 2; i+1 < text->getLength(); i += 2) {
       c = ((text->getChar(i) & 0xff) << 8) + (text->getChar(i+1) & 0xff);
       if (c <= 0xff) {
@@ -762,7 +762,7 @@ void Annot::drawText(GString *text, GString *da, GfxFontDict *fontDict,
   // parse the default appearance string
   tfPos = tmPos = -1;
   if (da) {
-    daToks = new GList();
+    daToks = new GooList();
     i = 0;
     while (i < da->getLength()) {
       while (i < da->getLength() && Lexer::isSpace(da->getChar(i))) {
@@ -772,14 +772,14 @@ void Annot::drawText(GString *text, GString *da, GfxFontDict *fontDict,
 	for (j = i + 1;
 	     j < da->getLength() && !Lexer::isSpace(da->getChar(j));
 	     ++j) ;
-	daToks->append(new GString(da, i, j - i));
+	daToks->append(new GooString(da, i, j - i));
 	i = j;
       }
     }
     for (i = 2; i < daToks->getLength(); ++i) {
-      if (i >= 2 && !((GString *)daToks->get(i))->cmp("Tf")) {
+      if (i >= 2 && !((GooString *)daToks->get(i))->cmp("Tf")) {
 	tfPos = i - 2;
-      } else if (i >= 6 && !((GString *)daToks->get(i))->cmp("Tm")) {
+      } else if (i >= 6 && !((GooString *)daToks->get(i))->cmp("Tm")) {
 	tmPos = i - 6;
       }
     }
@@ -791,7 +791,7 @@ void Annot::drawText(GString *text, GString *da, GfxFontDict *fontDict,
   //~ this should create the font if needed (?)
   if (forceZapfDingbats) {
     if (tfPos >= 0) {
-      tok = (GString *)daToks->get(tfPos);
+      tok = (GooString *)daToks->get(tfPos);
       if (tok->cmp("/ZaDb")) {
 	tok->clear();
 	tok->append("/ZaDb");
@@ -803,7 +803,7 @@ void Annot::drawText(GString *text, GString *da, GfxFontDict *fontDict,
   font = NULL;
   fontSize = 0;
   if (tfPos >= 0) {
-    tok = (GString *)daToks->get(tfPos);
+    tok = (GooString *)daToks->get(tfPos);
     if (tok->getLength() >= 1 && tok->getChar(0) == '/') {
       if (!fontDict || !(font = fontDict->lookup(tok->getCString() + 1))) {
 	error(errSyntaxError, -1, "Unknown font in field's DA string");
@@ -812,7 +812,7 @@ void Annot::drawText(GString *text, GString *da, GfxFontDict *fontDict,
       error(errSyntaxError, -1,
 	    "Invalid font name in 'Tf' operator in field's DA string");
     }
-    tok = (GString *)daToks->get(tfPos + 1);
+    tok = (GooString *)daToks->get(tfPos + 1);
     fontSize = atof(tok->getCString());
   } else {
     error(errSyntaxError, -1, "Missing 'Tf' operator in field's DA string");
@@ -871,7 +871,7 @@ void Annot::drawText(GString *text, GString *da, GfxFontDict *fontDict,
 	}
       }
       if (tfPos >= 0) {
-	tok = (GString *)daToks->get(tfPos + 1);
+	tok = (GooString *)daToks->get(tfPos + 1);
 	tok->clear();
 	tok->appendf("{0:.2f}", fontSize);
       }
@@ -884,10 +884,10 @@ void Annot::drawText(GString *text, GString *da, GfxFontDict *fontDict,
 
     // set the font matrix
     if (tmPos >= 0) {
-      tok = (GString *)daToks->get(tmPos + 4);
+      tok = (GooString *)daToks->get(tmPos + 4);
       tok->clear();
       tok->append('0');
-      tok = (GString *)daToks->get(tmPos + 5);
+      tok = (GooString *)daToks->get(tmPos + 5);
       tok->clear();
       tok->appendf("{0:.2f}", y);
     }
@@ -895,7 +895,7 @@ void Annot::drawText(GString *text, GString *da, GfxFontDict *fontDict,
     // write the DA string
     if (daToks) {
       for (i = 0; i < daToks->getLength(); ++i) {
-	appearBuf->append((GString *)daToks->get(i))->append(' ');
+	appearBuf->append((GooString *)daToks->get(i))->append(' ');
       }
     }
 
@@ -964,7 +964,7 @@ void Annot::drawText(GString *text, GString *da, GfxFontDict *fontDict,
 	}
 	fontSize = floor(fontSize);
 	if (tfPos >= 0) {
-	  tok = (GString *)daToks->get(tfPos + 1);
+	  tok = (GooString *)daToks->get(tfPos + 1);
 	  tok->clear();
 	  tok->appendf("{0:.2f}", fontSize);
 	}
@@ -987,10 +987,10 @@ void Annot::drawText(GString *text, GString *da, GfxFontDict *fontDict,
 
       // set the font matrix
       if (tmPos >= 0) {
-	tok = (GString *)daToks->get(tmPos + 4);
+	tok = (GooString *)daToks->get(tmPos + 4);
 	tok->clear();
 	tok->appendf("{0:.2f}", x);
-	tok = (GString *)daToks->get(tmPos + 5);
+	tok = (GooString *)daToks->get(tmPos + 5);
 	tok->clear();
 	tok->appendf("{0:.2f}", y);
       }
@@ -998,7 +998,7 @@ void Annot::drawText(GString *text, GString *da, GfxFontDict *fontDict,
       // write the DA string
       if (daToks) {
 	for (i = 0; i < daToks->getLength(); ++i) {
-	  appearBuf->append((GString *)daToks->get(i))->append(' ');
+	  appearBuf->append((GooString *)daToks->get(i))->append(' ');
 	}
       }
 
@@ -1050,7 +1050,7 @@ void Annot::drawText(GString *text, GString *da, GfxFontDict *fontDict,
 	}
 	fontSize = floor(fontSize);
 	if (tfPos >= 0) {
-	  tok = (GString *)daToks->get(tfPos + 1);
+	  tok = (GooString *)daToks->get(tfPos + 1);
 	  tok->clear();
 	  tok->appendf("{0:.2f}", fontSize);
 	}
@@ -1074,10 +1074,10 @@ void Annot::drawText(GString *text, GString *da, GfxFontDict *fontDict,
 
       // set the font matrix
       if (tmPos >= 0) {
-	tok = (GString *)daToks->get(tmPos + 4);
+	tok = (GooString *)daToks->get(tmPos + 4);
 	tok->clear();
 	tok->appendf("{0:.2f}", x);
-	tok = (GString *)daToks->get(tmPos + 5);
+	tok = (GooString *)daToks->get(tmPos + 5);
 	tok->clear();
 	tok->appendf("{0:.2f}", y);
       }
@@ -1085,7 +1085,7 @@ void Annot::drawText(GString *text, GString *da, GfxFontDict *fontDict,
       // write the DA string
       if (daToks) {
 	for (i = 0; i < daToks->getLength(); ++i) {
-	  appearBuf->append((GString *)daToks->get(i))->append(' ');
+	  appearBuf->append((GooString *)daToks->get(i))->append(' ');
 	}
       }
 
@@ -1119,7 +1119,7 @@ void Annot::drawText(GString *text, GString *da, GfxFontDict *fontDict,
   }
 
   if (daToks) {
-    deleteGList(daToks, GString);
+    deleteGooList(daToks, GooString);
   }
   if (text2 != text) {
     delete text2;
@@ -1127,11 +1127,11 @@ void Annot::drawText(GString *text, GString *da, GfxFontDict *fontDict,
 }
 
 // Draw the variable text or caption for a field.
-void Annot::drawListBox(GString **text, GBool *selection,
+void Annot::drawListBox(GooString **text, GBool *selection,
 			int nOptions, int topIdx,
-			GString *da, GfxFontDict *fontDict, GBool quadding) {
-  GList *daToks;
-  GString *tok;
+			GooString *da, GfxFontDict *fontDict, GBool quadding) {
+  GooList *daToks;
+  GooString *tok;
   GfxFont *font;
   double fontSize, fontSize2, border, x, y, w, wMax;
   int tfPos, tmPos, i, j, c;
@@ -1143,7 +1143,7 @@ void Annot::drawListBox(GString **text, GBool *selection,
   // parse the default appearance string
   tfPos = tmPos = -1;
   if (da) {
-    daToks = new GList();
+    daToks = new GooList();
     i = 0;
     while (i < da->getLength()) {
       while (i < da->getLength() && Lexer::isSpace(da->getChar(i))) {
@@ -1153,14 +1153,14 @@ void Annot::drawListBox(GString **text, GBool *selection,
 	for (j = i + 1;
 	     j < da->getLength() && !Lexer::isSpace(da->getChar(j));
 	     ++j) ;
-	daToks->append(new GString(da, i, j - i));
+	daToks->append(new GooString(da, i, j - i));
 	i = j;
       }
     }
     for (i = 2; i < daToks->getLength(); ++i) {
-      if (i >= 2 && !((GString *)daToks->get(i))->cmp("Tf")) {
+      if (i >= 2 && !((GooString *)daToks->get(i))->cmp("Tf")) {
 	tfPos = i - 2;
-      } else if (i >= 6 && !((GString *)daToks->get(i))->cmp("Tm")) {
+      } else if (i >= 6 && !((GooString *)daToks->get(i))->cmp("Tm")) {
 	tmPos = i - 6;
       }
     }
@@ -1172,7 +1172,7 @@ void Annot::drawListBox(GString **text, GBool *selection,
   font = NULL;
   fontSize = 0;
   if (tfPos >= 0) {
-    tok = (GString *)daToks->get(tfPos);
+    tok = (GooString *)daToks->get(tfPos);
     if (tok->getLength() >= 1 && tok->getChar(0) == '/') {
       if (!fontDict || !(font = fontDict->lookup(tok->getCString() + 1))) {
 	error(errSyntaxError, -1, "Unknown font in field's DA string");
@@ -1181,7 +1181,7 @@ void Annot::drawListBox(GString **text, GBool *selection,
       error(errSyntaxError, -1,
 	    "Invalid font name in 'Tf' operator in field's DA string");
     }
-    tok = (GString *)daToks->get(tfPos + 1);
+    tok = (GooString *)daToks->get(tfPos + 1);
     fontSize = atof(tok->getCString());
   } else {
     error(errSyntaxError, -1, "Missing 'Tf' operator in field's DA string");
@@ -1214,7 +1214,7 @@ void Annot::drawListBox(GString **text, GBool *selection,
     }
     fontSize = floor(fontSize);
     if (tfPos >= 0) {
-      tok = (GString *)daToks->get(tfPos + 1);
+      tok = (GooString *)daToks->get(tfPos + 1);
       tok->clear();
       tok->appendf("{0:.2f}", fontSize);
     }
@@ -1268,10 +1268,10 @@ void Annot::drawListBox(GString **text, GBool *selection,
 
     // set the font matrix
     if (tmPos >= 0) {
-      tok = (GString *)daToks->get(tmPos + 4);
+      tok = (GooString *)daToks->get(tmPos + 4);
       tok->clear();
       tok->appendf("{0:.2f}", x);
-      tok = (GString *)daToks->get(tmPos + 5);
+      tok = (GooString *)daToks->get(tmPos + 5);
       tok->clear();
       tok->appendf("{0:.2f}", y);
     }
@@ -1279,7 +1279,7 @@ void Annot::drawListBox(GString **text, GBool *selection,
     // write the DA string
     if (daToks) {
       for (j = 0; j < daToks->getLength(); ++j) {
-	appearBuf->append((GString *)daToks->get(j))->append(' ');
+	appearBuf->append((GooString *)daToks->get(j))->append(' ');
       }
     }
 
@@ -1317,7 +1317,7 @@ void Annot::drawListBox(GString **text, GBool *selection,
   }
 
   if (daToks) {
-    deleteGList(daToks, GString);
+    deleteGooList(daToks, GooString);
   }
 }
 
@@ -1325,7 +1325,7 @@ void Annot::drawListBox(GString **text, GBool *selection,
 // *end = one past the last character to be included
 // *width = width of the characters start .. end-1
 // *next = index of first character on the following line
-void Annot::getNextLine(GString *text, int start,
+void Annot::getNextLine(GooString *text, int start,
 			GfxFont *font, double fontSize, double wMax,
 			int *end, double *width, int *next) {
   double w, dw;

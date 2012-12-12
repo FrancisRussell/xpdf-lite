@@ -16,7 +16,7 @@
 #endif
 
 #include "gtypes.h"
-#include "GString.h"
+#include "GooString.h"
 #include "Object.h"
 #include "Stream.h"
 
@@ -33,19 +33,19 @@ public:
   // the owner password was correct.  Either or both of the passwords
   // may be NULL, which is treated as an empty string.
   static GBool makeFileKey(int encVersion, int encRevision, int keyLength,
-			   GString *ownerKey, GString *userKey,
-			   GString *ownerEnc, GString *userEnc,
-			   int permissions, GString *fileID,
-			   GString *ownerPassword, GString *userPassword,
+			   GooString *ownerKey, GooString *userKey,
+			   GooString *ownerEnc, GooString *userEnc,
+			   int permissions, GooString *fileID,
+			   GooString *ownerPassword, GooString *userPassword,
 			   Guchar *fileKey, GBool encryptMetadata,
 			   GBool *ownerPasswordOk);
 
 private:
 
   static GBool makeFileKey2(int encVersion, int encRevision, int keyLength,
-			    GString *ownerKey, GString *userKey,
-			    int permissions, GString *fileID,
-			    GString *userPassword, Guchar *fileKey,
+			    GooString *ownerKey, GooString *userKey,
+			    int permissions, GooString *fileID,
+			    GooString *userPassword, Guchar *fileKey,
 			    GBool encryptMetadata);
 };
 

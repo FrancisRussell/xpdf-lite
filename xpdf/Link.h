@@ -17,7 +17,7 @@
 
 #include "Object.h"
 
-class GString;
+class GooString;
 class Array;
 class Dict;
 
@@ -51,11 +51,11 @@ public:
   static LinkAction *parseDest(Object *obj);
 
   // Parse an action dictionary.
-  static LinkAction *parseAction(Object *obj, GString *baseURI = NULL);
+  static LinkAction *parseAction(Object *obj, GooString *baseURI = NULL);
 
   // Extract a file name from a file specification (string or
   // dictionary).
-  static GString *getFileSpecName(Object *fileSpecObj);
+  static GooString *getFileSpecName(Object *fileSpecObj);
 };
 
 //------------------------------------------------------------------------
@@ -138,13 +138,13 @@ public:
   // Accessors.
   virtual LinkActionKind getKind() { return actionGoTo; }
   LinkDest *getDest() { return dest; }
-  GString *getNamedDest() { return namedDest; }
+  GooString *getNamedDest() { return namedDest; }
 
 private:
 
   LinkDest *dest;		// regular destination (NULL for remote
 				//   link with bad destination)
-  GString *namedDest;		// named destination (only one of dest and
+  GooString *namedDest;		// named destination (only one of dest and
 				//   and namedDest may be non-NULL)
 };
 
@@ -167,16 +167,16 @@ public:
 
   // Accessors.
   virtual LinkActionKind getKind() { return actionGoToR; }
-  GString *getFileName() { return fileName; }
+  GooString *getFileName() { return fileName; }
   LinkDest *getDest() { return dest; }
-  GString *getNamedDest() { return namedDest; }
+  GooString *getNamedDest() { return namedDest; }
 
 private:
 
-  GString *fileName;		// file name
+  GooString *fileName;		// file name
   LinkDest *dest;		// regular destination (NULL for remote
 				//   link with bad destination)
-  GString *namedDest;		// named destination (only one of dest and
+  GooString *namedDest;		// named destination (only one of dest and
 				//   and namedDest may be non-NULL)
 };
 
@@ -198,13 +198,13 @@ public:
 
   // Accessors.
   virtual LinkActionKind getKind() { return actionLaunch; }
-  GString *getFileName() { return fileName; }
-  GString *getParams() { return params; }
+  GooString *getFileName() { return fileName; }
+  GooString *getParams() { return params; }
 
 private:
 
-  GString *fileName;		// file name
-  GString *params;		// parameters
+  GooString *fileName;		// file name
+  GooString *params;		// parameters
 };
 
 //------------------------------------------------------------------------
@@ -215,7 +215,7 @@ class LinkURI: public LinkAction {
 public:
 
   // Build a LinkURI given the URI (string) and base URI.
-  LinkURI(Object *uriObj, GString *baseURI);
+  LinkURI(Object *uriObj, GooString *baseURI);
 
   // Destructor.
   virtual ~LinkURI();
@@ -225,11 +225,11 @@ public:
 
   // Accessors.
   virtual LinkActionKind getKind() { return actionURI; }
-  GString *getURI() { return uri; }
+  GooString *getURI() { return uri; }
 
 private:
 
-  GString *uri;			// the URI
+  GooString *uri;			// the URI
 };
 
 //------------------------------------------------------------------------
@@ -247,11 +247,11 @@ public:
   virtual GBool isOk() { return name != NULL; }
 
   virtual LinkActionKind getKind() { return actionNamed; }
-  GString *getName() { return name; }
+  GooString *getName() { return name; }
 
 private:
 
-  GString *name;
+  GooString *name;
 };
 
 //------------------------------------------------------------------------
@@ -270,12 +270,12 @@ public:
   virtual LinkActionKind getKind() { return actionMovie; }
   GBool hasAnnotRef() { return annotRef.num >= 0; }
   Ref *getAnnotRef() { return &annotRef; }
-  GString *getTitle() { return title; }
+  GooString *getTitle() { return title; }
 
 private:
 
   Ref annotRef;
-  GString *title;
+  GooString *title;
 };
 
 //------------------------------------------------------------------------
@@ -296,11 +296,11 @@ public:
 
   // Accessors.
   virtual LinkActionKind getKind() { return actionUnknown; }
-  GString *getAction() { return action; }
+  GooString *getAction() { return action; }
 
 private:
 
-  GString *action;		// action subtype
+  GooString *action;		// action subtype
 };
 
 //------------------------------------------------------------------------
@@ -311,7 +311,7 @@ class Link {
 public:
 
   // Construct a link, given its dictionary.
-  Link(Dict *dict, GString *baseURI);
+  Link(Dict *dict, GooString *baseURI);
 
   // Destructor.
   ~Link();
@@ -346,7 +346,7 @@ class Links {
 public:
 
   // Extract links from array of annotations.
-  Links(Object *annots, GString *baseURI);
+  Links(Object *annots, GooString *baseURI);
 
   // Destructor.
   ~Links();

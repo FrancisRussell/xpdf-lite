@@ -20,7 +20,7 @@
 #include "Catalog.h"
 #include "Page.h"
 
-class GString;
+class GooString;
 class BaseStream;
 class OutputDev;
 class Links;
@@ -37,14 +37,14 @@ class PDFCore;
 class PDFDoc {
 public:
 
-  PDFDoc(GString *fileNameA, GString *ownerPassword = NULL,
-	 GString *userPassword = NULL, PDFCore *coreA = NULL);
+  PDFDoc(GooString *fileNameA, GooString *ownerPassword = NULL,
+	 GooString *userPassword = NULL, PDFCore *coreA = NULL);
 #ifdef WIN32
-  PDFDoc(wchar_t *fileNameA, int fileNameLen, GString *ownerPassword = NULL,
-	 GString *userPassword = NULL, PDFCore *coreA = NULL);
+  PDFDoc(wchar_t *fileNameA, int fileNameLen, GooString *ownerPassword = NULL,
+	 GooString *userPassword = NULL, PDFCore *coreA = NULL);
 #endif
-  PDFDoc(BaseStream *strA, GString *ownerPassword = NULL,
-	 GString *userPassword = NULL, PDFCore *coreA = NULL);
+  PDFDoc(BaseStream *strA, GooString *ownerPassword = NULL,
+	 GooString *userPassword = NULL, PDFCore *coreA = NULL);
   ~PDFDoc();
 
   // Was PDF document successfully opened?
@@ -54,7 +54,7 @@ public:
   int getErrorCode() { return errCode; }
 
   // Get file name.
-  GString *getFileName() { return fileName; }
+  GooString *getFileName() { return fileName; }
 #ifdef WIN32
   wchar_t *getFileNameU() { return fileNameU; }
 #endif
@@ -85,7 +85,7 @@ public:
 
   // Return the contents of the metadata stream, or NULL if there is
   // no metadata.
-  GString *readMetadata() { return catalog->readMetadata(); }
+  GooString *readMetadata() { return catalog->readMetadata(); }
 
   // Return the structure tree root object.
   Object *getStructTreeRoot() { return catalog->getStructTreeRoot(); }
@@ -122,7 +122,7 @@ public:
 
   // Find a named destination.  Returns the link destination, or
   // NULL if <name> is not a destination.
-  LinkDest *findDest(GString *name)
+  LinkDest *findDest(GooString *name)
     { return catalog->findDest(name); }
 
   // Process the links for a page.
@@ -160,7 +160,7 @@ public:
   double getPDFVersion() { return pdfVersion; }
 
   // Save this file with another name.
-  GBool saveAs(GString *name);
+  GBool saveAs(GooString *name);
 
   // Return a pointer to the PDFCore object.
   PDFCore *getCore() { return core; }
@@ -179,14 +179,14 @@ public:
 
 private:
 
-  GBool setup(GString *ownerPassword, GString *userPassword);
-  GBool setup2(GString *ownerPassword, GString *userPassword,
+  GBool setup(GooString *ownerPassword, GooString *userPassword);
+  GBool setup2(GooString *ownerPassword, GooString *userPassword,
 	       GBool repairXRef);
   void checkHeader();
-  GBool checkEncryption(GString *ownerPassword, GString *userPassword);
+  GBool checkEncryption(GooString *ownerPassword, GooString *userPassword);
   GBool saveEmbeddedFile2(int idx, FILE *f);
 
-  GString *fileName;
+  GooString *fileName;
 #ifdef WIN32
   wchar_t *fileNameU;
 #endif

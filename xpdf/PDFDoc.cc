@@ -19,7 +19,7 @@
 #ifdef WIN32
 #  include <windows.h>
 #endif
-#include "GString.h"
+#include "GooString.h"
 #include "config.h"
 #include "GlobalParams.h"
 #include "Page.h"
@@ -48,10 +48,10 @@
 // PDFDoc
 //------------------------------------------------------------------------
 
-PDFDoc::PDFDoc(GString *fileNameA, GString *ownerPassword,
-	       GString *userPassword, PDFCore *coreA) {
+PDFDoc::PDFDoc(GooString *fileNameA, GooString *ownerPassword,
+	       GooString *userPassword, PDFCore *coreA) {
   Object obj;
-  GString *fileName1, *fileName2;
+  GooString *fileName1, *fileName2;
 #ifdef WIN32
   int n, i;
 #endif
@@ -115,8 +115,8 @@ PDFDoc::PDFDoc(GString *fileNameA, GString *ownerPassword,
 }
 
 #ifdef WIN32
-PDFDoc::PDFDoc(wchar_t *fileNameA, int fileNameLen, GString *ownerPassword,
-	       GString *userPassword, PDFCore *coreA) {
+PDFDoc::PDFDoc(wchar_t *fileNameA, int fileNameLen, GooString *ownerPassword,
+	       GooString *userPassword, PDFCore *coreA) {
   OSVERSIONINFO version;
   Object obj;
   int i;
@@ -136,7 +136,7 @@ PDFDoc::PDFDoc(wchar_t *fileNameA, int fileNameLen, GString *ownerPassword,
   optContent = NULL;
 
   // save both Unicode and 8-bit copies of the file name
-  fileName = new GString();
+  fileName = new GooString();
   fileNameU = (wchar_t *)gmallocn(fileNameLen + 1, sizeof(wchar_t));
   for (i = 0; i < fileNameLen; ++i) {
     fileName->append((char)fileNameA[i]);
@@ -167,8 +167,8 @@ PDFDoc::PDFDoc(wchar_t *fileNameA, int fileNameLen, GString *ownerPassword,
 }
 #endif
 
-PDFDoc::PDFDoc(BaseStream *strA, GString *ownerPassword,
-	       GString *userPassword, PDFCore *coreA) {
+PDFDoc::PDFDoc(BaseStream *strA, GooString *ownerPassword,
+	       GooString *userPassword, PDFCore *coreA) {
 #ifdef WIN32
   int n, i;
 #endif
@@ -203,7 +203,7 @@ PDFDoc::PDFDoc(BaseStream *strA, GString *ownerPassword,
   ok = setup(ownerPassword, userPassword);
 }
 
-GBool PDFDoc::setup(GString *ownerPassword, GString *userPassword) {
+GBool PDFDoc::setup(GooString *ownerPassword, GooString *userPassword) {
   str->reset();
 
   // check header
@@ -235,7 +235,7 @@ GBool PDFDoc::setup(GString *ownerPassword, GString *userPassword) {
   return gTrue;
 }
 
-GBool PDFDoc::setup2(GString *ownerPassword, GString *userPassword,
+GBool PDFDoc::setup2(GooString *ownerPassword, GooString *userPassword,
 		     GBool repairXRef) {
   // read xref table
   xref = new XRef(str, repairXRef);
@@ -336,7 +336,7 @@ void PDFDoc::checkHeader() {
   }
 }
 
-GBool PDFDoc::checkEncryption(GString *ownerPassword, GString *userPassword) {
+GBool PDFDoc::checkEncryption(GooString *ownerPassword, GooString *userPassword) {
   Object encrypt;
   GBool encrypted;
   SecurityHandler *secHdlr;
@@ -453,7 +453,7 @@ GBool PDFDoc::isLinearized() {
   return lin;
 }
 
-GBool PDFDoc::saveAs(GString *name) {
+GBool PDFDoc::saveAs(GooString *name) {
   FILE *f;
   int c;
 

@@ -20,8 +20,8 @@
 #include "GfxFont.h"
 #include "OutputDev.h"
 
-class GString;
-class GList;
+class GooString;
+class GooList;
 class GfxFont;
 class GfxState;
 class UnicodeMap;
@@ -54,7 +54,7 @@ public:
 
 #if TEXTOUT_WORD_LIST
   // Get the font name (which may be NULL).
-  GString *getFontName() { return fontName; }
+  GooString *getFontName() { return fontName; }
 
   // Get font descriptor flags.
   GBool isFixedWidth() { return flags & fontFixedWidth; }
@@ -68,7 +68,7 @@ private:
 
   GfxFont *gfxFont;
 #if TEXTOUT_WORD_LIST
-  GString *fontName;
+  GooString *fontName;
   int flags;
 #endif
 
@@ -117,8 +117,8 @@ public:
 #if TEXTOUT_WORD_LIST
   int getLength() { return len; }
   Unicode getChar(int idx) { return text[idx]; }
-  GString *getText();
-  GString *getFontName() { return font->fontName; }
+  GooString *getText();
+  GooString *getFontName() { return font->fontName; }
   void getColor(double *r, double *g, double *b)
     { *r = colorR; *g = colorG; *b = colorB; }
   void getBBox(double *xMinA, double *yMinA, double *xMaxA, double *yMaxA)
@@ -395,7 +395,7 @@ public:
 
 private:
 
-  GList *words;			// [TextWord]
+  GooList *words;			// [TextWord]
 };
 
 #endif // TEXTOUT_WORD_LIST
@@ -470,7 +470,7 @@ public:
 		 double *xMax, double *yMax);
 
   // Get the text which is inside the specified rectangle.
-  GString *getText(double xMin, double yMin,
+  GooString *getText(double xMin, double yMin,
 		   double xMax, double yMax);
 
   // Find a string by character position and length.  If found, sets
@@ -499,7 +499,7 @@ private:
 
   void clear();
   void assignColumns(TextLineFrag *frags, int nFrags, int rot);
-  int dumpFragment(Unicode *text, int len, UnicodeMap *uMap, GString *s);
+  int dumpFragment(Unicode *text, int len, UnicodeMap *uMap, GooString *s);
 
   GBool rawOrder;		// keep text in content stream order
 
@@ -532,15 +532,15 @@ private:
 				//   rawOrder is set)
   TextWord *rawLastWord;	// last word on rawWords list
 
-  GList *fonts;			// all font info objects used on this
+  GooList *fonts;			// all font info objects used on this
 				//   page [TextFontInfo]
 
   double lastFindXMin,		// coordinates of the last "find" result
          lastFindYMin;
   GBool haveLastFind;
 
-  GList *underlines;		// [TextUnderline]
-  GList *links;			// [TextLink]
+  GooList *underlines;		// [TextUnderline]
+  GooList *links;			// [TextLink]
 
   friend class TextLine;
   friend class TextLineFrag;
@@ -614,7 +614,7 @@ public:
   virtual void updateFont(GfxState *state);
 
   //----- text drawing
-  virtual void beginString(GfxState *state, GString *s);
+  virtual void beginString(GfxState *state, GooString *s);
   virtual void endString(GfxState *state);
   virtual void drawChar(GfxState *state, double x, double y,
 			double dx, double dy,
@@ -650,7 +650,7 @@ public:
 		 double *xMax, double *yMax);
 
   // Get the text which is inside the specified rectangle.
-  GString *getText(double xMin, double yMin,
+  GooString *getText(double xMin, double yMin,
 		   double xMax, double yMax);
 
   // Find a string by character position and length.  If found, sets

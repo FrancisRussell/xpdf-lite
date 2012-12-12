@@ -63,9 +63,9 @@ public:
   PDFRectangle *getTrimBox() { return &trimBox; }
   PDFRectangle *getArtBox() { return &artBox; }
   int getRotate() { return rotate; }
-  GString *getLastModified()
+  GooString *getLastModified()
     { return lastModified.isString()
-	? lastModified.getString() : (GString *)NULL; }
+	? lastModified.getString() : (GooString *)NULL; }
   Dict *getBoxColorInfo()
     { return boxColorInfo.isDict() ? boxColorInfo.getDict() : (Dict *)NULL; }
   Dict *getGroup()
@@ -140,7 +140,7 @@ public:
   PDFRectangle *getTrimBox() { return attrs->getTrimBox(); }
   PDFRectangle *getArtBox() { return attrs->getArtBox(); }
   int getRotate() { return attrs->getRotate(); }
-  GString *getLastModified() { return attrs->getLastModified(); }
+  GooString *getLastModified() { return attrs->getLastModified(); }
   Dict *getBoxColorInfo() { return attrs->getBoxColorInfo(); }
   Dict *getGroup() { return attrs->getGroup(); }
   Stream *getMetadata() { return attrs->getMetadata(); }

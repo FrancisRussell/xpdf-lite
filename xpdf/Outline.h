@@ -18,8 +18,8 @@
 #include "Object.h"
 #include "CharTypes.h"
 
-class GString;
-class GList;
+class GooString;
+class GooList;
 class XRef;
 class LinkAction;
 
@@ -31,11 +31,11 @@ public:
   Outline(Object *outlineObj, XRef *xref);
   ~Outline();
 
-  GList *getItems() { return items; }
+  GooList *getItems() { return items; }
 
 private:
 
-  GList *items;			// NULL if document has no outline
+  GooList *items;			// NULL if document has no outline
 				//   [OutlineItem]
 };
 
@@ -47,7 +47,7 @@ public:
   OutlineItem(Dict *dict, XRef *xrefA);
   ~OutlineItem();
 
-  static GList *readItemList(Object *firstItemRef, Object *lastItemRef,
+  static GooList *readItemList(Object *firstItemRef, Object *lastItemRef,
 			     XRef *xrefA);
 
   void open();
@@ -58,7 +58,7 @@ public:
   LinkAction *getAction() { return action; }
   GBool isOpen() { return startsOpen; }
   GBool hasKids() { return firstRef.isRef(); }
-  GList *getKids() { return kids; }
+  GooList *getKids() { return kids; }
 
 private:
 
@@ -70,7 +70,7 @@ private:
   Object lastRef;
   Object nextRef;
   GBool startsOpen;
-  GList *kids;			// NULL unless this item is open [OutlineItem]
+  GooList *kids;			// NULL unless this item is open [OutlineItem]
 };
 
 #endif

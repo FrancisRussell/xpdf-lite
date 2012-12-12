@@ -1079,7 +1079,7 @@ void PSStack::pop() {
 PostScriptFunction::PostScriptFunction(Object *funcObj, Dict *dict) {
   Stream *str;
   int codePtr;
-  GString *tok;
+  GooString *tok;
   double in[funcMaxInputs];
   int i;
 
@@ -1105,7 +1105,7 @@ PostScriptFunction::PostScriptFunction(Object *funcObj, Dict *dict) {
   str = funcObj->getStream();
 
   //----- parse the function
-  codeString = new GString();
+  codeString = new GooString();
   str->reset();
   if (!(tok = getToken(str)) || tok->cmp("{")) {
     error(errSyntaxError, -1, "Expected '{' at start of PostScript function");
@@ -1197,7 +1197,7 @@ void PostScriptFunction::transform(double *in, double *out) {
 }
 
 GBool PostScriptFunction::parseCode(Stream *str, int *codePtr) {
-  GString *tok;
+  GooString *tok;
   char *p;
   GBool isReal;
   int opPtr, elsePtr;
@@ -1324,12 +1324,12 @@ GBool PostScriptFunction::parseCode(Stream *str, int *codePtr) {
   return gTrue;
 }
 
-GString *PostScriptFunction::getToken(Stream *str) {
-  GString *s;
+GooString *PostScriptFunction::getToken(Stream *str) {
+  GooString *s;
   int c;
   GBool comment;
 
-  s = new GString();
+  s = new GooString();
   comment = gFalse;
   while (1) {
     if ((c = str->getChar()) == EOF) {

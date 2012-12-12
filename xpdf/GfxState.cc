@@ -1109,7 +1109,7 @@ void GfxIndexedColorSpace::getDefaultRanges(double *decodeLow,
 // GfxSeparationColorSpace
 //------------------------------------------------------------------------
 
-GfxSeparationColorSpace::GfxSeparationColorSpace(GString *nameA,
+GfxSeparationColorSpace::GfxSeparationColorSpace(GooString *nameA,
 						 GfxColorSpace *altA,
 						 Function *funcA) {
   name = nameA;
@@ -1127,7 +1127,7 @@ GfxSeparationColorSpace::GfxSeparationColorSpace(GString *nameA,
   }
 }
 
-GfxSeparationColorSpace::GfxSeparationColorSpace(GString *nameA,
+GfxSeparationColorSpace::GfxSeparationColorSpace(GooString *nameA,
 						 GfxColorSpace *altA,
 						 Function *funcA,
 						 GBool nonMarkingA,
@@ -1153,7 +1153,7 @@ GfxColorSpace *GfxSeparationColorSpace::copy() {
 //~ handle the 'All' and 'None' colorants
 GfxColorSpace *GfxSeparationColorSpace::parse(Array *arr, int recursion) {
   GfxSeparationColorSpace *cs;
-  GString *nameA;
+  GooString *nameA;
   GfxColorSpace *altA;
   Function *funcA;
   Object obj1;
@@ -1166,7 +1166,7 @@ GfxColorSpace *GfxSeparationColorSpace::parse(Array *arr, int recursion) {
     error(errSyntaxError, -1, "Bad Separation color space (name)");
     goto err2;
   }
-  nameA = new GString(obj1.getName());
+  nameA = new GooString(obj1.getName());
   obj1.free();
   arr->get(2, &obj1);
   if (!(altA = GfxColorSpace::parse(&obj1, recursion + 1))) {
@@ -1245,7 +1245,7 @@ void GfxSeparationColorSpace::getDefaultColor(GfxColor *color) {
 //------------------------------------------------------------------------
 
 GfxDeviceNColorSpace::GfxDeviceNColorSpace(int nCompsA,
-					   GString **namesA,
+					   GooString **namesA,
 					   GfxColorSpace *altA,
 					   Function *funcA) {
   int i;
@@ -1275,7 +1275,7 @@ GfxDeviceNColorSpace::GfxDeviceNColorSpace(int nCompsA,
 }
 
 GfxDeviceNColorSpace::GfxDeviceNColorSpace(int nCompsA,
-					   GString **namesA,
+					   GooString **namesA,
 					   GfxColorSpace *altA,
 					   Function *funcA,
 					   GBool nonMarkingA,
@@ -1311,7 +1311,7 @@ GfxColorSpace *GfxDeviceNColorSpace::copy() {
 GfxColorSpace *GfxDeviceNColorSpace::parse(Array *arr, int recursion) {
   GfxDeviceNColorSpace *cs;
   int nCompsA;
-  GString *namesA[gfxColorMaxComps];
+  GooString *namesA[gfxColorMaxComps];
   GfxColorSpace *altA;
   Function *funcA;
   Object obj1, obj2;
@@ -1338,7 +1338,7 @@ GfxColorSpace *GfxDeviceNColorSpace::parse(Array *arr, int recursion) {
       obj2.free();
       goto err2;
     }
-    namesA[i] = new GString(obj2.getName());
+    namesA[i] = new GooString(obj2.getName());
     obj2.free();
   }
   obj1.free();

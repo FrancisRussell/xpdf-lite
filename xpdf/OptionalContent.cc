@@ -12,8 +12,8 @@
 #pragma implementation
 #endif
 
-#include "GString.h"
-#include "GList.h"
+#include "GooString.h"
+#include "GooList.h"
 #include "Error.h"
 #include "Object.h"
 #include "PDFDoc.h"
@@ -47,7 +47,7 @@ OptionalContent::OptionalContent(PDFDoc *doc) {
   int i;
 
   xref = doc->getXRef();
-  ocgs = new GList();
+  ocgs = new GooList();
   display = NULL;
 
   if ((ocProps = doc->getCatalog()->getOCProperties())->isDict()) {
@@ -107,7 +107,7 @@ OptionalContent::OptionalContent(PDFDoc *doc) {
 }
 
 OptionalContent::~OptionalContent() {
-  deleteGList(ocgs, OptionalContentGroup);
+  deleteGooList(ocgs, OptionalContentGroup);
   delete display;
 }
 
@@ -282,7 +282,7 @@ OptionalContentGroup *OptionalContentGroup::parse(Ref *refA, Object *obj) {
   Unicode *nameA;
   int nameLenA;
   Object obj1, obj2, obj3;
-  GString *s;
+  GooString *s;
   OCUsageState viewStateA, printStateA;
   int i;
 
@@ -424,7 +424,7 @@ OCDisplayNode::OCDisplayNode() {
   children = NULL;
 }
 
-OCDisplayNode::OCDisplayNode(GString *nameA) {
+OCDisplayNode::OCDisplayNode(GooString *nameA) {
   int i;
 
   if ((nameA->getChar(0) & 0xff) == 0xfe &&
@@ -460,21 +460,21 @@ OCDisplayNode::OCDisplayNode(OptionalContentGroup *ocgA) {
 
 void OCDisplayNode::addChild(OCDisplayNode *child) {
   if (!children) {
-    children = new GList();
+    children = new GooList();
   }
   children->append(child);
 }
 
-void OCDisplayNode::addChildren(GList *childrenA) {
+void OCDisplayNode::addChildren(GooList *childrenA) {
   if (!children) {
-    children = new GList();
+    children = new GooList();
   }
   children->append(childrenA);
   delete childrenA;
 }
 
-GList *OCDisplayNode::takeChildren() {
-  GList *childrenA;
+GooList *OCDisplayNode::takeChildren() {
+  GooList *childrenA;
 
   childrenA = children;
   children = NULL;
@@ -484,7 +484,7 @@ GList *OCDisplayNode::takeChildren() {
 OCDisplayNode::~OCDisplayNode() {
   gfree(name);
   if (children) {
-    deleteGList(children, OCDisplayNode);
+    deleteGooList(children, OCDisplayNode);
   }
 }
 

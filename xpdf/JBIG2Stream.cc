@@ -14,7 +14,7 @@
 
 #include <stdlib.h>
 #include <limits.h>
-#include "GList.h"
+#include "GooList.h"
 #include "Error.h"
 #include "JArithmeticDecoder.h"
 #include "JBIG2Stream.h"
@@ -1197,7 +1197,7 @@ JBIG2Stream::~JBIG2Stream() {
 
 void JBIG2Stream::reset() {
   // read the globals stream
-  globalSegments = new GList();
+  globalSegments = new GooList();
   if (globalsStream.isStream()) {
     segments = globalSegments;
     curStr = globalsStream.getStream();
@@ -1210,7 +1210,7 @@ void JBIG2Stream::reset() {
   }
 
   // read the main stream
-  segments = new GList();
+  segments = new GooList();
   curStr = str;
   curStr->reset();
   arithDecoder->setStream(curStr);
@@ -1232,11 +1232,11 @@ void JBIG2Stream::close() {
     pageBitmap = NULL;
   }
   if (segments) {
-    deleteGList(segments, JBIG2Segment);
+    deleteGooList(segments, JBIG2Segment);
     segments = NULL;
   }
   if (globalSegments) {
-    deleteGList(globalSegments, JBIG2Segment);
+    deleteGooList(globalSegments, JBIG2Segment);
     globalSegments = NULL;
   }
   dataPtr = dataEnd = NULL;
@@ -1274,7 +1274,7 @@ int JBIG2Stream::getBlock(char *blk, int size) {
   return n;
 }
 
-GString *JBIG2Stream::getPSFilter(int psLevel, const char *indent) {
+GooString *JBIG2Stream::getPSFilter(int psLevel, const char *indent) {
   return NULL;
 }
 
@@ -1489,7 +1489,7 @@ GBool JBIG2Stream::readSymbolDictSeg(Guint segNum, Guint length,
   JBIG2HuffmanTable *huffDHTable, *huffDWTable;
   JBIG2HuffmanTable *huffBMSizeTable, *huffAggInstTable;
   JBIG2Segment *seg;
-  GList *codeTables;
+  GooList *codeTables;
   JBIG2SymbolDict *inputSymbolDict;
   Guint flags, sdTemplate, sdrTemplate, huff, refAgg;
   Guint huffDH, huffDW, huffBMSize, huffAggInst;
@@ -1560,7 +1560,7 @@ GBool JBIG2Stream::readSymbolDictSeg(Guint segNum, Guint length,
   }
 
   // get referenced segments: input symbol dictionaries and code tables
-  codeTables = new GList();
+  codeTables = new GooList();
   numInputSyms = 0;
   for (i = 0; i < nRefSegs; ++i) {
     if ((seg = findSegment(refSegs[i]))) {
@@ -1923,7 +1923,7 @@ void JBIG2Stream::readTextRegionSeg(Guint segNum, GBool imm,
   JBIG2HuffmanTable *huffRDWTable, *huffRDHTable;
   JBIG2HuffmanTable *huffRDXTable, *huffRDYTable, *huffRSizeTable;
   JBIG2Segment *seg;
-  GList *codeTables;
+  GooList *codeTables;
   JBIG2SymbolDict *symbolDict;
   JBIG2Bitmap **syms;
   Guint w, h, x, y, segInfoFlags, extCombOp;
@@ -1987,7 +1987,7 @@ void JBIG2Stream::readTextRegionSeg(Guint segNum, GBool imm,
   }
 
   // get symbol dictionaries and tables
-  codeTables = new GList();
+  codeTables = new GooList();
   numSyms = 0;
   for (i = 0; i < nRefSegs; ++i) {
     if ((seg = findSegment(refSegs[i]))) {

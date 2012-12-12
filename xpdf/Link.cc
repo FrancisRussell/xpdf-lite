@@ -15,7 +15,7 @@
 #include <stddef.h>
 #include <string.h>
 #include "gmem.h"
-#include "GString.h"
+#include "GooString.h"
 #include "Error.h"
 #include "Object.h"
 #include "Array.h"
@@ -37,7 +37,7 @@ LinkAction *LinkAction::parseDest(Object *obj) {
   return action;
 }
 
-LinkAction *LinkAction::parseAction(Object *obj, GString *baseURI) {
+LinkAction *LinkAction::parseAction(Object *obj, GooString *baseURI) {
   LinkAction *action;
   Object obj2, obj3, obj4;
 
@@ -105,8 +105,8 @@ LinkAction *LinkAction::parseAction(Object *obj, GString *baseURI) {
   return action;
 }
 
-GString *LinkAction::getFileSpecName(Object *fileSpecObj) {
-  GString *name;
+GooString *LinkAction::getFileSpecName(Object *fileSpecObj) {
+  GooString *name;
   Object obj1;
 
   name = NULL;
@@ -436,7 +436,7 @@ LinkGoTo::LinkGoTo(Object *destObj) {
 
   // named destination
   if (destObj->isName()) {
-    namedDest = new GString(destObj->getName());
+    namedDest = new GooString(destObj->getName());
   } else if (destObj->isString()) {
     namedDest = destObj->getString()->copy();
 
@@ -474,7 +474,7 @@ LinkGoToR::LinkGoToR(Object *fileSpecObj, Object *destObj) {
 
   // named destination
   if (destObj->isName()) {
-    namedDest = new GString(destObj->getName());
+    namedDest = new GooString(destObj->getName());
   } else if (destObj->isString()) {
     namedDest = destObj->getString()->copy();
 
@@ -560,8 +560,8 @@ LinkLaunch::~LinkLaunch() {
 // LinkURI
 //------------------------------------------------------------------------
 
-LinkURI::LinkURI(Object *uriObj, GString *baseURI) {
-  GString *uri2;
+LinkURI::LinkURI(Object *uriObj, GooString *baseURI) {
+  GooString *uri2;
   int n;
   char c;
 
@@ -574,7 +574,7 @@ LinkURI::LinkURI(Object *uriObj, GString *baseURI) {
       uri = uri2->copy();
     } else if (!uri2->cmpN("www.", 4)) {
       // "www.[...]" without the leading "http://"
-      uri = new GString("http://");
+      uri = new GooString("http://");
       uri->append(uri2);
     } else {
       // relative URI
@@ -610,7 +610,7 @@ LinkURI::~LinkURI() {
 LinkNamed::LinkNamed(Object *nameObj) {
   name = NULL;
   if (nameObj->isName()) {
-    name = new GString(nameObj->getName());
+    name = new GooString(nameObj->getName());
   }
 }
 
@@ -648,7 +648,7 @@ LinkMovie::~LinkMovie() {
 //------------------------------------------------------------------------
 
 LinkUnknown::LinkUnknown(char *actionA) {
-  action = new GString(actionA);
+  action = new GooString(actionA);
 }
 
 LinkUnknown::~LinkUnknown() {
@@ -659,7 +659,7 @@ LinkUnknown::~LinkUnknown() {
 // Link
 //------------------------------------------------------------------------
 
-Link::Link(Dict *dict, GString *baseURI) {
+Link::Link(Dict *dict, GooString *baseURI) {
   Object obj1, obj2;
   double t;
 
@@ -743,7 +743,7 @@ Link::~Link() {
 // Links
 //------------------------------------------------------------------------
 
-Links::Links(Object *annots, GString *baseURI) {
+Links::Links(Object *annots, GooString *baseURI) {
   Link *link;
   Object obj1, obj2;
   int size;

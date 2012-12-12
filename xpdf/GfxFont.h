@@ -16,7 +16,7 @@
 #endif
 
 #include "gtypes.h"
-#include "GString.h"
+#include "GooString.h"
 #include "Object.h"
 #include "CharTypes.h"
 
@@ -96,13 +96,13 @@ public:
   GfxFontType fontType;
   Ref embFontID;		// embedded stream obj ID
 				//   (if locType == gfxFontLocEmbedded)
-  GString *path;		// font file path
+  GooString *path;		// font file path
 				//   (if locType == gfxFontLocExternal)
 				// PS font name
 				//   (if locType == gfxFontLocResident)
   int fontNum;			// for TrueType collections
 				//   (if locType == gfxFontLocExternal)
-  GString *encoding;		// PS font encoding, only for 16-bit fonts
+  GooString *encoding;		// PS font encoding, only for 16-bit fonts
 				//   (if locType == gfxFontLocResident)
   int wMode;			// writing mode, only for 16-bit fonts
 				//   (if locType == gfxFontLocResident)
@@ -127,7 +127,7 @@ public:
   // Build a GfxFont object.
   static GfxFont *makeFont(XRef *xref, char *tagA, Ref idA, Dict *fontDict);
 
-  GfxFont(char *tagA, Ref idA, GString *nameA,
+  GfxFont(char *tagA, Ref idA, GooString *nameA,
 	  GfxFontType typeA, Ref embFontIDA);
 
   virtual ~GfxFont();
@@ -135,7 +135,7 @@ public:
   GBool isOk() { return ok; }
 
   // Get font tag.
-  GString *getTag() { return tag; }
+  GooString *getTag() { return tag; }
 
   // Get font dictionary ID.
   Ref *getID() { return &id; }
@@ -145,7 +145,7 @@ public:
 
   // Get the original font name (ignornig any munging that might have
   // been done to map to a canonical Base-14 font name).
-  GString *getName() { return name; }
+  GooString *getName() { return name; }
 
   // Get font type.
   GfxFontType getType() { return type; }
@@ -158,7 +158,7 @@ public:
 
   // Get the PostScript font name for the embedded font.  Returns
   // NULL if there is no embedded font.
-  GString *getEmbeddedFontName() { return embFontName; }
+  GooString *getEmbeddedFontName() { return embFontName; }
 
   // Get font descriptor flags.
   int getFlags() { return flags; }
@@ -186,7 +186,7 @@ public:
   GfxFontLoc *locateFont(XRef *xref, GBool ps);
 
   // Locate a Base-14 font file for a specified font name.
-  static GfxFontLoc *locateBase14Font(GString *base14Name);
+  static GfxFontLoc *locateBase14Font(GooString *base14Name);
 
   // Read an embedded font file into a buffer.
   char *readEmbFontFile(XRef *xref, int *len);
@@ -207,14 +207,14 @@ protected:
   void readFontDescriptor(XRef *xref, Dict *fontDict);
   CharCodeToUnicode *readToUnicodeCMap(Dict *fontDict, int nBits,
 				       CharCodeToUnicode *ctu);
-  static GfxFontLoc *getExternalFont(GString *path, GBool cid);
+  static GfxFontLoc *getExternalFont(GooString *path, GBool cid);
 
-  GString *tag;			// PDF font tag
+  GooString *tag;			// PDF font tag
   Ref id;			// reference (used as unique ID)
-  GString *name;		// font name
+  GooString *name;		// font name
   GfxFontType type;		// type of font
   int flags;			// font descriptor flags
-  GString *embFontName;		// name of embedded font
+  GooString *embFontName;		// name of embedded font
   Ref embFontID;		// ref to embedded font file stream
   double fontMat[6];		// font matrix
   double fontBBox[4];		// font bounding box
@@ -231,7 +231,7 @@ protected:
 class Gfx8BitFont: public GfxFont {
 public:
 
-  Gfx8BitFont(XRef *xref, char *tagA, Ref idA, GString *nameA,
+  Gfx8BitFont(XRef *xref, char *tagA, Ref idA, GooString *nameA,
 	      GfxFontType typeA, Ref embFontIDA, Dict *fontDict);
 
   virtual ~Gfx8BitFont();
@@ -294,7 +294,7 @@ private:
 class GfxCIDFont: public GfxFont {
 public:
 
-  GfxCIDFont(XRef *xref, char *tagA, Ref idA, GString *nameA,
+  GfxCIDFont(XRef *xref, char *tagA, Ref idA, GooString *nameA,
 	     GfxFontType typeA, Ref embFontIDA, Dict *fontDict);
 
   virtual ~GfxCIDFont();
@@ -312,7 +312,7 @@ public:
   CharCodeToUnicode *getToUnicode();
 
   // Get the collection name (<registry>-<ordering>).
-  GString *getCollection();
+  GooString *getCollection();
 
   // Return the CID-to-GID mapping table.  These should only be called
   // if type is fontCIDType2.
@@ -321,7 +321,7 @@ public:
 
 private:
 
-  GString *collection;		// collection name
+  GooString *collection;		// collection name
   CMap *cMap;			// char code --> CID
   CharCodeToUnicode *ctu;	// CID/char code --> Unicode
   GBool ctuUsesCharCode;	// true: ctu maps char code to Unicode;

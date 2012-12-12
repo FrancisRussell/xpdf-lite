@@ -164,7 +164,7 @@ GfxFontLoc::~GfxFontLoc() {
 //------------------------------------------------------------------------
 
 GfxFont *GfxFont::makeFont(XRef *xref, char *tagA, Ref idA, Dict *fontDict) {
-  GString *nameA;
+  GooString *nameA;
   Ref embFontIDA;
   GfxFontType typeA;
   GfxFont *font;
@@ -174,7 +174,7 @@ GfxFont *GfxFont::makeFont(XRef *xref, char *tagA, Ref idA, Dict *fontDict) {
   nameA = NULL;
   fontDict->lookup("BaseFont", &obj1);
   if (obj1.isName()) {
-    nameA = new GString(obj1.getName());
+    nameA = new GooString(obj1.getName());
   }
   obj1.free();
 
@@ -194,10 +194,10 @@ GfxFont *GfxFont::makeFont(XRef *xref, char *tagA, Ref idA, Dict *fontDict) {
   return font;
 }
 
-GfxFont::GfxFont(char *tagA, Ref idA, GString *nameA,
+GfxFont::GfxFont(char *tagA, Ref idA, GooString *nameA,
 		 GfxFontType typeA, Ref embFontIDA) {
   ok = gFalse;
-  tag = new GString(tagA);
+  tag = new GooString(tagA);
   id = idA;
   name = nameA;
   type = typeA;
@@ -430,7 +430,7 @@ void GfxFont::readFontDescriptor(XRef *xref, Dict *fontDict) {
     // get name
     obj1.dictLookup("FontName", &obj2);
     if (obj2.isName()) {
-      embFontName = new GString(obj2.getName());
+      embFontName = new GooString(obj2.getName());
     }
     obj2.free();
 
@@ -487,7 +487,7 @@ void GfxFont::readFontDescriptor(XRef *xref, Dict *fontDict) {
 
 CharCodeToUnicode *GfxFont::readToUnicodeCMap(Dict *fontDict, int nBits,
 					      CharCodeToUnicode *ctu) {
-  GString *buf;
+  GooString *buf;
   Object obj1;
   int c;
 
@@ -495,7 +495,7 @@ CharCodeToUnicode *GfxFont::readToUnicodeCMap(Dict *fontDict, int nBits,
     obj1.free();
     return NULL;
   }
-  buf = new GString();
+  buf = new GooString();
   obj1.streamReset();
   while ((c = obj1.streamGetChar()) != EOF) {
     buf->append(c);
@@ -514,7 +514,7 @@ CharCodeToUnicode *GfxFont::readToUnicodeCMap(Dict *fontDict, int nBits,
 GfxFontLoc *GfxFont::locateFont(XRef *xref, GBool ps) {
   GfxFontLoc *fontLoc;
   SysFontType sysFontType;
-  GString *path, *base14Name, *substName;
+  GooString *path, *base14Name, *substName;
   PSFontParam16 *psFont16;
   Object refObj, embFontObj;
   int substIdx, fontNum;
@@ -583,7 +583,7 @@ GfxFontLoc *GfxFont::locateFont(XRef *xref, GBool ps) {
     fontLoc = new GfxFontLoc();
     fontLoc->locType = gfxFontLocResident;
     fontLoc->fontType = fontType1;
-    fontLoc->path = new GString(((Gfx8BitFont *)this)->base14->base14Name);
+    fontLoc->path = new GooString(((Gfx8BitFont *)this)->base14->base14Name);
     return fontLoc;
   }
 
@@ -596,7 +596,7 @@ GfxFontLoc *GfxFont::locateFont(XRef *xref, GBool ps) {
 
   //----- external font file for Base-14 font
   if (!ps && !isCIDFont() && ((Gfx8BitFont *)this)->base14) {
-    base14Name = new GString(((Gfx8BitFont *)this)->base14->base14Name);
+    base14Name = new GooString(((Gfx8BitFont *)this)->base14->base14Name);
     if ((path = globalParams->findFontFile(base14Name))) {
       if ((fontLoc = getExternalFont(path, gFalse))) {
 	delete base14Name;
@@ -664,7 +664,7 @@ GfxFontLoc *GfxFont::locateFont(XRef *xref, GBool ps) {
     if (isItalic()) {
       substIdx += 1;
     }
-    substName = new GString(base14SubstFonts[substIdx]);
+    substName = new GooString(base14SubstFonts[substIdx]);
     if (ps) {
       error(errSyntaxWarning, -1, "Substituting font '{0:s}' for '{1:t}'",
 	    base14SubstFonts[substIdx], name);
@@ -731,8 +731,8 @@ GfxFontLoc *GfxFont::locateFont(XRef *xref, GBool ps) {
   return NULL;
 }
 
-GfxFontLoc *GfxFont::locateBase14Font(GString *base14Name) {
-  GString *path;
+GfxFontLoc *GfxFont::locateBase14Font(GooString *base14Name) {
+  GooString *path;
 
   path = globalParams->findFontFile(base14Name);
   if (!path) {
@@ -741,7 +741,7 @@ GfxFontLoc *GfxFont::locateBase14Font(GString *base14Name) {
   return getExternalFont(path, gFalse);
 }
 
-GfxFontLoc *GfxFont::getExternalFont(GString *path, GBool cid) {
+GfxFontLoc *GfxFont::getExternalFont(GooString *path, GBool cid) {
   FoFiIdentifierType fft;
   GfxFontType fontType;
   GfxFontLoc *fontLoc;
@@ -832,11 +832,11 @@ char *GfxFont::readEmbFontFile(XRef *xref, int *len) {
 // Gfx8BitFont
 //------------------------------------------------------------------------
 
-Gfx8BitFont::Gfx8BitFont(XRef *xref, char *tagA, Ref idA, GString *nameA,
+Gfx8BitFont::Gfx8BitFont(XRef *xref, char *tagA, Ref idA, GooString *nameA,
 			 GfxFontType typeA, Ref embFontIDA, Dict *fontDict):
   GfxFont(tagA, idA, nameA, typeA, embFontIDA)
 {
-  GString *name2;
+  GooString *name2;
   BuiltinFont *builtinFont;
   const char **baseEnc;
   GBool baseEncFromFontFile;
@@ -1020,7 +1020,7 @@ Gfx8BitFont::Gfx8BitFont(XRef *xref, char *tagA, Ref idA, GString *nameA,
 	  if (embFontName) {
 	    delete embFontName;
 	  }
-	  embFontName = new GString(ffT1->getName());
+	  embFontName = new GooString(ffT1->getName());
 	}
 	if (!baseEnc) {
 	  baseEnc = (const char **)ffT1->getEncoding();
@@ -1036,7 +1036,7 @@ Gfx8BitFont::Gfx8BitFont(XRef *xref, char *tagA, Ref idA, GString *nameA,
 	  if (embFontName) {
 	    delete embFontName;
 	  }
-	  embFontName = new GString(ffT1C->getName());
+	  embFontName = new GooString(ffT1C->getName());
 	}
 	if (!baseEnc) {
 	  baseEnc = (const char **)ffT1C->getEncoding();
@@ -1529,7 +1529,7 @@ static int CDECL cmpWidthExcepV(const void *w1, const void *w2) {
 
 #endif
 
-GfxCIDFont::GfxCIDFont(XRef *xref, char *tagA, Ref idA, GString *nameA,
+GfxCIDFont::GfxCIDFont(XRef *xref, char *tagA, Ref idA, GooString *nameA,
 		       GfxFontType typeA, Ref embFontIDA, Dict *fontDict):
   GfxFont(tagA, idA, nameA, typeA, embFontIDA)
 {
@@ -1948,8 +1948,8 @@ CharCodeToUnicode *GfxCIDFont::getToUnicode() {
   return ctu;
 }
 
-GString *GfxCIDFont::getCollection() {
-  return cMap ? cMap->getCollection() : (GString *)NULL;
+GooString *GfxCIDFont::getCollection() {
+  return cMap ? cMap->getCollection() : (GooString *)NULL;
 }
 
 //------------------------------------------------------------------------

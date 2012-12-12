@@ -21,10 +21,10 @@
 #include "CharTypes.h"
 
 #if MULTITHREADED
-#include "GMutex.h"
+#include "GooMutex.h"
 #endif
 
-class GString;
+class GooString;
 
 //------------------------------------------------------------------------
 
@@ -50,7 +50,7 @@ public:
 
   // Create the UnicodeMap specified by <encodingName>.  Sets the
   // initial reference count to 1.  Returns NULL on failure.
-  static UnicodeMap *parse(GString *encodingNameA);
+  static UnicodeMap *parse(GooString *encodingNameA);
 
   // Create a resident UnicodeMap.
   UnicodeMap(const char *encodingNameA, GBool unicodeOutA,
@@ -66,13 +66,13 @@ public:
   void incRefCnt();
   void decRefCnt();
 
-  GString *getEncodingName() { return encodingName; }
+  GooString *getEncodingName() { return encodingName; }
 
   GBool isUnicode() { return unicodeOut; }
 
   // Return true if this UnicodeMap matches the specified
   // <encodingNameA>.
-  GBool match(GString *encodingNameA);
+  GBool match(GooString *encodingNameA);
 
   // Map Unicode to the target encoding.  Fills in <buf> with the
   // output and returns the number of bytes used.  Output will be
@@ -82,9 +82,9 @@ public:
 
 private:
 
-  UnicodeMap(GString *encodingNameA);
+  UnicodeMap(GooString *encodingNameA);
 
-  GString *encodingName;
+  GooString *encodingName;
   UnicodeMapKind kind;
   GBool unicodeOut;
   union {
@@ -96,7 +96,7 @@ private:
   int eMapsLen;			// (user)
   int refCnt;
 #if MULTITHREADED
-  GMutex mutex;
+  GooMutex mutex;
 #endif
 };
 
@@ -113,7 +113,7 @@ public:
   // Get the UnicodeMap for <encodingName>.  Increments its reference
   // count; there will be one reference for the cache plus one for the
   // caller of this function.  Returns NULL on failure.
-  UnicodeMap *getUnicodeMap(GString *encodingName);
+  UnicodeMap *getUnicodeMap(GooString *encodingName);
 
 private:
 

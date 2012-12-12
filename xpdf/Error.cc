@@ -15,7 +15,7 @@
 #include <stdio.h>
 #include <stddef.h>
 #include <stdarg.h>
-#include "GString.h"
+#include "GooString.h"
 #include "GlobalParams.h"
 #include "Error.h"
 
@@ -43,14 +43,14 @@ void setErrorCallback(void (*cbk)(void *data, ErrorCategory category,
 
 void CDECL error(ErrorCategory category, int pos, const char *msg, ...) {
   va_list args;
-  GString *s;
+  GooString *s;
 
   // NB: this can be called before the globalParams object is created
   if (!errorCbk && globalParams && globalParams->getErrQuiet()) {
     return;
   }
   va_start(args, msg);
-  s = GString::formatv(msg, args);
+  s = GooString::formatv(msg, args);
   va_end(args);
   if (errorCbk) {
     (*errorCbk)(errorCbkData, category, pos, s->getCString());

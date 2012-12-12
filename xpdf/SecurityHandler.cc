@@ -12,7 +12,7 @@
 #pragma implementation
 #endif
 
-#include "GString.h"
+#include "GooString.h"
 #include "PDFDoc.h"
 #include "Decrypt.h"
 #include "Error.h"
@@ -65,8 +65,8 @@ SecurityHandler::SecurityHandler(PDFDoc *docA) {
 SecurityHandler::~SecurityHandler() {
 }
 
-GBool SecurityHandler::checkEncryption(GString *ownerPassword,
-				       GString *userPassword) {
+GBool SecurityHandler::checkEncryption(GooString *ownerPassword,
+				       GooString *userPassword) {
   void *authData;
   GBool ok;
   int i;
@@ -102,7 +102,7 @@ GBool SecurityHandler::checkEncryption(GString *ownerPassword,
 class StandardAuthData {
 public:
 
-  StandardAuthData(GString *ownerPasswordA, GString *userPasswordA) {
+  StandardAuthData(GooString *ownerPasswordA, GooString *userPasswordA) {
     ownerPassword = ownerPasswordA;
     userPassword = userPasswordA;
   }
@@ -116,8 +116,8 @@ public:
     }
   }
 
-  GString *ownerPassword;
-  GString *userPassword;
+  GooString *ownerPassword;
+  GooString *userPassword;
 };
 
 StandardSecurityHandler::StandardSecurityHandler(PDFDoc *docA,
@@ -248,18 +248,18 @@ StandardSecurityHandler::StandardSecurityHandler(PDFDoc *docA,
 	  if (fileIDObj.arrayGet(0, &fileIDObj1)->isString()) {
 	    fileID = fileIDObj1.getString()->copy();
 	  } else {
-	    fileID = new GString();
+	    fileID = new GooString();
 	  }
 	  fileIDObj1.free();
 	} else {
-	  fileID = new GString();
+	  fileID = new GooString();
 	}
 	if (fileKeyLength > 16 || fileKeyLength < 0) {
 	  fileKeyLength = 16;
 	}
 	ok = gTrue;
       } else if (encVersion == 5 && encRevision == 5) {
-	fileID = new GString(); // unused for V=R=5
+	fileID = new GooString(); // unused for V=R=5
 	ownerEnc = ownerEncObj.getString()->copy();
 	userEnc = userEncObj.getString()->copy();
 	if (fileKeyLength > 32 || fileKeyLength < 0) {
@@ -310,17 +310,17 @@ GBool StandardSecurityHandler::isUnencrypted() {
   return encVersion == -1 && encRevision == -1;
 }
 
-void *StandardSecurityHandler::makeAuthData(GString *ownerPassword,
-					    GString *userPassword) {
+void *StandardSecurityHandler::makeAuthData(GooString *ownerPassword,
+					    GooString *userPassword) {
   return new StandardAuthData(ownerPassword ? ownerPassword->copy()
-			                    : (GString *)NULL,
+			                    : (GooString *)NULL,
 			      userPassword ? userPassword->copy()
-			                   : (GString *)NULL);
+			                   : (GooString *)NULL);
 }
 
 void *StandardSecurityHandler::getAuthData() {
   PDFCore *core;
-  GString *password;
+  GooString *password;
 
   if (!(core = doc->getCore()) ||
       !(password = core->getPassword())) {
@@ -334,7 +334,7 @@ void StandardSecurityHandler::freeAuthData(void *authData) {
 }
 
 GBool StandardSecurityHandler::authorize(void *authData) {
-  GString *ownerPassword, *userPassword;
+  GooString *ownerPassword, *userPassword;
 
   if (!ok) {
     return gFalse;
@@ -385,8 +385,8 @@ ExternalSecurityHandler::~ExternalSecurityHandler() {
   encryptDict.free();
 }
 
-void *ExternalSecurityHandler::makeAuthData(GString *ownerPassword,
-					    GString *userPassword) {
+void *ExternalSecurityHandler::makeAuthData(GooString *ownerPassword,
+					    GooString *userPassword) {
   char *opw, *upw;
   void *authData;
 

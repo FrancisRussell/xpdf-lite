@@ -18,7 +18,7 @@
 #include "gtypes.h"
 #include "CharTypes.h"
 
-class GString;
+class GooString;
 class Gfx;
 class GfxState;
 struct GfxColor;
@@ -182,13 +182,13 @@ public:
   //----- text drawing
   virtual void beginStringOp(GfxState *state) {}
   virtual void endStringOp(GfxState *state) {}
-  virtual void beginString(GfxState *state, GString *s) {}
+  virtual void beginString(GfxState *state, GooString *s) {}
   virtual void endString(GfxState *state) {}
   virtual void drawChar(GfxState *state, double x, double y,
 			double dx, double dy,
 			double originX, double originY,
 			CharCode code, int nBytes, Unicode *u, int uLen) {}
-  virtual void drawString(GfxState *state, GString *s) {}
+  virtual void drawString(GfxState *state, GooString *s) {}
   virtual GBool beginType3Char(GfxState *state, double x, double y,
 			       double dx, double dy,
 			       CharCode code, Unicode *u, int uLen);

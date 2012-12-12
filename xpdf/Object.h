@@ -19,7 +19,7 @@
 #include <string.h>
 #include "gtypes.h"
 #include "gmem.h"
-#include "GString.h"
+#include "GooString.h"
 
 class XRef;
 class Array;
@@ -87,7 +87,7 @@ public:
     { initObj(objInt); intg = intgA; return this; }
   Object *initReal(double realA)
     { initObj(objReal); real = realA; return this; }
-  Object *initString(GString *stringA)
+  Object *initString(GooString *stringA)
     { initObj(objString); string = stringA; return this; }
   Object *initName(const char *nameA)
     { initObj(objName); name = copyString(nameA); return this; }
@@ -147,7 +147,7 @@ public:
   int getInt() { return intg; }
   double getReal() { return real; }
   double getNum() { return type == objInt ? (double)intg : real; }
-  GString *getString() { return string; }
+  GooString *getString() { return string; }
   char *getName() { return name; }
   Array *getArray() { return array; }
   Dict *getDict() { return dict; }
@@ -198,7 +198,7 @@ private:
     GBool booln;		//   boolean
     int intg;			//   integer
     double real;		//   real
-    GString *string;		//   string
+    GooString *string;		//   string
     char *name;			//   name
     Array *array;		//   array
     Dict *dict;			//   dictionary

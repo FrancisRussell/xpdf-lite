@@ -98,8 +98,8 @@ char *Stream::getLine(char *buf, int size) {
   return buf;
 }
 
-GString *Stream::getPSFilter(int psLevel, const char *indent) {
-  return new GString();
+GooString *Stream::getPSFilter(int psLevel, const char *indent) {
+  return new GooString();
 }
 
 Stream *Stream::addFilters(Object *dict) {
@@ -975,8 +975,8 @@ int ASCIIHexStream::lookChar() {
   return buf;
 }
 
-GString *ASCIIHexStream::getPSFilter(int psLevel, const char *indent) {
-  GString *s;
+GooString *ASCIIHexStream::getPSFilter(int psLevel, const char *indent) {
+  GooString *s;
 
   if (psLevel < 2) {
     return NULL;
@@ -1056,8 +1056,8 @@ int ASCII85Stream::lookChar() {
   return b[index];
 }
 
-GString *ASCII85Stream::getPSFilter(int psLevel, const char *indent) {
-  GString *s;
+GooString *ASCII85Stream::getPSFilter(int psLevel, const char *indent) {
+  GooString *s;
 
   if (psLevel < 2) {
     return NULL;
@@ -1270,8 +1270,8 @@ int LZWStream::getCode() {
   return code;
 }
 
-GString *LZWStream::getPSFilter(int psLevel, const char *indent) {
-  GString *s;
+GooString *LZWStream::getPSFilter(int psLevel, const char *indent) {
+  GooString *s;
 
   if (psLevel < 2 || pred) {
     return NULL;
@@ -1332,8 +1332,8 @@ int RunLengthStream::getBlock(char *blk, int size) {
   return n;
 }
 
-GString *RunLengthStream::getPSFilter(int psLevel, const char *indent) {
-  GString *s;
+GooString *RunLengthStream::getPSFilter(int psLevel, const char *indent) {
+  GooString *s;
 
   if (psLevel < 2) {
     return NULL;
@@ -2022,8 +2022,8 @@ short CCITTFaxStream::lookBits(int n) {
   return (inputBuf >> (inputBits - n)) & (0xffffffff >> (32 - n));
 }
 
-GString *CCITTFaxStream::getPSFilter(int psLevel, const char *indent) {
-  GString *s;
+GooString *CCITTFaxStream::getPSFilter(int psLevel, const char *indent) {
+  GooString *s;
   char s1[50];
 
   if (psLevel < 2) {
@@ -3502,8 +3502,8 @@ int DCTStream::read16() {
   return (c1 << 8) + c2;
 }
 
-GString *DCTStream::getPSFilter(int psLevel, const char *indent) {
-  GString *s;
+GooString *DCTStream::getPSFilter(int psLevel, const char *indent) {
+  GooString *s;
 
   if (psLevel < 2) {
     return NULL;
@@ -4289,8 +4289,8 @@ int FlateStream::getBlock(char *blk, int size) {
   return n;
 }
 
-GString *FlateStream::getPSFilter(int psLevel, const char *indent) {
-  GString *s;
+GooString *FlateStream::getPSFilter(int psLevel, const char *indent) {
+  GooString *s;
 
   if (psLevel < 3 || pred) {
     return NULL;

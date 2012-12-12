@@ -212,17 +212,17 @@ public:
   virtual void transform(double *in, double *out);
   virtual GBool isOk() { return ok; }
 
-  GString *getCodeString() { return codeString; }
+  GooString *getCodeString() { return codeString; }
 
 private:
 
   PostScriptFunction(PostScriptFunction *func);
   GBool parseCode(Stream *str, int *codePtr);
-  GString *getToken(Stream *str);
+  GooString *getToken(Stream *str);
   void resizeCode(int newSize);
   void exec(PSStack *stack, int codePtr);
 
-  GString *codeString;
+  GooString *codeString;
   PSObject *code;
   int codeSize;
   double cacheIn[funcMaxInputs];

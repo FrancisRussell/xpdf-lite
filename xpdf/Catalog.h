@@ -17,7 +17,7 @@
 
 #include "CharTypes.h"
 
-class GList;
+class GooList;
 class PDFDoc;
 class XRef;
 class Object;
@@ -57,11 +57,11 @@ public:
   void doneWithPage(int i);
 
   // Return base URI, or NULL if none.
-  GString *getBaseURI() { return baseURI; }
+  GooString *getBaseURI() { return baseURI; }
 
   // Return the contents of the metadata stream, or NULL if there is
   // no metadata.
-  GString *readMetadata();
+  GooString *readMetadata();
 
   // Return the structure tree root object.
   Object *getStructTreeRoot() { return &structTreeRoot; }
@@ -72,7 +72,7 @@ public:
 
   // Find a named destination.  Returns the link destination, or
   // NULL if <name> is not a destination.
-  LinkDest *findDest(GString *name);
+  LinkDest *findDest(GooString *name);
 
   Object *getDests() { return &dests; }
 
@@ -101,16 +101,16 @@ private:
   int pagesSize;		// size of pages array
   Object dests;			// named destination dictionary
   Object nameTree;		// name tree
-  GString *baseURI;		// base URI for URI-type links
+  GooString *baseURI;		// base URI for URI-type links
   Object metadata;		// metadata stream
   Object structTreeRoot;	// structure tree root dictionary
   Object outline;		// outline dictionary
   Object acroForm;		// AcroForm dictionary
   Object ocProperties;		// OCProperties dictionary
-  GList *embeddedFiles;		// embedded file list [EmbeddedFile]
+  GooList *embeddedFiles;		// embedded file list [EmbeddedFile]
   GBool ok;			// true if catalog is valid
 
-  Object *findDestInTree(Object *tree, GString *name, Object *obj);
+  Object *findDestInTree(Object *tree, GooString *name, Object *obj);
   GBool readPageTree(Object *catDict);
   int countPageTree(Object *pagesObj);
   void loadPage(int pg);

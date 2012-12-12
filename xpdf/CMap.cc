@@ -18,7 +18,7 @@
 #include <ctype.h>
 #include "gmem.h"
 #include "gfile.h"
-#include "GString.h"
+#include "GooString.h"
 #include "Error.h"
 #include "GlobalParams.h"
 #include "PSTokenizer.h"
@@ -48,12 +48,12 @@ static int getCharFromStream(void *data) {
 
 //------------------------------------------------------------------------
 
-CMap *CMap::parse(CMapCache *cache, GString *collectionA, Object *obj) {
+CMap *CMap::parse(CMapCache *cache, GooString *collectionA, Object *obj) {
   CMap *cMap;
-  GString *cMapNameA;
+  GooString *cMapNameA;
 
   if (obj->isName()) {
-    cMapNameA = new GString(obj->getName());
+    cMapNameA = new GooString(obj->getName());
     if (!(cMap = globalParams->getCMap(collectionA, cMapNameA))) {
       error(errSyntaxError, -1,
 	    "Unknown CMap '{0:t}' for character collection '{1:t}'",
@@ -71,8 +71,8 @@ CMap *CMap::parse(CMapCache *cache, GString *collectionA, Object *obj) {
   return cMap;
 }
 
-CMap *CMap::parse(CMapCache *cache, GString *collectionA,
-		  GString *cMapNameA) {
+CMap *CMap::parse(CMapCache *cache, GooString *collectionA,
+		  GooString *cMapNameA) {
   FILE *f;
   CMap *cMap;
 
@@ -100,7 +100,7 @@ CMap *CMap::parse(CMapCache *cache, GString *collectionA,
   return cMap;
 }
 
-CMap *CMap::parse(CMapCache *cache, GString *collectionA, Stream *str) {
+CMap *CMap::parse(CMapCache *cache, GooString *collectionA, Stream *str) {
   Object obj1;
   CMap *cMap;
 
@@ -187,7 +187,7 @@ void CMap::parse2(CMapCache *cache, int (*getCharFunc)(void *), void *data) {
   delete pst;
 }
 
-CMap::CMap(GString *collectionA, GString *cMapNameA) {
+CMap::CMap(GooString *collectionA, GooString *cMapNameA) {
   int i;
 
   collection = collectionA;
@@ -205,7 +205,7 @@ CMap::CMap(GString *collectionA, GString *cMapNameA) {
 #endif
 }
 
-CMap::CMap(GString *collectionA, GString *cMapNameA, int wModeA) {
+CMap::CMap(GooString *collectionA, GooString *cMapNameA, int wModeA) {
   collection = collectionA;
   cMapName = cMapNameA;
   isIdent = gTrue;
@@ -218,10 +218,10 @@ CMap::CMap(GString *collectionA, GString *cMapNameA, int wModeA) {
 }
 
 void CMap::useCMap(CMapCache *cache, char *useName) {
-  GString *useNameStr;
+  GooString *useNameStr;
   CMap *subCMap;
 
-  useNameStr = new GString(useName);
+  useNameStr = new GooString(useName);
   // if cache is non-NULL, we already have a lock, and we can use
   // CMapCache::getCMap() directly; otherwise, we need to use
   // GlobalParams::getCMap() in order to acqure the lock need to use
@@ -363,7 +363,7 @@ void CMap::decRefCnt() {
   }
 }
 
-GBool CMap::match(GString *collectionA, GString *cMapNameA) {
+GBool CMap::match(GooString *collectionA, GooString *cMapNameA) {
   return !collection->cmp(collectionA) && !cMapName->cmp(cMapNameA);
 }
 
@@ -416,7 +416,7 @@ CMapCache::~CMapCache() {
   }
 }
 
-CMap *CMapCache::getCMap(GString *collection, GString *cMapName) {
+CMap *CMapCache::getCMap(GooString *collection, GooString *cMapName) {
   CMap *cmap;
   int i, j;
 
