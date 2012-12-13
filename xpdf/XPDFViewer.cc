@@ -3526,7 +3526,7 @@ void XPDFViewer::printPrintCbk(Widget widget, XtPointer ptr,
   }
 
   psOut = new PSOutputDev(psFileName->getCString(), doc,
-			  firstPage, lastPage, psModePS);
+			  NULL, firstPage, lastPage, psModePS);
   if (psOut->isOk()) {
     doc->displayPages(psOut, firstPage, lastPage, 72, 72,
 		      0, gTrue, globalParams->getPSCrop(), gTrue);
