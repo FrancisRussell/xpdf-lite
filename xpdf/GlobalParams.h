@@ -37,6 +37,7 @@ class CMapCache;
 struct XpdfSecurityHandler;
 class GlobalParams;
 class SysFontList;
+class Stream;
 
 //------------------------------------------------------------------------
 
@@ -257,7 +258,7 @@ public:
   CharCodeToUnicode *getCIDToUnicode(GooString *collection);
   CharCodeToUnicode *getUnicodeToUnicode(GooString *fontName);
   UnicodeMap *getUnicodeMap(GooString *encodingName);
-  CMap *getCMap(GooString *collection, GooString *cMapName);
+  CMap *getCMap(GooString *collection, GooString *cMapName, Stream *stream);
   UnicodeMap *getTextEncoding();
 
   //----- functions to set parameters
