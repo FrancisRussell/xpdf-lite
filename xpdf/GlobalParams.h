@@ -9,7 +9,7 @@
 #ifndef GLOBALPARAMS_H
 #define GLOBALPARAMS_H
 
-#include <aconf.h>
+#include <poppler-config.h>
 
 #ifdef USE_GCC_PRAGMAS
 #pragma interface

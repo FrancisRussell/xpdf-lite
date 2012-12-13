@@ -9,7 +9,7 @@
 #ifndef XPDFAPP_H
 #define XPDFAPP_H
 
-#include <aconf.h>
+#include <poppler-config.h>
 
 #ifdef USE_GCC_PRAGMAS
 #pragma interface

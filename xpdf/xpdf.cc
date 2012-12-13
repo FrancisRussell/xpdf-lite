@@ -6,7 +6,7 @@
 //
 //========================================================================
 
-#include <aconf.h>
+#include <poppler-config.h>
 #include "gtypes.h"
 #include "GooString.h"
 #include "parseargs.h"

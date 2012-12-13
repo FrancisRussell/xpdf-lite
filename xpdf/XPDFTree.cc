@@ -6,7 +6,7 @@
 //
 //========================================================================
 
-#include <aconf.h>
+#include <poppler-config.h>
 #include <stdlib.h>
 #include "gmem.h"
 #include "XPDFTreeP.h"
