@@ -194,7 +194,7 @@ int PDFCore::loadFile2(PDFDoc *newDoc) {
   }
   doc = newDoc;
   if (out) {
-    out->startDoc(doc->getXRef());
+    out->startDoc(doc);
   }
 
   // nothing displayed yet
