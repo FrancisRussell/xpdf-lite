@@ -1,6 +1,7 @@
 *.o
 *.a
 *.swp
+/configure
 /autom4te.cache/
 /Makefile
 /aconf.h
