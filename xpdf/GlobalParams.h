@@ -18,6 +18,7 @@
 #include <stdio.h>
 #include "gtypes.h"
 #include "CharTypes.h"
+#include "config.h"
 
 #if MULTITHREADED
 #include "GooMutex.h"
