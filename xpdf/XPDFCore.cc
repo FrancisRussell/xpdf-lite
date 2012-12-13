@@ -22,6 +22,7 @@
 #include "GlobalParams.h"
 #include "PDFDoc.h"
 #include "Link.h"
+#include "FileSpec.h"
 #include "ErrorCodes.h"
 #include "GfxState.h"
 #include "CoreOutputDev.h"
@@ -466,7 +467,7 @@ void XPDFCore::doAction(LinkAction *action) {
   GooString *fileName, *fileName2;
   GooString *cmd;
   GooString *actionName;
-  Object movieAnnot, obj1, obj2;
+  Object movieAnnot, obj1, obj2, obj3;
   GooString *msg;
   int i;
 
@@ -645,7 +646,9 @@ void XPDFCore::doAction(LinkAction *action) {
     if (movieAnnot.isDict()) {
       if (movieAnnot.dictLookup("Movie", &obj1)->isDict()) {
 	if (obj1.dictLookup("F", &obj2)) {
-	  if ((fileName = LinkAction::getFileSpecName(&obj2))) {
+	  if (getFileSpecNameForPlatform(&obj2, &obj3)) {
+	    fileName = obj3.getString()->copy();
+	    obj3.free();
 	    if (!isAbsolutePath(fileName->getCString())) {
 	      fileName2 = appendToPath(
 			      grabPath(doc->getFileName()->getCString()),
