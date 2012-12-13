@@ -21,15 +21,9 @@ INSTALL_DATA = @INSTALL_DATA@
 EXE = @EXE@
 
 all:
-	cd goo; $(MAKE)
-	cd @UP_DIR@fofi; $(MAKE)
-	cd @UP_DIR@splash; $(MAKE)
 	cd @UP_DIR@xpdf; $(MAKE) @XPDF_TARGET@
 
 xpdf: dummy
-	cd goo; $(MAKE)
-	cd @UP_DIR@fofi; $(MAKE)
-	cd @UP_DIR@splash; $(MAKE)
 	cd @UP_DIR@xpdf; $(MAKE) xpdf$(EXE)
 
 dummy:
@@ -50,24 +44,15 @@ install: dummy
 	fi
 
 clean:
-	-cd goo; $(MAKE) clean
-	-cd @UP_DIR@fofi; $(MAKE) clean
-	-cd @UP_DIR@splash; $(MAKE) clean
 	-cd @UP_DIR@xpdf; $(MAKE) clean
 
 distclean: clean
 	rm -f config.log config.status config.cache
 	rm -f aconf.h
-	rm -f Makefile goo/Makefile xpdf/Makefile
-	rm -f goo/Makefile.dep fofi/Makefile.dep splash/Makefile.dep xpdf/Makefile.dep
-	rm -f goo/Makefile.in.bak fofi/Makefile.in.bak splash/Makefile.in.bak xpdf/Makefile.in.bak
-	touch goo/Makefile.dep
-	touch fofi/Makefile.dep
-	touch splash/Makefile.dep
+	rm -f Makefile xpdf/Makefile
+	rm -f xpdf/Makefile.dep
+	rm -f xpdf/Makefile.in.bak
 	touch xpdf/Makefile.dep
 
 depend:
-	cd goo; $(MAKE) depend
-	cd @UP_DIR@fofi; $(MAKE) depend
-	cd @UP_DIR@splash; $(MAKE) depend
 	cd @UP_DIR@xpdf; $(MAKE) depend
