@@ -20,8 +20,7 @@ INSTALL_DATA = @INSTALL_DATA@
 
 EXE = @EXE@
 
-all:
-	cd @UP_DIR@xpdf; $(MAKE) @XPDF_TARGET@
+all: xpdf
 
 xpdf: dummy
 	cd @UP_DIR@xpdf; $(MAKE) xpdf$(EXE)
@@ -30,9 +29,9 @@ dummy:
 
 install: dummy
 	-mkdir -p $(DESTDIR)@bindir@
-@X@	$(INSTALL_PROGRAM) xpdf/xpdf$(EXE) $(DESTDIR)@bindir@/xpdf$(EXE)
+	$(INSTALL_PROGRAM) xpdf/xpdf$(EXE) $(DESTDIR)@bindir@/xpdf$(EXE)
 	-mkdir -p $(DESTDIR)@mandir@/man1
-@X@	$(INSTALL_DATA) $(srcdir)/doc/xpdf.1 $(DESTDIR)@mandir@/man1/xpdf.1
+	$(INSTALL_DATA) $(srcdir)/doc/xpdf.1 $(DESTDIR)@mandir@/man1/xpdf.1
 	-mkdir -p $(DESTDIR)@mandir@/man5
 	$(INSTALL_DATA) $(srcdir)/doc/xpdfrc.5 $(DESTDIR)@mandir@/man5/xpdfrc.5
 	-mkdir -p $(DESTDIR)@sysconfdir@
@@ -56,3 +55,5 @@ distclean: clean
 
 depend:
 	cd @UP_DIR@xpdf; $(MAKE) depend
+
+.PHONY: all dummy xpdf install clean distclean depend
