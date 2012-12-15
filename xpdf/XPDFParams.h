@@ -54,8 +54,13 @@ private:
   void parsePSImageableArea(GooList *tokens, GooString *fileName, int line);
   void parseInitialZoom(GooList *tokens, GooString *fileName, int line);
   void parseCommand(const char *cmdName, 
-                    std::tr1::shared_ptr<GooString>& val, 
-                    GooList *tokens, GooString *fileName, int line);
+         std::tr1::shared_ptr<GooString>& val, GooList *tokens, 
+         GooString *fileName, int line);
+  void parseBind(GooList *tokens, GooString *fileName, int line);
+  void parseUnbind(GooList *tokens, GooString *fileName, int line);
+  GBool parseKey(GooString *modKeyStr, GooString *contextStr,
+    int *code, int *mods, int *context, const char *cmdName, 
+    GooList *tokens, GooString *fileName, int line);
 
   // xpdf-specific
   GBool continuousView;                          // continuous view mode

@@ -308,9 +308,9 @@ void XPDFParams::parseLine(char *buf, GooString *fileName, int line)
       parseYesNo("mapUnknownCharNames", &GlobalParams::setMapUnknownCharNames,
         tokens, fileName, line);
     } else if (!cmd->cmp("bind")) {
-      //parseBind(tokens, fileName, line);
+      parseBind(tokens, fileName, line);
     } else if (!cmd->cmp("unbind")) {
-      //parseUnbind(tokens, fileName, line);
+      parseUnbind(tokens, fileName, line);
     } else if (!cmd->cmp("printCommands")) {
       parseYesNo("printCommands", &GlobalParams::setPrintCommands, 
         tokens, fileName, line);
@@ -762,6 +762,212 @@ void XPDFParams::parseInteger(const char *cmdName,
   parseInteger(cmdName, &value, tokens, fileName, line);
   (globalParams->*setter)(value);
 }
+
+void XPDFParams::parseBind(GooList *tokens, GooString *fileName, int line) 
+{
+  int code, mods, context;
+
+  if (tokens->getLength() < 4) 
+  {
+    error(errConfig, -1, "Bad 'bind' config file command ({0:t}:{1:d})",
+	  fileName, line);
+    return;
+  }
+
+  if (!parseKey((GooString *)tokens->get(1), (GooString *)tokens->get(2),
+		&code, &mods, &context,
+		"bind", tokens, fileName, line)) 
+  {
+    return;
+  }
+
+  for (int i = 0; i < keyBindings->getLength(); ++i) 
+  {
+    KeyBinding *binding = (KeyBinding *)keyBindings->get(i);
+    if (binding->code == code &&
+	binding->mods == mods &&
+	binding->context == context) 
+    {
+      delete (KeyBinding *)keyBindings->del(i);
+      break;
+    }
+  }
+
+  GooList *cmds = new GooList();
+  for (int i = 3; i < tokens->getLength(); ++i) 
+  {
+    cmds->append(((GooString *)tokens->get(i))->copy());
+  }
+
+  keyBindings->append(new KeyBinding(code, mods, context, cmds));
+}
+
+void XPDFParams::parseUnbind(GooList *tokens, GooString *fileName, int line) 
+{
+  KeyBinding *binding;
+  int code, mods, context, i;
+
+  if (tokens->getLength() != 3) {
+    error(errConfig, -1, "Bad 'unbind' config file command ({0:t}:{1:d})",
+	  fileName, line);
+    return;
+  }
+  if (!parseKey((GooString *)tokens->get(1), (GooString *)tokens->get(2),
+		&code, &mods, &context,
+		"unbind", tokens, fileName, line)) {
+    return;
+  }
+  for (i = 0; i < keyBindings->getLength(); ++i) {
+    binding = (KeyBinding *)keyBindings->get(i);
+    if (binding->code == code &&
+	binding->mods == mods &&
+	binding->context == context) {
+      delete (KeyBinding *)keyBindings->del(i);
+      break;
+    }
+  }
+}
+
+GBool XPDFParams::parseKey(GooString *modKeyStr, GooString *contextStr,
+			     int *code, int *mods, int *context,
+			     const char *cmdName,
+			     GooList *tokens, GooString *fileName, int line) 
+{
+  char *p0;
+  int btn;
+
+  *mods = xpdfKeyModNone;
+  p0 = modKeyStr->getCString();
+  while (1) {
+    if (!strncmp(p0, "shift-", 6)) {
+      *mods |= xpdfKeyModShift;
+      p0 += 6;
+    } else if (!strncmp(p0, "ctrl-", 5)) {
+      *mods |= xpdfKeyModCtrl;
+      p0 += 5;
+    } else if (!strncmp(p0, "alt-", 4)) {
+      *mods |= xpdfKeyModAlt;
+      p0 += 4;
+    } else {
+      break;
+    }
+  }
+
+  if (!strcmp(p0, "space")) {
+    *code = ' ';
+  } else if (!strcmp(p0, "tab")) {
+    *code = xpdfKeyCodeTab;
+  } else if (!strcmp(p0, "return")) {
+    *code = xpdfKeyCodeReturn;
+  } else if (!strcmp(p0, "enter")) {
+    *code = xpdfKeyCodeEnter;
+  } else if (!strcmp(p0, "backspace")) {
+    *code = xpdfKeyCodeBackspace;
+  } else if (!strcmp(p0, "insert")) {
+    *code = xpdfKeyCodeInsert;
+  } else if (!strcmp(p0, "delete")) {
+    *code = xpdfKeyCodeDelete;
+  } else if (!strcmp(p0, "home")) {
+    *code = xpdfKeyCodeHome;
+  } else if (!strcmp(p0, "end")) {
+    *code = xpdfKeyCodeEnd;
+  } else if (!strcmp(p0, "pgup")) {
+    *code = xpdfKeyCodePgUp;
+  } else if (!strcmp(p0, "pgdn")) {
+    *code = xpdfKeyCodePgDn;
+  } else if (!strcmp(p0, "left")) {
+    *code = xpdfKeyCodeLeft;
+  } else if (!strcmp(p0, "right")) {
+    *code = xpdfKeyCodeRight;
+  } else if (!strcmp(p0, "up")) {
+    *code = xpdfKeyCodeUp;
+  } else if (!strcmp(p0, "down")) {
+    *code = xpdfKeyCodeDown;
+  } else if (p0[0] == 'f' && p0[1] >= '1' && p0[1] <= '9' && !p0[2]) {
+    *code = xpdfKeyCodeF1 + (p0[1] - '1');
+  } else if (p0[0] == 'f' &&
+	     ((p0[1] >= '1' && p0[1] <= '2' && p0[2] >= '0' && p0[2] <= '9') ||
+	      (p0[1] == '3' && p0[2] >= '0' && p0[2] <= '5')) &&
+	     !p0[3]) {
+    *code = xpdfKeyCodeF1 + 10 * (p0[1] - '0') + (p0[2] - '0') - 1;
+  } else if (!strncmp(p0, "mousePress", 10) &&
+	     p0[10] >= '0' && p0[10] <= '9' &&
+	     (!p0[11] || (p0[11] >= '0' && p0[11] <= '9' && !p0[12])) &&
+	     (btn = atoi(p0 + 10)) >= 1 && btn <= 32) {
+    *code = xpdfKeyCodeMousePress1 + btn - 1;
+  } else if (!strncmp(p0, "mouseRelease", 12) &&
+	     p0[12] >= '0' && p0[12] <= '9' &&
+	     (!p0[13] || (p0[13] >= '0' && p0[13] <= '9' && !p0[14])) &&
+	     (btn = atoi(p0 + 12)) >= 1 && btn <= 32) {
+    *code = xpdfKeyCodeMouseRelease1 + btn - 1;
+  } else if (*p0 >= 0x20 && *p0 <= 0x7e && !p0[1]) {
+    *code = (int)*p0;
+  } else {
+    error(errConfig, -1,
+	  "Bad key/modifier in '{0:s}' config file command ({1:t}:{2:d})",
+	  cmdName, fileName, line);
+    return gFalse;
+  }
+
+  p0 = contextStr->getCString();
+  if (!strcmp(p0, "any")) {
+    *context = xpdfKeyContextAny;
+  } else {
+    *context = xpdfKeyContextAny;
+    while (1) {
+      if (!strncmp(p0, "fullScreen", 10)) {
+	*context |= xpdfKeyContextFullScreen;
+	p0 += 10;
+      } else if (!strncmp(p0, "window", 6)) {
+	*context |= xpdfKeyContextWindow;
+	p0 += 6;
+      } else if (!strncmp(p0, "continuous", 10)) {
+	*context |= xpdfKeyContextContinuous;
+	p0 += 10;
+      } else if (!strncmp(p0, "singlePage", 10)) {
+	*context |= xpdfKeyContextSinglePage;
+	p0 += 10;
+      } else if (!strncmp(p0, "overLink", 8)) {
+	*context |= xpdfKeyContextOverLink;
+	p0 += 8;
+      } else if (!strncmp(p0, "offLink", 7)) {
+	*context |= xpdfKeyContextOffLink;
+	p0 += 7;
+      } else if (!strncmp(p0, "outline", 7)) {
+	*context |= xpdfKeyContextOutline;
+	p0 += 7;
+      } else if (!strncmp(p0, "mainWin", 7)) {
+	*context |= xpdfKeyContextMainWin;
+	p0 += 7;
+      } else if (!strncmp(p0, "scrLockOn", 9)) {
+	*context |= xpdfKeyContextScrLockOn;
+	p0 += 9;
+      } else if (!strncmp(p0, "scrLockOff", 10)) {
+	*context |= xpdfKeyContextScrLockOff;
+	p0 += 10;
+      } else {
+	error(errConfig, -1,
+	      "Bad context in '{0:s}' config file command ({1:t}:{2:d})",
+	      cmdName, fileName, line);
+	return gFalse;
+      }
+      if (!*p0) {
+	break;
+      }
+      if (*p0 != ',') {
+	error(errConfig, -1,
+	      "Bad context in '{0:s}' config file command ({1:t}:{2:d})",
+	      cmdName, fileName, line);
+	return gFalse;
+      }
+      ++p0;
+    }
+  }
+
+  return gTrue;
+}
+
+
 
 XPDFParams::~XPDFParams()
 {
