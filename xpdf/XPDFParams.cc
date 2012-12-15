@@ -22,11 +22,7 @@ XPDFParams::XPDFParams()
 {
   gInitMutex(&mutex);
   continuousView = gFalse;
-  launchCommand = NULL;
-  urlCommand = NULL;
-  movieCommand = NULL;
-  initialZoom = new GooString("125");
-  psFile = NULL;
+  initialZoom.reset(new GooString("125"));
   psCrop = gTrue;
   enableT1lib = gTrue;
 
@@ -118,25 +114,24 @@ GooList *XPDFParams::getKeyBinding(int code, int mods, int context)
 void XPDFParams::setInitialZoom(char *s) 
 {
   lockGlobalParams;
-  delete initialZoom;
-  initialZoom = new GooString(s);
+  initialZoom.reset(new GooString(s));
   unlockGlobalParams;
 }
 
 GooString *XPDFParams::getLaunchCommand()
 {
-  return launchCommand;
+  return launchCommand.get();
 
 }
 
 GooString *XPDFParams::getMovieCommand()
 {
-  return movieCommand;
+  return movieCommand.get();
 }
 
 GooString *XPDFParams::getURLCommand()
 {
-  return urlCommand;
+  return urlCommand.get();
 }
 
 GooString *XPDFParams::getPSFile()
@@ -144,7 +139,7 @@ GooString *XPDFParams::getPSFile()
   GooString *s;
 
   lockGlobalParams;
-  s = psFile ? psFile->copy() : NULL;
+  s = psFile.get() == NULL ? NULL : psFile->copy();
   unlockGlobalParams;
   return s;
 }
@@ -353,4 +348,9 @@ GBool XPDFParams::parseYesNo2(char *token, GBool *flag)
     return gFalse;
   }
   return gTrue;
+}
+
+XPDFParams::~XPDFParams()
+{
+  deleteGooList(keyBindings, KeyBinding);
 }

@@ -3,6 +3,7 @@
 
 #include <poppler-config.h>
 #include <gtypes.h>
+#include <tr1/memory>
 #include <GooMutex.h>
 
 class GooList;
@@ -11,6 +12,7 @@ class GooString;
 class XPDFParams {
 public:
   XPDFParams();
+  ~XPDFParams();
 
   // Will probably become poppler functionality
   
@@ -45,14 +47,14 @@ private:
   GooMutex mutex;
 
   // xpdf-specific
-  GBool continuousView;		// continuous view mode
-  GooString *launchCommand;	// command executed for 'launch' links
-  GooString *urlCommand;	// command executed for URL links
-  GooString *movieCommand;	// command executed for movie annotations
-  GooList *keyBindings;		// key & mouse button bindings [KeyBinding]
-  GooString *initialZoom;	// initial zoom level
-  GooString *psFile;		// PostScript file or command (for xpdf)
-  GBool psCrop;			// crop PS output to CropBox
+  GBool continuousView;                          // continuous view mode
+  std::tr1::shared_ptr<GooString> launchCommand; // command executed for 'launch' links
+  std::tr1::shared_ptr<GooString> urlCommand;    // command executed for URL links
+  std::tr1::shared_ptr<GooString> movieCommand;  // command executed for movie annotations
+  std::tr1::shared_ptr<GooString> initialZoom;   // initial zoom level
+  std::tr1::shared_ptr<GooString> psFile;        // PostScript file or command (for xpdf)
+  GooList *keyBindings;                          // key & mouse button bindings [KeyBinding]
+  GBool psCrop;                                  // crop PS output to CropBox
 
   void createDefaultKeyBindings();
 
