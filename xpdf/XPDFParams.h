@@ -61,6 +61,11 @@ private:
   GBool parseKey(GooString *modKeyStr, GooString *contextStr,
     int *code, int *mods, int *context, const char *cmdName, 
     GooList *tokens, GooString *fileName, int line);
+  void parsePSLevel(GooList *tokens, GooString *fileName, int line);
+  void parseScreenType(GooList *tokens, GooString *fileName, int line);
+  void parseTextEncoding(GooList *tokens, GooString *fileName, int line);
+  void parseTextEOL(GooList *tokens, GooString *fileName, int line);
+  void parseFontFile(GooList *tokens, GooString *fileName, int line); 
 
   // xpdf-specific
   GBool continuousView;                          // continuous view mode

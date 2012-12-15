@@ -166,13 +166,13 @@ void XPDFParams::parseLine(char *buf, GooString *fileName, int line)
     } else if (!cmd->cmp("toUnicodeDir")) {
       //parseToUnicodeDir(tokens, fileName, line);
     } else if (!cmd->cmp("fontFile")) {
-      //parseFontFile(tokens, fileName, line);
+      parseFontFile(tokens, fileName, line);
     } else if (!cmd->cmp("fontDir")) {
       //parseFontDir(tokens, fileName, line);
     } else if (!cmd->cmp("fontFileCC")) {
       //parseFontFileCC(tokens, fileName, line);
     } else if (!cmd->cmp("psFile")) {
-      //parsePSFile(tokens, fileName, line);
+      parsePSFile(tokens, fileName, line);
     } else if (!cmd->cmp("psPaperSize")) {
       //parsePSPaperSize(tokens, fileName, line);
     } else if (!cmd->cmp("psImageableArea")) {
@@ -191,7 +191,7 @@ void XPDFParams::parseLine(char *buf, GooString *fileName, int line)
     } else if (!cmd->cmp("psDuplex")) {
       //parseYesNo("psDuplex", &psDuplex, tokens, fileName, line);
     } else if (!cmd->cmp("psLevel")) {
-      //parsePSLevel(tokens, fileName, line);
+      parsePSLevel(tokens, fileName, line);
     } else if (!cmd->cmp("psResidentFont")) {
       //parsePSResidentFont(tokens, fileName, line);
     } else if (!cmd->cmp("psResidentFont16")) {
@@ -235,9 +235,9 @@ void XPDFParams::parseLine(char *buf, GooString *fileName, int line)
       //parseYesNo("psAlwaysRasterize", &psAlwaysRasterize,
       //	 tokens, fileName, line);
     } else if (!cmd->cmp("textEncoding")) {
-      //parseTextEncoding(tokens, fileName, line);
+      parseTextEncoding(tokens, fileName, line);
     } else if (!cmd->cmp("textEOL")) {
-      //parseTextEOL(tokens, fileName, line);
+      parseTextEOL(tokens, fileName, line);
     } else if (!cmd->cmp("textPageBreaks")) {
       parseYesNo("textPageBreaks", &GlobalParams::setTextPageBreaks,
         tokens, fileName, line);
@@ -270,7 +270,7 @@ void XPDFParams::parseLine(char *buf, GooString *fileName, int line)
       parseYesNo("strokeAdjust", &GlobalParams::setStrokeAdjust, 
         tokens, fileName, line);
     } else if (!cmd->cmp("screenType")) {
-      //parseScreenType(tokens, fileName, line);
+      parseScreenType(tokens, fileName, line);
     } else if (!cmd->cmp("screenSize")) {
       parseInteger("screenSize", &GlobalParams::setScreenSize, tokens, 
         fileName, line);
@@ -965,6 +965,107 @@ GBool XPDFParams::parseKey(GooString *modKeyStr, GooString *contextStr,
   }
 
   return gTrue;
+}
+
+void XPDFParams::parsePSLevel(GooList *tokens, GooString *fileName, int line) 
+{
+  if (tokens->getLength() != 2) {
+    error(errConfig, -1, "Bad 'psLevel' config file command ({0:t}:{1:d})",
+	  fileName, line);
+    return;
+  }
+  GooString *tok = (GooString *)tokens->get(1);
+  if (!tok->cmp("level1")) {
+    globalParams->setPSLevel(psLevel1);
+  } else if (!tok->cmp("level1sep")) {
+    globalParams->setPSLevel(psLevel1Sep);
+  } else if (!tok->cmp("level2")) {
+    globalParams->setPSLevel(psLevel2);
+  } else if (!tok->cmp("level2sep")) {
+    globalParams->setPSLevel(psLevel2Sep);
+  } else if (!tok->cmp("level3")) {
+    globalParams->setPSLevel(psLevel3);
+  } else if (!tok->cmp("level3Sep")) {
+    globalParams->setPSLevel(psLevel3Sep);
+  } else {
+    error(errConfig, -1, "Bad 'psLevel' config file command ({0:t}:{1:d})",
+	  fileName, line);
+  }
+}
+
+void XPDFParams::parsePSFile(GooList *tokens, GooString *fileName, int line) 
+{
+  if (tokens->getLength() != 2) {
+    error(errConfig, -1, "Bad 'psFile' config file command ({0:t}:{1:d})",
+	  fileName, line);
+    return;
+  }
+
+  psFile.reset(static_cast<GooString*>(tokens->get(1))->copy());
+}
+
+void XPDFParams::parseScreenType(GooList *tokens, GooString *fileName,
+  int line) 
+{
+  GooString *tok;
+
+  if (tokens->getLength() != 2) 
+  {
+    error(errConfig, -1, "Bad 'screenType' config file command ({0:t}:{1:d})",
+	  fileName, line);
+    return;
+  }
+
+  tok = (GooString *)tokens->get(1);
+  if (!tok->cmp("dispersed")) 
+    globalParams->setScreenType(screenDispersed);
+  else if (!tok->cmp("clustered")) 
+    globalParams->setScreenType(screenClustered);
+  else if (!tok->cmp("stochasticClustered")) 
+    globalParams->setScreenType(screenStochasticClustered);
+  else 
+    error(errConfig, -1, "Bad 'screenType' config file command ({0:t}:{1:d})",
+	  fileName, line);
+}
+
+void XPDFParams::parseTextEncoding(GooList *tokens, GooString *fileName, 
+       int line) 
+{
+  if (tokens->getLength() != 2) {
+    error(errConfig, -1,
+	  "Bad 'textEncoding' config file command ({0:s}:{1:d})",
+	  fileName, line);
+    return;
+  }
+  globalParams->setTextEncoding(static_cast<GooString*>(tokens->get(1))->getCString());
+}
+
+void XPDFParams::parseTextEOL(GooList *tokens, GooString *fileName, 
+  int line) 
+{ 
+  if (tokens->getLength() != 2) {
+    error(errConfig, -1, "Bad 'textEOL' config file command ({0:t}:{1:d})",
+	  fileName, line);
+    return;
+  }
+  GooString *tok = (GooString *)tokens->get(1);
+  if (!globalParams->setTextEOL(tok->getCString())) 
+  {
+    error(errConfig, -1, "Bad 'textEOL' config file command ({0:t}:{1:d})",
+	  fileName, line);
+  }
+}
+
+void XPDFParams::parseFontFile(GooList *tokens, GooString *fileName, int line) 
+{
+  if (tokens->getLength() != 3)
+  {
+    error(errConfig, -1, "Bad 'fontFile' config file command ({0:t}:{1:d})",
+	  fileName, line);
+    return;
+  }
+  globalParams->addFontFile(((GooString *)tokens->get(1))->copy(),
+		            ((GooString *)tokens->get(2))->copy());
 }
 
 
