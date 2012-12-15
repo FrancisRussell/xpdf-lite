@@ -20,6 +20,7 @@
 #undef Object
 #include "gtypes.h"
 #include "XPDFCore.h"
+#include "KeyBinding.h"
 
 #if (XmVERSION <= 1) && !defined(__sgi)
 #define DISABLE_OUTLINE
