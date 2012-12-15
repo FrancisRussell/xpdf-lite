@@ -155,9 +155,9 @@ int main(int argc, char *argv[]) {
   }
 
   // read config file
-  globalParams = new GlobalParams(cfgFileName);
+  globalParams = new GlobalParams();
   globalParams->setupBaseFonts(NULL);
-  xpdfParams = new XPDFParams();
+  xpdfParams = new XPDFParams(cfgFileName);
 
   if (contView) {
     xpdfParams->setContinuousView(contView);

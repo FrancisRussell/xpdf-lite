@@ -8,10 +8,11 @@
 
 class GooList;
 class GooString;
+class GlobalParams;
 
 class XPDFParams {
 public:
-  XPDFParams();
+  XPDFParams(const char* configPath);
   ~XPDFParams();
 
   // Will probably become poppler functionality
@@ -45,6 +46,16 @@ public:
   
 private:
   GooMutex mutex;
+  void loadConfig(const char *configPath);
+  void parseFile(GooString *fileName, FILE *f);
+  void parseLine(char *buf, GooString *fileName, int line);
+  void parsePSFile(GooList *tokens, GooString *fileName, int line);
+  void parsePSPaperSize(GooList *tokens, GooString *fileName, int line);
+  void parsePSImageableArea(GooList *tokens, GooString *fileName, int line);
+  void parseInitialZoom(GooList *tokens, GooString *fileName, int line);
+  void parseCommand(const char *cmdName, 
+                    std::tr1::shared_ptr<GooString>& val, 
+                    GooList *tokens, GooString *fileName, int line);
 
   // xpdf-specific
   GBool continuousView;                          // continuous view mode
@@ -69,8 +80,26 @@ private:
 
   // Present in poppler, but preferable as static utility methods
   static void parseYesNo(const char *cmdName, GBool *flag,
-		  GooList *tokens, GooString *fileName, int line);
+    GooList *tokens, GooString *fileName, int line);
   static GBool parseYesNo2(char *token, GBool *flag);
+  static void parseFloat(const char *cmdName, double *val,
+    GooList *tokens, GooString *fileName, int line);
+  static void parseInteger(const char *cmdName, int *val,
+    GooList *tokens, GooString *fileName, int line);
+
+  // For parsing values passed to poppler's GlobalParams
+  static void parseYesNo(const char *cmdName, 
+    void (GlobalParams::*setter)(bool), GooList *tokens, 
+    GooString *fileName, int line);
+  static void parseYesNo(const char *cmdName,
+    GBool (GlobalParams::*setter)(char*), GooList *tokens, 
+    GooString *fileName, int line);
+  static void parseFloat(const char *cmdName, 
+    void (GlobalParams::*setter)(double),
+    GooList *tokens, GooString *fileName, int line);
+  static void parseInteger(const char *cmdName,
+      void (GlobalParams::*setter)(int), GooList *tokens, 
+      GooString *fileName, int line);
 };
 
 
