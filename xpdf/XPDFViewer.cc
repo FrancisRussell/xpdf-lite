@@ -45,6 +45,7 @@
 #include "XPDFViewer.h"
 #include "PSOutputDev.h"
 #include "config.h"
+#include "XPDFParams.h"
 
 // these macro defns conflict with xpdf's Object class
 #ifdef LESSTIF_VERSION
@@ -587,7 +588,7 @@ void XPDFViewer::keyPressCbk(void *data, KeySym key, Guint modifiers,
     return;
   }
 
-  if ((cmds = globalParams->getKeyBinding(keyCode,
+  if ((cmds = xpdfParams->getKeyBinding(keyCode,
 					  viewer->getModifiers(modifiers),
 					  viewer->getContext(modifiers)))) {
     for (i = 0; i < cmds->getLength(); ++i) {
@@ -619,7 +620,7 @@ void XPDFViewer::mouseCbk(void *data, XEvent *event) {
     return;
   }
 
-  if ((cmds = globalParams->getKeyBinding(keyCode,
+  if ((cmds = xpdfParams->getKeyBinding(keyCode,
 					  viewer->getModifiers(
 						      event->xkey.state),
 					  viewer->getContext(
@@ -3407,7 +3408,7 @@ void XPDFViewer::initPrintDialog() {
   XtSetValues(printDialog, args, n);
 
   //----- initial values
-  if ((psFileName = globalParams->getPSFile())) {
+  if ((psFileName = xpdfParams->getPSFile())) {
     if (psFileName->getChar(0) == '|') {
       XmTextFieldSetString(printCmdText,
 			   psFileName->getCString() + 1);
@@ -3425,7 +3426,7 @@ void XPDFViewer::setupPrintDialog() {
   char *p;
 
   doc = core->getDoc();
-  psFileName = globalParams->getPSFile();
+  psFileName = xpdfParams->getPSFile();
   if (!psFileName || psFileName->getChar(0) == '|') {
     pdfFileName = doc->getFileName();
     p = pdfFileName->getCString() + pdfFileName->getLength() - 4;
@@ -3529,7 +3530,7 @@ void XPDFViewer::printPrintCbk(Widget widget, XtPointer ptr,
 			  NULL, firstPage, lastPage, psModePS);
   if (psOut->isOk()) {
     doc->displayPages(psOut, firstPage, lastPage, 72, 72,
-		      0, gTrue, globalParams->getPSCrop(), gTrue);
+		      0, gTrue, xpdfParams->getPSCrop(), gTrue);
   }
   delete psOut;
   delete psFileName;

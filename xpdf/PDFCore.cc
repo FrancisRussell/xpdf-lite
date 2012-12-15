@@ -27,6 +27,7 @@
 #include "TextOutputDev.h"
 #include "CoreOutputDev.h"
 #include "PDFCore.h"
+#include "XPDFParams.h"
 
 //------------------------------------------------------------------------
 // PDFCorePage
@@ -84,7 +85,7 @@ PDFCore::PDFCore(SplashColorMode colorModeA, int bitmapRowPadA,
   int i;
 
   doc = NULL;
-  continuousMode = globalParams->getContinuousView();
+  continuousMode = xpdfParams->getContinuousView();
   drawAreaWidth = drawAreaHeight = 0;
   maxPageW = totalDocH = 0;
   pageY = NULL;

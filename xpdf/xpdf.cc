@@ -16,6 +16,7 @@
 #include "Object.h"
 #include "XPDFApp.h"
 #include "config.h"
+#include "XPDFParams.h"
 
 //------------------------------------------------------------------------
 // command line options
@@ -156,22 +157,24 @@ int main(int argc, char *argv[]) {
   // read config file
   globalParams = new GlobalParams(cfgFileName);
   globalParams->setupBaseFonts(NULL);
+  xpdfParams = new XPDFParams();
+
   if (contView) {
-    globalParams->setContinuousView(contView);
+    xpdfParams->setContinuousView(contView);
   }
   if (psFileArg[0]) {
     globalParams->setPSFile(psFileArg);
   }
   if (paperSize[0]) {
-    if (!globalParams->setPSPaperSize(paperSize)) {
+    if (!xpdfParams->setPSPaperSize(paperSize)) {
       fprintf(stderr, "Invalid paper size\n");
     }
   } else {
     if (paperWidth) {
-      globalParams->setPSPaperWidth(paperWidth);
+      xpdfParams->setPSPaperWidth(paperWidth);
     }
     if (paperHeight) {
-      globalParams->setPSPaperHeight(paperHeight);
+      xpdfParams->setPSPaperHeight(paperHeight);
     }
   }
   if (level1) {
@@ -186,7 +189,7 @@ int main(int argc, char *argv[]) {
     }
   }
   if (enableT1libStr[0]) {
-    if (!globalParams->setEnableT1lib(enableT1libStr)) {
+    if (!xpdfParams->setEnableT1lib(enableT1libStr)) {
       fprintf(stderr, "Bad '-t1lib' value on command line\n");
     }
   }
@@ -218,7 +221,7 @@ int main(int argc, char *argv[]) {
   // the initialZoom parameter can be set in either the config file or
   // as an X resource (or command line arg)
   if (app->getInitialZoom()) {
-    globalParams->setInitialZoom(app->getInitialZoom()->getCString());
+    xpdfParams->setInitialZoom(app->getInitialZoom()->getCString());
   }
 
   // check command line
@@ -333,6 +336,7 @@ int main(int argc, char *argv[]) {
   }
  done1:
   delete app;
+  delete xpdfParams;
   delete globalParams;
 
   // check for memory leaks

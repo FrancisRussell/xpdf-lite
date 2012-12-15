@@ -32,6 +32,7 @@
 #include "SplashPattern.h"
 #include "XPDFApp.h"
 #include "XPDFCore.h"
+#include "XPDFParams.h"
 
 // these macro defns conflict with xpdf's Object class
 #ifdef LESSTIF_VERSION
@@ -114,7 +115,7 @@ XPDFCore::XPDFCore(Widget shellA, Widget parentWidgetA,
   if (fullScreen) {
     zoom = zoomPage;
   } else {
-    initialZoom = globalParams->getInitialZoom();
+    initialZoom = xpdfParams->getInitialZoom();
     if (!initialZoom->cmp("page")) {
       zoom = zoomPage;
     } else if (!initialZoom->cmp("width")) {
@@ -556,9 +557,9 @@ void XPDFCore::doAction(LinkAction *action) {
 #else
       fileName->append(" &");
 #endif
-      if (globalParams->getLaunchCommand()) {
+      if (xpdfParams->getLaunchCommand()) {
 	fileName->insert(0, ' ');
-	fileName->insert(0, globalParams->getLaunchCommand());
+	fileName->insert(0, xpdfParams->getLaunchCommand());
 	const int errorCode = system(fileName->getCString());
         if (errorCode != 0) {
           error(errInternal, -1, "non-zero error code returned by system call");
@@ -580,7 +581,7 @@ void XPDFCore::doAction(LinkAction *action) {
 
   // URI action
   case actionURI:
-    if (!(cmd = globalParams->getURLCommand())) {
+    if (!(cmd = xpdfParams->getURLCommand())) {
       error(errConfig, -1, "No urlCommand defined in config file");
       break;
     }
@@ -618,7 +619,7 @@ void XPDFCore::doAction(LinkAction *action) {
 
   // Movie action
   case actionMovie:
-    if (!(cmd = globalParams->getMovieCommand())) {
+    if (!(cmd = xpdfParams->getMovieCommand())) {
       error(errConfig, -1, "No movieCommand defined in config file");
       break;
     }
