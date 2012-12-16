@@ -1223,7 +1223,6 @@ void XPDFViewer::cmdRun(GooString *args[], int nArgs,
 #else
   cmd->append(" &");
 #endif
-  system(cmd->getCString());
   const int errorCode = system(cmd->getCString());
   if (errorCode != 0) {
     error(errInternal, -1, "non-zero error code returned by system call");
