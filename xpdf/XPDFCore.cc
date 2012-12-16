@@ -975,9 +975,9 @@ void XPDFCore::initWindow() {
 
   // set up mouse motion translations
   XtOverrideTranslations(drawArea, XtParseTranslationTable(
-      "<Btn1Down>:DrawingAreaInput()\n"
-      "<Btn1Up>:DrawingAreaInput()\n"
-      "<Btn1Motion>:DrawingAreaInput()\n"
+      "<BtnDown>:DrawingAreaInput()\n"
+      "<BtnUp>:DrawingAreaInput()\n"
+      "<BtnMotion>:DrawingAreaInput()\n"
       "<Motion>:DrawingAreaInput()"));
 
   // can't create a GC until the window gets mapped
