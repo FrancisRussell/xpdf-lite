@@ -44,6 +44,7 @@ EXE = @EXE@
 
 CXX_SRC = \
 	$(srcdir)/CoreOutputDev.cc \
+	$(srcdir)/ConfigParser.cc \
 	$(srcdir)/KeyBinding.cc \
 	$(srcdir)/XPDFParams.cc \
 	$(srcdir)/PDFCore.cc \
@@ -60,8 +61,8 @@ all: xpdf$(EXE)
 
 #------------------------------------------------------------------------
 
-XPDF_OBJS = CoreOutputDev.o KeyBinding.o XPDFParams.o PDFCore.o \
-	XPDFApp.o XPDFCore.o XPDFTree.o XPDFViewer.o \
+XPDF_OBJS = CoreOutputDev.o ConfigParser.o KeyBinding.o XPDFParams.o \
+	PDFCore.o XPDFApp.o XPDFCore.o XPDFTree.o XPDFViewer.o \
 	parseargs.o xpdf.o
 XPDF_LIBS = $(T1LIBS) $(XLIBS) $(OTHERLIBS) -lm
 
