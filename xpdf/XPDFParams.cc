@@ -361,6 +361,8 @@ void XPDFParams::createDefaultKeyBindings() {
 				     xpdfKeyContextAny, "zoomFitPage"));
   keyBindings->append(new KeyBinding('w', xpdfKeyModNone,
 				     xpdfKeyContextAny, "zoomFitWidth"));
+  keyBindings->append(new KeyBinding('h', xpdfKeyModNone, 
+                                     xpdfKeyContextAny, "zoomFitHeight"));
   keyBindings->append(new KeyBinding('f', xpdfKeyModAlt,
 				     xpdfKeyContextAny,
 				     "toggleFullScreenMode"));

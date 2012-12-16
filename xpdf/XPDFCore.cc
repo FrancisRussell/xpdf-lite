@@ -122,6 +122,8 @@ XPDFCore::XPDFCore(Widget shellA, Widget parentWidgetA,
       zoom = zoomPage;
     } else if (!initialZoom->cmp("width")) {
       zoom = zoomWidth;
+    } else if (!initialZoom->cmp("height")) {
+      zoom = zoomHeight;
     } else {
       zoom = atoi(initialZoom->getCString());
       if (zoom <= 0) {
@@ -250,7 +252,7 @@ void XPDFCore::resizeToPage(int pg) {
       width1 = doc->getPageCropWidth(pg);
       height1 = doc->getPageCropHeight(pg);
     }
-    if (zoom == zoomPage || zoom == zoomWidth) {
+    if (zoom == zoomPage || zoom == zoomWidth || zoom == zoomHeight) {
       width = (Dimension)(width1 * 0.01 * defZoom + 0.5);
       height = (Dimension)(height1 * 0.01 * defZoom + 0.5);
     } else {
@@ -1060,7 +1062,7 @@ void XPDFCore::resizeCbk(Widget widget, XtPointer ptr, XtPointer callData) {
   XtGetValues(core->drawArea, args, n);
   core->drawAreaWidth = (int)w;
   core->drawAreaHeight = (int)h;
-  if (core->zoom == zoomPage || core->zoom == zoomWidth) {
+  if (core->zoom == zoomPage || core->zoom == zoomWidth || core->zoom == zoomHeight) {
     sx = sy = -1;
   } else {
     sx = core->scrollX;

@@ -39,6 +39,7 @@ class PDFCore;
 
 #define zoomPage  -1
 #define zoomWidth -2
+#define zoomHeight -3
 #define defZoom   125
 
 //------------------------------------------------------------------------

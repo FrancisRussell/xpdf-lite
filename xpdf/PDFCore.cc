@@ -463,6 +463,12 @@ void PDFCore::update(int topPageA, int scrollXA, int scrollYA,
     dpiA = (hDPI < vDPI) ? hDPI : vDPI;
   } else if (zoomA == zoomWidth) {
     dpiA = (drawAreaWidth / uw) * 72;
+  } else if (zoomA == zoomHeight) {
+    if (continuousMode) {
+      dpiA = ((drawAreaHeight - continuousModePageSpacing) / uh) * 72;
+    } else {
+      dpiA = (drawAreaHeight / uh) * 72;
+    }
   } else {
     dpiA = 0.01 * zoomA * 72;
   }
@@ -1215,6 +1221,24 @@ void PDFCore::zoomCentered(double zoomA) {
 	                                : doc->getPageCropWidth(topPage);
     }
     dpi1 = 72.0 * (double)drawAreaWidth / pageW;
+    sx = 0;
+
+  } else if (zoomA == zoomHeight) {
+    if (continuousMode) {
+      pageH = (rotate == 90 || rotate == 270) ? maxUnscaledPageW
+	                                      : maxUnscaledPageH;
+      dpi1 = 72.0 * (double)(drawAreaHeight - continuousModePageSpacing) / pageH;
+    } else {
+      rot = rotate + doc->getPageRotate(topPage);
+      if (rot >= 360) {
+	rot -= 360;
+      } else if (rot < 0) {
+	rot += 360;
+      }
+      pageH = (rot == 90 || rot == 270) ? doc->getPageCropWidth(topPage)
+	                                : doc->getPageCropHeight(topPage);
+      dpi1 = 72.0 * (double)drawAreaHeight / pageH;
+    }
     sx = 0;
 
   } else if (zoomA <= 0) {

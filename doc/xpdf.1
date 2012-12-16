@@ -94,7 +94,7 @@ xpdf.fullScreenMatteColor, for full-screen mode.)
 Set the initial zoom factor.  A number specifies a zoom percentage,
 where 100 means 72 dpi.  You may also specify \'page', to fit the page
 to the window size, or \'width', to fit the page width to the window
-width.
+width, or \'height', to fit the page height to the window height
 .RB "[config file: " initialZoom "; or X resource: " xpdf.initialZoom ]
 .TP
 .B \-cont
@@ -423,6 +423,9 @@ Set the zoom factor to 'page' (fit page to window).
 .B w
 Set the zoom factor to 'width' (fit page width to window).
 .TP
+.B h
+Set the zoom factor to 'height' (fit page height to window).
+.TP
 .B alt-F
 Toggle full-screen mode.
 .TP
@@ -574,6 +577,9 @@ Set the zoom factor to fit-page.
 .TP
 .B zoomFitWidth
 Set the zoom factor to fit-width.
+.TP
+.B zoomFitHeight
+Set the zoom factor to fit-height.
 .TP
 .B zoomIn
 Zoom in - go to the next higher zoom factor.
@@ -797,6 +803,7 @@ The default key bindings are as follows:
     bind -              any         zoomOut
     bind z              any         zoomFitPage
     bind w              any         zoomFitWidth
+    bind h              any         zoomFitHeight
     bind alt-f          any         toggleFullScreenMode
     bind ctrl-l         any         redraw
     bind ctrl-w         any         closeWindow

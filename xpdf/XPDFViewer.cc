@@ -141,7 +141,11 @@ struct ZoomMenuInfo {
   double zoom;
 };
 
-static ZoomMenuInfo zoomMenuInfo[nZoomMenuItems] = {
+static ZoomMenuInfo zoomMenuInfo[] = {
+  { "1600%",    1600 },
+  { "1200%",    1200 },
+  { "800%",      800 },
+  { "600%",      600 },
   { "400%",      400 },
   { "200%",      200 },
   { "150%",      150 },
@@ -151,14 +155,22 @@ static ZoomMenuInfo zoomMenuInfo[nZoomMenuItems] = {
   { "25%",        25 },
   { "12.5%",      12.5 },
   { "fit page",  zoomPage },
-  { "fit width", zoomWidth }
+  { "fit width", zoomWidth },
+  { "fit height", zoomHeight }
 };
 
+#define nZoomMenuItems (sizeof(zoomMenuInfo)/sizeof(struct ZoomMenuInfo))
+
+#ifndef USE_COMBO_BOX
+  Widget zoomMenuBtns[nZoomMenuItems];
+#endif
+
 #define maxZoomIdx   0
-#define defZoomIdx   3
-#define minZoomIdx   7
-#define zoomPageIdx  8
-#define zoomWidthIdx 9
+#define defZoomIdx   7
+#define minZoomIdx   nZoomMenuItems - 4
+#define zoomPageIdx  nZoomMenuItems - 3
+#define zoomWidthIdx nZoomMenuItems - 2
+#define zoomHeightIdx nZoomMenuItems -1
 
 //------------------------------------------------------------------------
 
@@ -233,6 +245,7 @@ XPDFViewerCmd XPDFViewer::cmdTab[] = {
   { "toggleFullScreenMode",    0, gFalse, gFalse, &XPDFViewer::cmdToggleFullScreenMode },
   { "toggleOutline",           0, gFalse, gFalse, &XPDFViewer::cmdToggleOutline },
   { "windowMode",              0, gFalse, gFalse, &XPDFViewer::cmdWindowMode },
+  { "zoomFitHeight",           0, gFalse, gFalse, &XPDFViewer::cmdZoomFitHeight },
   { "zoomFitPage",             0, gFalse, gFalse, &XPDFViewer::cmdZoomFitPage },
   { "zoomFitWidth",            0, gFalse, gFalse, &XPDFViewer::cmdZoomFitWidth },
   { "zoomIn",                  0, gFalse, gFalse, &XPDFViewer::cmdZoomIn },
@@ -1429,6 +1442,15 @@ void XPDFViewer::cmdZoomFitWidth(GooString *args[], int nArgs,
   }
 }
 
+void XPDFViewer::cmdZoomFitHeight(GooString *args[], int nArgs,
+				  XEvent *event) {
+  if (core->getZoom() != zoomHeight) {
+    setZoomIdx(zoomHeightIdx);
+    displayPage(core->getPageNum(), zoomHeight,
+		core->getRotate(), gTrue, gFalse);
+  }
+}
+
 void XPDFViewer::cmdZoomIn(GooString *args[], int nArgs,
 			   XEvent *event) {
   int z;
@@ -1811,7 +1833,7 @@ void XPDFViewer::initToolbar(Widget parent) {
   menuPane = XmCreatePulldownMenu(toolBar, "zoomMenuPane", args, n);
   for (i = 0; i < nZoomMenuItems; ++i) {
     n = 0;
-    s = XmStringCreateLocalized(zoomMenuInfo[i].label);
+    s = XmStringCreateLocalized((char*)zoomMenuInfo[i].label);
     XtSetArg(args[n], XmNlabelString, s); ++n;
     XtSetArg(args[n], XmNuserData, i); ++n;
     sprintf(buf, "zoom%d", i);

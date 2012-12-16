@@ -41,11 +41,6 @@ class XPDFViewer;
 
 //------------------------------------------------------------------------
 
-// NB: this must match the defn of zoomMenuBtnInfo in XPDFViewer.cc
-#define nZoomMenuItems 10
-
-//------------------------------------------------------------------------
-
 struct XPDFViewerCmd {
   const char *name;
   int nArgs;
@@ -53,6 +48,8 @@ struct XPDFViewerCmd {
   GBool requiresEvent;
   void (XPDFViewer::*func)(GooString *args[], int nArgs, XEvent *event);
 };
+
+//------------------------------------------------------------------------
 
 //------------------------------------------------------------------------
 // XPDFViewer
@@ -171,6 +168,7 @@ private:
   void cmdWindowMode(GooString *args[], int nArgs, XEvent *event);
   void cmdZoomFitPage(GooString *args[], int nArgs, XEvent *event);
   void cmdZoomFitWidth(GooString *args[], int nArgs, XEvent *event);
+  void cmdZoomFitHeight(GooString *args[], int nArgs, XEvent *event);
   void cmdZoomIn(GooString *args[], int nArgs, XEvent *event);
   void cmdZoomOut(GooString *args[], int nArgs, XEvent *event);
   void cmdZoomPercent(GooString *args[], int nArgs, XEvent *event);
@@ -321,7 +319,6 @@ private:
   Widget zoomComboBox;
 #else
   Widget zoomMenu;
-  Widget zoomMenuBtns[nZoomMenuItems];
 #endif
   Widget zoomWidget;
   Widget findBtn;
