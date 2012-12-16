@@ -1360,7 +1360,7 @@ void XPDFCore::redrawRect(PDFCoreTile *tileA, int xSrc, int ySrc,
   }
 
   // draw the document
-  if (tile) {
+  if (tile && tile->image) {
     XPutImage(display, drawAreaWin, drawAreaGC, tile->image,
 	      xSrc, ySrc, xDest, yDest, width, height);
 
