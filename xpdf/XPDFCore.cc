@@ -4,6 +4,8 @@
 //
 // Copyright 2002-2003 Glyph & Cog, LLC
 //
+// Modified for Debian by Hamish Moffatt, 22 May 2002.
+//
 //========================================================================
 
 #include <poppler-config.h>
@@ -386,12 +388,16 @@ void XPDFCore::endSelection(int wx, int wy) {
 #ifndef NO_TEXT_SELECT
       if (selectULX != selectLRX &&
 	  selectULY != selectLRY) {
+#ifdef ENFORCE_PERMISSIONS
 	if (doc->okToCopy()) {
 	  copySelection();
 	} else {
 	  error(errNotAllowed, -1,
 		"Copying of text from this document is not allowed.");
 	}
+#else
+        copySelection();
+#endif
       }
 #endif
     }
@@ -410,9 +416,11 @@ void XPDFCore::copySelection() {
   int pg;
   double ulx, uly, lrx, lry;
 
+#ifdef ENFORCE_PERMISSIONS
   if (!doc->okToCopy()) {
     return;
   }
+#endif
   if (getSelection(&pg, &ulx, &uly, &lrx, &lry)) {
     //~ for multithreading: need a mutex here
     if (currentSelection) {

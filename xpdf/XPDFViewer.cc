@@ -4,6 +4,8 @@
 //
 // Copyright 2002-2003 Glyph & Cog, LLC
 //
+// Modified for Debian by Hamish Moffatt, 22 May 2002.
+//
 //========================================================================
 
 #include <poppler-config.h>
@@ -3498,10 +3500,12 @@ void XPDFViewer::printPrintCbk(Widget widget, XtPointer ptr,
   PSOutputDev *psOut;
 
   doc = viewer->core->getDoc();
+#ifdef ENFORCE_PERMISSIONS
   if (!doc->okToPrint()) {
     error(errNotAllowed, -1, "Printing this document is not allowed.");
     return;
   }
+#endif
 
   viewer->core->setBusyCursor(gTrue);
 
