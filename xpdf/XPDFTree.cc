@@ -124,7 +124,7 @@ static XtResource constraints[] = {
 };
 
 static char defaultTranslations[] =
-  "<Btn1Down>: XPDFTreeClick()";
+  "<BtnDown>: XPDFTreeClick()";
 
 static XtActionsRec actions[] = {
   { "XPDFTreeClick", click }
