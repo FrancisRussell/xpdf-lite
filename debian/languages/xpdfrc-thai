@@ -1,0 +1,4 @@
+#----- begin Thai support package (2002-jan-16; updated to use poppler-data 2010-06-14)
+nameToUnicode			/usr/share/poppler/nameToUnicode/Thai
+unicodeMap	TIS-620		/usr/share/poppler/unicodeMap/TIS-620
+#----- end Thai support package

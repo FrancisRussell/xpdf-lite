@@ -1,0 +1,77 @@
+#----- begin Japanese support package (2010-Apr-15)
+cidToUnicode    Adobe-Japan1    /usr/share/poppler/cidToUnicode/Adobe-Japan1
+unicodeMap      ISO-2022-JP     /usr/share/poppler/unicodeMap/ISO-2022-JP
+unicodeMap      EUC-JP          /usr/share/poppler/unicodeMap/EUC-JP
+unicodeMap      Shift-JIS       /usr/share/poppler/unicodeMap/Shift-JIS
+cMapDir         Adobe-Japan1    /usr/share/poppler/cMap/Adobe-Japan1
+toUnicodeDir                    /usr/share/poppler/cMap/Adobe-Japan1
+fontFileCC      Adobe-Japan1    /usr/share/fonts/truetype/ttf-japanese-mincho.ttf
+fontFile   Ryumin-Light    /usr/share/fonts/truetype/ttf-japanese-mincho.ttf
+fontFile   Ryumin-Light-H  /usr/share/fonts/truetype/ttf-japanese-mincho.ttf
+fontFile   Ryumin-Light-Identity-H /usr/share/fonts/truetype/ttf-japanese-mincho.ttf
+fontFile   FutoMinA101-Bold-Identity-H     /usr/share/fonts/truetype/ttf-japanese-mincho.ttf
+fontFile   GothicBBB-Meidum        /usr/share/fonts/truetype/ttf-japanese-gothic.ttf
+fontFile   GothicBBB-Medium-H      /usr/share/fonts/truetype/ttf-japanese-gothic.ttf
+fontFile   GothicBBB-Medium-Identity-H     /usr/share/fonts/truetype/ttf-japanese-gothic.ttf
+fontFile   Shingo-Medium-Identity-H        /usr/share/fonts/truetype/ttf-japanese-gothic.ttf
+fontFile   ShinGo-Bold-Identity-H  /usr/share/fonts/truetype/ttf-japanese-gothic.ttf
+fontFile   ShinGo-Ultra-Identity-H /usr/share/fonts/truetype/ttf-japanese-gothic.ttf
+fontFile   HeiseiKakuGo-W5 /usr/share/fonts/truetype/ttf-japanese-gothic.ttf
+fontFile   HeiseiKakuGo-W7 /usr/share/fonts/truetype/ttf-japanese-gothic.ttf
+fontFile   HeiseiKakuGo-W9 /usr/share/fonts/truetype/ttf-japanese-gothic.ttf
+fontFile   MidashiGo-MB31  /usr/share/fonts/truetype/ttf-japanese-gothic.ttf
+fontFile   FutoGoB101-Bold /usr/share/fonts/truetype/ttf-japanese-gothic.ttf
+fontFile   MS-Gothic       /usr/share/fonts/truetype/ttf-japanese-gothic.ttf
+fontFile   MS-PGothic      /usr/share/fonts/truetype/ttf-japanese-gothic.ttf
+fontFile   HG-GothicB      /usr/share/fonts/truetype/ttf-japanese-gothic.ttf
+fontFile   Kochi-Gothic    /usr/share/fonts/truetype/ttf-japanese-gothic.ttf
+fontFile   LX-Gothic       /usr/share/fonts/truetype/ttf-japanese-gothic.ttf
+fontFile   LX-P-Gothic     /usr/share/fonts/truetype/ttf-japanese-gothic.ttf
+fontFile   ＭＳＰゴシック  /usr/share/fonts/truetype/ttf-japanese-gothic.ttf
+fontFile   ＭＳゴシック    /usr/share/fonts/truetype/ttf-japanese-gothic.ttf
+fontFile   ＤＦＰゴシック  /usr/share/fonts/truetype/ttf-japanese-gothic.ttf
+fontFile   ＤＦＰ特太ゴシック      /usr/share/fonts/truetype/ttf-japanese-gothic.ttf
+fontFile   @ヒラギノ角ゴ3等幅      /usr/share/fonts/truetype/ttf-japanese-gothic.ttf
+fontFile   @ヒラギノ角ゴ5等幅      /usr/share/fonts/truetype/ttf-japanese-gothic.ttf
+fontFile   @ヒラギノ角ゴ7等幅      /usr/share/fonts/truetype/ttf-japanese-gothic.ttf
+
+psResidentFontCC        Adobe-Japan1    H       Ryumin-Light-H  ISO-2022-JP
+psResidentFontCC        Adobe-Japan1    V       Ryumin-Light-V  ISO-2022-JP
+psResidentFont16   GothicBBB-Medium-H      H       GothicBBB-Medium-H      ISO-2022-JP
+psResidentFont16   GothicBBB-Medium-Identity-H     H       GothicBBB-Medium-H      ISO-2022-JP
+psResidentFont16   GothicBBB-Medium-V      V       GothicBBB-Medium-V      ISO-2022-JP
+psResidentFont16    MidashiGo-MB31   H     GothicBBB-Medium-H ISO-2022-JP
+psResidentFont16    MidashiGo-MB31   V     GothicBBB-Medium-V ISO-2022-JP
+psResidentFont16    FutoGoB101-Bold  H     GothicBBB-Medium-H ISO-2022-JP
+psResidentFont16    FutoGoB101-Bold  V     GothicBBB-Medium-V ISO-2022-JP
+psResidentFont16    HeiseiKakuGo-W5  H     GothicBBB-Medium-H ISO-2022-JP
+psResidentFont16    HeiseiKakuGo-W5  V     GothicBBB-Medium-V ISO-2022-JP
+psResidentFont16    HeiseiKakuGo-W9  H     GothicBBB-Medium-H ISO-2022-JP
+psResidentFont16    HeiseiKakuGo-W9  V     GothicBBB-Medium-V ISO-2022-JP
+psResidentFont16    HeiseiMaruGo-W4  H     GothicBBB-Medium-H ISO-2022-JP
+psResidentFont16    HeiseiMaruGo-W4  V     GothicBBB-Medium-V ISO-2022-JP
+psResidentFont16    MS-Gothic        H     GothicBBB-Medium-H ISO-2022-JP
+psResidentFont16    MS-Gothic        V     GothicBBB-Medium-V ISO-2022-JP
+psResidentFont16    HG-GothicB       H     GothicBBB-Medium-H ISO-2022-JP
+psResidentFont16    HG-GothicB       V     GothicBBB-Medium-V ISO-2022-JP
+psResidentFont16    Kochi-Gothic     H     GothicBBB-Medium-H ISO-2022-JP
+psResidentFont16    Kochi-Gothic     V     GothicBBB-Medium-V ISO-2022-JP
+psResidentFont16    LX-Gothic        H     GothicBBB-Medium-H ISO-2022-JP
+psResidentFont16    LX-Gothic        V     GothicBBB-Medium-V ISO-2022-JP
+psResidentFont16    LX-P-Gothic      H     GothicBBB-Medium-H ISO-2022-JP
+psResidentFont16    LX-P-Gothic      V     GothicBBB-Medium-V ISO-2022-JP
+psResidentFont16    ＭＳＰゴシック   H     GothicBBB-Medium-H ISO-2022-JP
+psResidentFont16    ＭＳＰゴシック   V     GothicBBB-Medium-V ISO-2022-JP
+psResidentFont16    ＭＳゴシック     H     GothicBBB-Medium-H ISO-2022-JP
+psResidentFont16    ＭＳゴシック     V     GothicBBB-Medium-V ISO-2022-JP
+psResidentFont16    ＤＦＰゴシック   H     GothicBBB-Medium-H ISO-2022-JP
+psResidentFont16    ＤＦＰゴシック   V     GothicBBB-Medium-V ISO-2022-JP
+psResidentFont16    ＤＦＰ特太ゴシック       H     GothicBBB-Medium-H ISO-2022-JP
+psResidentFont16    ＤＦＰ特太ゴシック       V     GothicBBB-Medium-V ISO-2022-JP
+psResidentFont16    @ヒラギノ角ゴ3等倍       H     GothicBBB-Medium-H ISO-2022-JP
+psResidentFont16    @ヒラギノ角ゴ3等倍       V     GothicBBB-Medium-V ISO-2022-JP
+psResidentFont16    @ヒラギノ角ゴ5等倍       H     GothicBBB-Medium-H ISO-2022-JP
+psResidentFont16    @ヒラギノ角ゴ5等倍       V     GothicBBB-Medium-V ISO-2022-JP
+psResidentFont16    @ヒラギノ角ゴ7等倍       H     GothicBBB-Medium-H ISO-2022-JP
+psResidentFont16    @ヒラギノ角ゴ7等倍       V     GothicBBB-Medium-V ISO-2022-JP
+#----- end Japanese support package

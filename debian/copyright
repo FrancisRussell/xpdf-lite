@@ -1,0 +1,44 @@
+Format: http://svn.debian.org/wsvn/dep/web/deps/dep5.mdwn?op=file&rev=202
+Upstream-Name: Xpdf
+Source: http://www.foolabs.com/xpdf
+
+Files: *
+Copyright: 1996-2007, Derek B. Noonburg <derekn@foolabs.com>
+License: GPL-2+
+ Xpdf is licensed under the GNU General Public License (GPL), version
+ 2.  In my opinion, the GPL is a convoluted, confusing, ambiguous mess.
+ But it's also pervasive, and I'm sick of arguing.  And even if it is
+ confusing, the basic idea is good.
+ .
+ In order to cut down on the confusion a little bit, here are some
+ informal clarifications:
+ .
+ - I don't mind if you redistribute xpdf in source and/or binary form,
+   as long as you include all of the documentation: README, man pages
+   (or help files), and COPYING.  (Note that the README file contains a
+   pointer to a web page with the source code.)
+ .
+ - Selling a CD-ROM that contains xpdf is fine with me, as long as it
+   includes the documentation.  I wouldn't mind receiving a sample
+   copy, but it's not necessary.
+ .
+ - If you make useful changes to xpdf, please make the source code
+   available -- post it on a web site, email it to me, whatever.
+ .
+ For information on commercial licensing and consulting, please see the
+ Glyph & Cog web site:
+ .
+     http://www.glyphandcog.com/
+ .
+ On Debian systems, the full text of the GNU General Public License
+ version 2 can be found in the file `/usr/share/common-licenses/GPL-2'.
+
+Files: debian/*
+Copyright: 1996-1998, Dirk Eddelbuettel <edd@debian.org>
+           1998-2007, Hamish Moffatt <hamish@debian.org>
+           2010, Michael S. Gilbert <michael.s.gilbert@gmail.com>
+           2010, Osamu Aoki <osamu@debian.org>
+           2010, Rogério Theodoro de Brito <rbrito@ime.usp.br>
+License: GPL-2
+ On Debian systems, the full text of the GNU General Public License
+ version 2 can be found in the file `/usr/share/common-licenses/GPL-2'.

@@ -1,0 +1,3 @@
+#----- begin Latin2 support package (2002-oct-22; updated to use poppler-data 2010-06-14)
+unicodeMap	Latin2	/usr/share/poppler/unicodeMap/Latin2
+#----- end Latin2 support package

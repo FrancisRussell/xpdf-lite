@@ -1,0 +1,31 @@
+#!/usr/bin/make -f
+
+# build-hardening flags
+export DEB_BUILD_MAINT_OPTIONS=hardening=+all
+
+includes=$(strip $(shell pkg-config --cflags poppler))
+LIBS+=-lXm $(shell pkg-config --libs poppler --libs xt --libs x11)
+CPPFLAGS+=$(includes) $(includes)/goo $(includes)/splash -Wno-write-strings -DHAVE_DIRENT_H
+CPPFLAGS+=-Wno-format-extra-args -DSYSTEM_XPDFRC=\"/etc/xpdf/xpdfrc\"
+
+files=xpdf/parseargs xpdf/CoreOutputDev xpdf/XPDFParams xpdf/PDFCore
+files+=xpdf/XPDFApp xpdf/XPDFCore xpdf/XPDFTree xpdf/XPDFViewer xpdf/xpdf
+files+=xpdf/KeyBinding xpdf/ConfigParser
+headers=xpdf/config.h xpdf/XPDFTreeP.h xpdf/about-text.h xpdf/*.xbm xpdf/xpdfIcon.xpm
+
+sources=$(shell for file in $(files); do echo $$file.*; done)
+objects=$(shell for file in $(files); do echo build/$$(basename $$file).o; done)
+
+override_dh_clean:
+	dh_clean
+	rm -rf build
+
+override_dh_auto_configure:
+	mkdir -p build
+	cp $(sources) $(headers) build
+
+override_dh_auto_build: $(objects)
+	$(CXX) $(LDFLAGS) -o build/xpdf.real build/*.o $(LIBS)
+
+%:
+	dh ${@}

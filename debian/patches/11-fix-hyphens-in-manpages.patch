@@ -1,0 +1,24 @@
+Index: xpdf-lite/doc/xpdf.1
+===================================================================
+--- xpdf-lite.orig/doc/xpdf.1	2012-12-16 13:03:25.364345642 +0000
++++ xpdf-lite/doc/xpdf.1	2012-12-16 13:04:55.222528711 +0000
+@@ -128,8 +128,8 @@
+ .TP
+ .BI \-ps " PS-file"
+ Set the default file name for PostScript output (i.e., the name which
+-will appear in the print dialog).  This can also be of the form
+-'|command' to pipe the PostScript through a command.
++will appear in the print dialog).  This can also be of the
++form '|command' to pipe the PostScript through a command.
+ .RB "[config file: " psFile ]
+ .TP
+ .BI \-paper " size"
+@@ -425,7 +425,7 @@
+ Activate the page number text field ("goto page").
+ .TP
+ .B 0
+-Set the zoom factor to 125%.
++Set the zoom factor to 125% (ready for increment and decrement).
+ .TP
+ .B +
+ Zoom in (increment the zoom factor by 1).

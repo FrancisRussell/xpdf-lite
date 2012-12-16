@@ -1,0 +1,8 @@
+#----- begin Korean support package (2010-Apr-15)
+cidToUnicode    Adobe-Korea1    /usr/share/poppler/cidToUnicode/Adobe-Korea1
+unicodeMap      ISO-2022-KR     /usr/share/poppler/unicodeMap/ISO-2022-KR
+cMapDir         Adobe-Korea1    /usr/share/poppler/cMap/Adobe-Korea1
+toUnicodeDir                    /usr/share/poppler/cMap/Adobe-Korea1
+fontFileCC      Adobe-Korea1    /usr/share/fonts/truetype/baekmuk/batang.ttf
+fontFileCC      Unidocs-Korea1  /usr/share/fonts/truetype/baekmuk/batang.ttf
+#----- end Korean support package

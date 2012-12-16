@@ -1,0 +1,8 @@
+#----- begin Chinese Traditional support package (2010-Apr-15)
+cidToUnicode    Adobe-CNS1      /usr/share/poppler/cidToUnicode/Adobe-CNS1
+unicodeMap      Big5            /usr/share/poppler/unicodeMap/Big5
+unicodeMap      Big5ascii       /usr/share/poppler/unicodeMap/Big5ascii
+cMapDir         Adobe-CNS1      /usr/share/poppler/cMap/Adobe-CNS1
+toUnicodeDir                    /usr/share/poppler/cMap/Adobe-CNS1
+fontFileCC      Adobe-CNS1      /usr/share/fonts/truetype/arphic/bkai00mp.ttf
+#----- end Chinese Traditional support package

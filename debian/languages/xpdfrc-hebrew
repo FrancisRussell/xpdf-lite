@@ -1,0 +1,4 @@
+#----- begin Hebrew support package (2003-feb-16; updated to use poppler-data 2010-06-14)
+unicodeMap	ISO-8859-8	/usr/share/poppler/unicodeMap/ISO-8859-8
+unicodeMap	Windows-1255	/usr/share/poppler/unicodeMap/Windows-1255
+#----- end Hebrew support package

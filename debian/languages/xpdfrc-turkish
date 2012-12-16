@@ -1,0 +1,3 @@
+#----- begin Turkish support package (2002-apr-10; updated to use poppler-data 2010-06-14)
+unicodeMap	ISO-8859-9	/usr/share/poppler/unicodeMap/ISO-8859-9
+#----- end Turkish support package

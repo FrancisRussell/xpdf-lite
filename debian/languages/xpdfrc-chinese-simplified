@@ -1,0 +1,9 @@
+#----- begin Chinese Simplified support package (2010-Apr-15)
+cidToUnicode    Adobe-GB1       /usr/share/poppler/cidToUnicode/Adobe-GB1
+unicodeMap      ISO-2022-CN     /usr/share/poppler/unicodeMap/ISO-2022-CN
+unicodeMap      EUC-CN          /usr/share/poppler/unicodeMap/EUC-CN
+unicodeMap      GBK             /usr/share/poppler/unicodeMap/GBK
+cMapDir         Adobe-GB1       /usr/share/poppler/cMap/Adobe-GB1
+toUnicodeDir                    /usr/share/poppler/cMap/Adobe-GB1
+fontFileCC      Adobe-GB1       /usr/share/fonts/truetype/wqy/wqy-zenhei.ttc
+#----- end Chinese Simplified support package

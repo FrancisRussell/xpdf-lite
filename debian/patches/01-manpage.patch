@@ -1,0 +1,217 @@
+description: manpage updates
+Index: xpdf-lite/doc/xpdf.1
+===================================================================
+--- xpdf-lite.orig/doc/xpdf.1	2012-12-16 01:22:46.000000000 +0000
++++ xpdf-lite/doc/xpdf.1	2012-12-16 13:00:20.024092537 +0000
+@@ -10,7 +10,7 @@
+ .SH DESCRIPTION
+ .B Xpdf
+ is a viewer for Portable Document Format (PDF) files.  (These are also
+-sometimes also called \'Acrobat' files, from the name of Adobe's PDF
++sometimes also called 'Acrobat' files, from the name of Adobe's PDF
+ software.)  Xpdf runs under the X Window System on UNIX, VMS, and
+ OS/2.
+ .PP
+@@ -29,7 +29,7 @@
+ xpdf file.pdf 18
+ .RE
+ .PP
+-You can also give a named destination, prefixed with \'+' in place of
++You can also give a named destination, prefixed with '+' in place of
+ the page number.  (This is only useful with PDF files that provide
+ named destination targets.)
+ .PP
+@@ -38,11 +38,17 @@
+ .RS
+ xpdf
+ .RE
++.PP
++Various compressed formats (gz, bz2, xz, and Z) are also supported, for example::
++.PP
++.RS
++xpdf file.pdf.gz
++.RE
++.PP
+ .SH CONFIGURATION FILE
+ Xpdf reads a configuration file at startup.  It first tries to find
+ the user's private config file, ~/.xpdfrc.  If that doesn't exist, it
+-looks for a system-wide config file, typically /usr/local/etc/xpdfrc
+-(but this location can be changed when xpdf is built).  See the
++looks for a system-wide config file, /etc/xpdf/xpdfrc.  See the
+ .BR xpdfrc (5)
+ man page for details.
+ .SH OPTIONS
+@@ -54,48 +60,48 @@
+ Set the initial window geometry.
+ .RB ( \-geometry
+ is equivalent.)
+-.RB "[X resource: " xpdf.geometry ]
++.RB "[X resource: " Xpdf.geometry ]
+ .TP
+ .BI \-title " title"
+ Set the window title.  By default, the title will be "xpdf: foo.pdf".
+-.RB "[X resource: " xpdf.title ]
++.RB "[X resource: " Xpdf.title ]
+ .TP
+ .B \-cmap
+ Install a private colormap.  This is ignored on TrueColor visuals.
+-.RB "[X resource: " xpdf.installCmap ]
++.RB "[X resource: " Xpdf.installCmap ]
+ .TP
+ .BI \-rgb " number"
+ Set the size of largest RGB cube xpdf will try to allocate.  The
+ default is 5 (for a 5x5x5 cube); set to a smaller number to conserve
+ color table entries.  This is ignored with private colormaps and on
+ TrueColor visuals.
+-.RB "[X resource: " xpdf.rgbCubeSize ]
++.RB "[X resource: " Xpdf.rgbCubeSize ]
+ .TP
+ .B \-rv
+ Set reverse video mode.  This reverses the colors of everything except
+ images.  It may not always produce great results for PDF files which
+ do weird things with color.  This also causes the paper color to
+ default to black.
+-.RB "[X resource: " xpdf.reverseVideo ]
++.RB "[X resource: " Xpdf.reverseVideo ]
+ .TP
+ .BI \-papercolor " color"
+ Set the "paper color", i.e., the background of the page display.  This
+ will not work too well with PDF files that do things like filling in
+ white behind the text.
+-.RB "[X resource: " xpdf.paperColor ]
++.RB "[X resource: " Xpdf.paperColor ]
+ .TP
+ .BI \-mattecolor " color"
+ Set the matte color, i.e., the color used for background outside the
+ actual page area.  (There is a separate setting,
+-xpdf.fullScreenMatteColor, for full-screen mode.)
+-.RB "[X resource: " xpdf.matteColor ]
++Xpdf.fullScreenMatteColor, for full-screen mode.)
++.RB "[X resource: " Xpdf.matteColor ]
+ .TP
+ .BI \-z " zoom"
+ Set the initial zoom factor.  A number specifies a zoom percentage,
+ where 100 means 72 dpi.  You may also specify \'page', to fit the page
+ to the window size, or \'width', to fit the page width to the window
+ width, or \'height', to fit the page height to the window height
+-.RB "[config file: " initialZoom "; or X resource: " xpdf.initialZoom ]
++.RB "[config file: " initialZoom "; or X resource: " Xpdf.initialZoom ]
+ .TP
+ .B \-cont
+ Start in continuous view mode, i.e., with one vertical scroll bar for
+@@ -123,7 +129,7 @@
+ .BI \-ps " PS-file"
+ Set the default file name for PostScript output (i.e., the name which
+ will appear in the print dialog).  This can also be of the form
+-\'|command' to pipe the PostScript through a command.
++'|command' to pipe the PostScript through a command.
+ .RB "[config file: " psFile ]
+ .TP
+ .BI \-paper " size"
+@@ -210,10 +216,20 @@
+ .B \-\-help
+ are equivalent.)
+ .PP
++.TP
++.BI \-m " file1 file2 ..."
++Open multiple pdf files:
++.I file1 file2 ...
++etc.  NOTE: The list of files is terminated once an argument starting with
++a dash is encountered.  In order to view file names starting with
++a dash, simply append "./".
++.BI \-m
++may be used multiple times.
++.PP
+ Several other standard X options and resources will work as expected:
+ .TP
+ .BI \-display " display"
+-.RB "[X resource: " xpdf.display ]
++.RB "[X resource: " Xpdf.display ]
+ .TP
+ .BI \-fg " color"
+ .RB ( \-foreground
+@@ -231,15 +247,15 @@
+ .RB "[X resource: " xpdf*fontList ]
+ .PP
+ The color and font options only affect the user interface elements,
+-not the PDF display (the \'paper').
++not the PDF display (the 'paper').
+ .PP
+ The following X resources do not have command line option equivalents:
+ .TP
+-.B xpdf.toolTipEnable
++.B Xpdf.toolTipEnable
+ Enables (if set to true) or disables (if set to false) the tool-tips
+ on the toolbar buttons.
+ .TP
+-.B xpdf.fullScreenMatteColor
++.B Xpdf.fullScreenMatteColor
+ Sets the matte color to be used in full-screen mode.  The default
+ setting is "black".
+ .SH CONTROLS
+@@ -254,7 +270,7 @@
+ .B "dashed left/right arrow buttons"
+ Move backward or forward along the history path.
+ .TP
+-.B "\'Page' entry box"
++.B "'Page' entry box"
+ Move to a specific page number.  Click in the box to activate it, type
+ the page number, then hit return.
+ .TP
+@@ -267,17 +283,17 @@
+ .B "print button"
+ Bring up a dialog for generating a PostScript file.  The dialog has
+ options to set the pages to be printed and the PostScript file name.
+-The file name can be \'-' for stdout or \'|command' to pipe the
+-PostScript through a command, e.g., \'|lpr'.
++The file name can be '-' for stdout or '|command' to pipe the
++PostScript through a command, e.g., '|lpr'.
+ .TP
+-.B "\'?' button"
+-Bring up the \'about xpdf' window.
++.B "'?' button"
++Bring up the 'about xpdf' window.
+ .TP
+ .B "link info"
+-The space between the \'?' and \'Quit' buttons is used to show the URL
++The space between the '?' and 'Quit' buttons is used to show the URL
+ or external file name when the mouse is over a link.
+ .TP
+-.B "\'Quit' button"
++.B "'Quit' button"
+ Quit xpdf.
+ .PP
+ .SS Menu
+@@ -333,9 +349,9 @@
+ .PP
+ .SS Links
+ Clicking on a hyperlink will jump to the link's destination.  A link
+-to another PDF document will make xpdf load that document.  A
+-\'launch' link to an executable program will display a dialog, and if
+-you click \'ok', execute the program.  URL links call an external
++to another PDF document will make xpdf load that document.  A 'launch'
++link to an executable program will display a dialog, and if
++you click 'ok', execute the program.  URL links call an external
+ command (see the
+ .B WEB BROWSERS
+ section below).
+@@ -461,7 +477,7 @@
+ .PP
+ When you click on a URL link in a PDF file, xpdf will execute the
+ command specified by the urlCommand config file option, replacing an
+-occurrence of \'%s' with the URL.  For example, to call netscape with
++occurrence of '%s' with the URL.  For example, to call netscape with
+ the URL, add this line to your config file:
+ .PP
+ .RS
+@@ -830,8 +846,8 @@
+ xpdf \-remote myServer file.pdf
+ .RE
+ .PP
+-If there is currently no xpdf running in server mode with the name
+-\'myServer', a new xpdf window will be opened.  If another command:
++If there is currently no xpdf running in server mode with the name 'myServer',
++a new xpdf window will be opened.  If another command:
+ .PP
+ .RS
+ xpdf \-remote myServer another.pdf 9

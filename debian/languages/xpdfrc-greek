@@ -1,0 +1,4 @@
+#----- begin Greek support package (2002-feb-13; updated to use poppler-data 2010-06-14)
+nameToUnicode                   /usr/share/poppler/nameToUnicode/Greek
+unicodeMap	ISO-8859-7	/usr/share/poppler/unicodeMap/ISO-8859-7
+#----- end Greek support package
